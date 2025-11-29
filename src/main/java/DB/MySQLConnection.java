@@ -15,22 +15,22 @@ public class MySQLConnection implements iDatabase{
             String password = "pwd";
             this.connection = DriverManager.getConnection(url,user,password);
             System.out.println("Connected to MySQL successfully");
+            return this.connection;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("MySQL failed to establish connection:  " + e.getMessage());
+            return null;
         }
-        return this.connection;
     }
 
     @Override
     public void disconnect() {
-        if (this.connection != null) {
-            try {
+        try {
+            if(this.connection != null && !this.connection.isClosed()) {
                 this.connection.close();
-                this.connection = null;
                 System.out.println("Disconnected from MySQL successfully");
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
+        } catch (SQLException e) {
+            System.err.println("MySQL connection could not be close:  " + e.getMessage());
         }
     }
 }

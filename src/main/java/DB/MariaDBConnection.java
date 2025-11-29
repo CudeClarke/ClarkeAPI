@@ -19,28 +19,32 @@ public class MariaDBConnection implements iDatabase {
             String user = "user_mariadb";
             String password = "pwd";
 
-            this.connection = DriverManager.getConnection(url, user, password);
+            // Si ya existe una conexion valida que no esta cerrada la devuelvo
+            if (connection != null && !connection.isClosed()) {
+                return connection;
+            }
+
+            connection = DriverManager.getConnection(url, user, password);
             System.out.println("MariaDB connection established");
+            return connection;
         } catch (ClassNotFoundException e) {
-            System.err.println("MariaDB Driver not found");
-            e.printStackTrace();
+            System.err.println("MariaDB Driver not found: " + e.getMessage());
+            return null;
         } catch (SQLException e) {
-            System.err.println("MariaDB failed to establish connection");
-            e.printStackTrace();
+            System.err.println("MariaDB failed to establish connection:  " + e.getMessage());
+            return null;
         }
-        return this.connection;
     }
 
     @Override
     public void disconnect() {
-        if (connection != null) {
-            try {
+        try {
+            if (connection != null && !connection.isClosed()) {
                 connection.close();
-                connection = null;
                 System.out.println("Disconnected from MariaDB successfully");
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
+        } catch (SQLException e) {
+            System.err.println("MariaDB connection could not be closed: " + e.getMessage());
         }
     }
 }
