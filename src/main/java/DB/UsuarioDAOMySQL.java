@@ -1,13 +1,12 @@
 package DB;
 
-import Usuario.UsuarioBase;
-
+import Usuario.*;
 import java.sql.*;
 
-public class UsuarioDAO {
+public class UsuarioDAOMySQL implements iUsuarioDAO{
     private Connection connection;
 
-    public UsuarioDAO(Connection connection) {
+    public UsuarioDAOMySQL(Connection connection) {
         this.connection = connection;
     }
 
