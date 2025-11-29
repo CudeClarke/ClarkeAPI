@@ -51,4 +51,9 @@ public class UsuarioBase implements iUsuario {
     public void setDni(String dni) {
         this.dni = dni;
     }
+
+    @Override
+    public String toString() {
+        return "User [DNI=" + dni + ", Nombre=" + nombre + ", Spam=" + spam + "]";
+    }
 }
