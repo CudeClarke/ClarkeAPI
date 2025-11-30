@@ -10,4 +10,16 @@ public class Ticket implements iTicket {
         this.dniBeneficiario = dniBeneficiario;
         this.id = id;
     }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getDniBeneficiario() {
+        return dniBeneficiario;
+    }
+
+    public int getId() {
+        return id;
+    }
 }
