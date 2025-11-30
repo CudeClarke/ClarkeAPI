@@ -8,11 +8,33 @@ import java.sql.PreparedStatement;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class TicketDAOMySQL implements iTicketDAO {
     private Connection connection;
     public TicketDAOMySQL(Connection connection){
         this.connection = connection;
+    }
+
+    @Override
+    public List<String> ticketNameAndType(int id) {
+        String sql = "SELECT e.nombre, e.tipo FROM TICKET t JOIN ENTRADA en ON en.ID = t.id_Entrada JOIN EVENTO e ON e.ID = en.id_Evento where t.id = ?";
+        List<String> s = new ArrayList<>();
+        try(PreparedStatement st = connection.prepareStatement(sql)){
+            st.setInt(1, id);
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    s.add(rs.getString("nombre"));
+                    s.add(rs.getString("tipo"));
+                    return s;
+                } else {
+                    System.err.println("No type found for ticket id: " + id);
+                }
+            }
+        }catch (SQLException e){
+            System.err.println("ERROR: " + e.getMessage());
+        }
+        return null;
     }
 
     /**
@@ -27,35 +49,23 @@ public class TicketDAOMySQL implements iTicketDAO {
             st.setString(1, user.getDni());
             try(ResultSet rs = st.executeQuery()){
                 while(rs.next()){
-                    String type = rs.getString("tipo");
-                    Ticket t = null;
+                    List<String> tuple = ticketNameAndType(rs.getInt("id"));
+                    String nombre =tuple.getFirst();
+                    String DNI = rs.getString("DNI_Beneficiario");
+                    int id = rs.getInt("id");
+                    int info = rs.getInt("informacion");
+                    String type = tuple.get(1);
                     switch(type){
                         case "Carrera" -> {
-                            t = new TicketCarrera(
-                                    rs.getString("Nombre"),
-                                    rs.getString("DNI_Beneficiario"),
-                                    rs.getInt("id"),
-                                    rs.getInt("Dorsal")
-                            );
+                            ticketList.add(new TicketCarrera(nombre, DNI, id, info));
                         }
                         case "Rifa" -> {
-                            t = new TicketRifa(
-                                    rs.getString("Nombre"),
-                                    rs.getString("DNI_Beneficiario"),
-                                    rs.getInt("id"),
-                                    rs.getInt("id_Boleto")
-                            );
+                            ticketList.add(new TicketRifa(nombre, DNI, id, info));
                         }
                         case "Concierto" -> {
-                            t = new TicketConcierto(
-                                    rs.getString("Nombre"),
-                                    rs.getString("DNI_Beneficiario"),
-                                    rs.getInt("id"),
-                                    rs.getInt("asiento")
-                            );
+                            ticketList.add(new TicketConcierto(nombre, DNI, id, info));
                         }
                     }
-                    ticketList.add(t);
                 }
             }catch(SQLException e){
                 System.err.println("Error searching ticket/s for user: " + e.getMessage());
@@ -72,40 +82,30 @@ public class TicketDAOMySQL implements iTicketDAO {
      */
     public List<Ticket>  searchByType(String type) {
         List<Ticket> ticketList = new ArrayList<>();
-        String sql = "SELECT * FROM tickets WHERE tipo = ?";
+        String sql = "SELECT * FROM tickets";
         try(PreparedStatement st = connection.prepareStatement(sql)) {
-            st.setString(1, type);
             try(ResultSet rs = st.executeQuery()){
-                while(rs.next()){
-                    Ticket t = null;
-                    switch(type){
-                        case "Carrera" -> {
-                            t = new TicketCarrera(
-                                    rs.getString("Nombre"),
-                                    rs.getString("DNI_Beneficiario"),
-                                    rs.getInt("id"),
-                                    rs.getInt("Dorsal")
-                            );
+                while(rs.next()) {
+                    List<String> tuple = ticketNameAndType(rs.getInt("id"));
+                    if (tuple.get(1).equals(type)) {
+                        String nombre = tuple.getFirst();
+                        String DNI = rs.getString("DNI_Beneficiario");
+                        int id = rs.getInt("id");
+                        int info = rs.getInt("informacion");
+                        switch (type) {
+                                case "Carrera" -> {
+                                    ticketList.add(new TicketCarrera(nombre, DNI, id, info));
+                                }
+                                case "Rifa" -> {
+                                    ticketList.add(new TicketRifa(nombre, DNI, id, info));
+                                }
+                                case "Concierto" -> {
+                                    ticketList.add(new TicketConcierto(nombre, DNI, id, info));
+                                }
                         }
-                        case "Rifa" -> {
-                            t = new TicketRifa(
-                                    rs.getString("Nombre"),
-                                    rs.getString("DNI_Beneficiario"),
-                                    rs.getInt("id"),
-                                    rs.getInt("id_Boleto")
-                            );
-                        }
-                        case "Concierto" -> {
-                            t = new TicketConcierto(
-                                    rs.getString("Nombre"),
-                                    rs.getString("DNI_Beneficiario"),
-                                    rs.getInt("id"),
-                                    rs.getInt("asiento")
-                            );
-                        }
-                    }
-                    if(t!=null) {
-                        ticketList.add(t);
+
+
+
                     }
                 }
             }catch(SQLException e){
@@ -119,25 +119,14 @@ public class TicketDAOMySQL implements iTicketDAO {
 
     /**
      * Method for registering certain ticket in the database
-     * @param ticket the ticket we are registering in the database
      */
     @Override
-    public boolean registerTicket(Ticket ticket) {
-        String sql = "INSERT INTO tickets (nombre, DNIBeneficiario, id, tipo) VALUES (?, ?, ?, ?)";
-        String type;
-        if(ticket instanceof TicketCarrera){
-            type = "carrera";
-        }else if(ticket instanceof TicketConcierto){
-            type = "concierto";
-        }else if(ticket instanceof TicketRifa){
-            type = "rifa";
-        }else{
-            throw new IllegalArgumentException("ERROR: Uknown ticket type");
-        }
+    public boolean registerTicket(String nombre, String DNI_Beneficiario, int id, String type) {
+        String sql = "INSERT INTO tickets (nombre, DNIBeneficiario, id, informacion) VALUES (?, ?, ?, ?)";
         try(PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, ticket.getNombre());
-            stmt.setString(2, ticket.getDniBeneficiario());
-            stmt.setInt(3, ticket.getId());
+            stmt.setString(1, nombre);
+            stmt.setString(2, DNI_Beneficiario);
+            stmt.setInt(3, id);
             stmt.setString(4, type);
             int rowsAffected = stmt.executeUpdate();
             return (rowsAffected > 0);
