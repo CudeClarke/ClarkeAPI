@@ -16,7 +16,7 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
      * @return True si se inserto correctamente o false si, o ya estaba en la bd u ocurrio un error.
      */
     public boolean register(UsuarioBase usuario) {
-        String sql = "INSERT INTO usuarios (nombre, email, dni, spam) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO usuario (nombre, email, dni, spam) VALUES (?, ?, ?, ?)";
 
         try(PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, usuario.getNombre());
@@ -38,7 +38,7 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
      * @return True si se actualiza o false en otro caso
      */
     public boolean update(UsuarioBase usuario) {
-        String sql = "UPDATE usuarios SET nombre=?, email=?, spam=? WHERE dni=?";
+        String sql = "UPDATE usuario SET nombre=?, email=?, spam=? WHERE dni=?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)){
             stmt.setString(1, usuario.getNombre());
@@ -61,7 +61,7 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
      * @return El usuario si existe o null en otro caso.
      */
     public UsuarioBase searchByDni(String dni) {
-        String sql = "SELECT * FROM usuarios WHERE dni = ?";
+        String sql = "SELECT * FROM usuario WHERE dni = ?";
         UsuarioBase user = null;
 
         try(PreparedStatement stmt = connection.prepareStatement(sql)){
