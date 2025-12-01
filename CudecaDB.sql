@@ -115,8 +115,11 @@ CREATE TABLE `evento` (
   `ID_TIPO_EVENTO` int NOT NULL,
   `Nombre` varchar(45) NOT NULL,
   `Fecha` date NOT NULL,
-  `Lugar` varchar(45) NOT NULL,
+  `Lugar` varchar(45) DEFAULT NULL,
   `Descripcion` varchar(200) DEFAULT NULL,
+  `aforo` int NOT NULL,
+  `recaudacion` double NOT NULL,
+  `objetivo` double NOT NULL,
   PRIMARY KEY (`ID_EVENTO`),
   UNIQUE KEY `ID_EVENTO_UNIQUE` (`ID_EVENTO`),
   KEY `EVENTO_TIPO_EVENTO_FK_idx` (`ID_TIPO_EVENTO`),
@@ -130,7 +133,7 @@ CREATE TABLE `evento` (
 
 LOCK TABLES `evento` WRITE;
 /*!40000 ALTER TABLE `evento` DISABLE KEYS */;
-INSERT INTO `evento` VALUES (1,3,'Concierto en la Malagueta','2025-02-10','La Malagueta','Presentación musical al aire libre.'),(2,1,'Carrera Paseo Marítimo','2025-03-02','Paseo Marítimo Pablo Ruiz Picasso','Carrera popular de 5 km junto al mar.'),(3,2,'Rifa Solidaria en Teatinos','2025-04-01','Teatinos','Rifa benéfica organizada por asociaciones locales.'),(4,5,'Festival Cultural Soho','2025-05-12','Barrio del Soho','Actividades culturales y talleres artísticos.'),(5,3,'Concierto en el Cervantes','2025-06-20','Teatro Cervantes','Actuación de banda local.'),(6,1,'Carrera del Parque del Oeste','2025-07-05','Parque del Oeste','Competición deportiva para todas las edades.'),(7,2,'Rifa del Mercado de Atarazanas','2025-08-15','Mercado Central de Atarazanas','Rifa de productos locales.'),(8,5,'Taller Creativo en el Muelle Uno','2025-09-09','Muelle Uno','Taller artístico abierto al público.'),(9,3,'Concierto en Plaza de la Merced','2025-10-03','Plaza de la Merced','Evento musical gratuito.'),(10,1,'Carrera Montes de Málaga','2025-11-14','Montes de Málaga','Carrera de montaña de 10 km.'),(11,2,'Rifa de Navidad en El Palo','2025-12-18','El Palo','Rifa tradicional del barrio.'),(12,5,'Encuentro Cultural Pedregalejo','2025-02-27','Pedregalejo','Reunión vecinal con actividades.'),(13,3,'Concierto en el Auditorio Eduardo Ocón','2025-03-21','Parque de Málaga','Presentación de artistas emergentes.'),(14,1,'Carrera Río Guadalhorce','2025-04-06','Río Guadalhorce',''),(15,2,'Rifa en el Barrio de Huelin','2025-05-30','Huelin','Rifa comunitaria con premios locales.'),(16,5,'Feria Artesanal del Centro Histórico','2025-06-11','Centro Histórico','Exposición y venta de artesanías.'),(17,3,'Concierto en Gibralfaro','2025-07-25','Castillo de Gibralfaro','Concierto nocturno con vistas panorámicas.'),(18,1,'Carrera Playa de la Misericordia','2025-08-02','Playa de la Misericordia','Carrera playera de 3 km.'),(19,2,'Rifa del Puerto de Málaga','2025-09-19','Puerto de Málaga','Rifa de recaudación solidaria.'),(20,5,'Encuentro de Arte en la Térmica','2025-10-27','La Térmica','Actividades culturales y exposiciones.');
+INSERT INTO `evento` VALUES (1,3,'Concierto en la Malagueta','2025-02-10','La Malagueta','Presentación musical al aire libre.',2000,5000,10000),(2,1,'Carrera Paseo Marítimo','2025-03-02','Paseo Marítimo Pablo Ruiz Picasso','Carrera popular de 5 km junto al mar.',500,2000,2500),(3,2,'Rifa Solidaria en Teatinos','2025-04-01','Teatinos','Rifa benéfica organizada por asociaciones locales.',300,1500,3000),(4,5,'Festival Cultural Soho','2025-05-12','Barrio del Soho','Actividades culturales y talleres artísticos.',600,6000,6500),(5,3,'Concierto en el Cervantes','2025-06-20','Teatro Cervantes','Actuación de banda local.',1500,5000,9000),(6,1,'Carrera del Parque del Oeste','2025-07-05','Parque del Oeste','Competición deportiva para todas las edades.',4400,5200,4000),(7,2,'Rifa del Mercado de Atarazanas','2025-08-15','Mercado Central de Atarazanas','Rifa de productos locales.',610,3500,3000),(8,5,'Taller Creativo en el Muelle Uno','2025-09-09','Muelle Uno','Taller artístico abierto al público.',320,400,9000),(9,3,'Concierto en Plaza de la Merced','2025-10-03','Plaza de la Merced','Evento musical gratuito.',640,510,200),(10,1,'Carrera Montes de Málaga','2025-11-14','Montes de Málaga','Carrera de montaña de 10 km.',700,5000,900),(11,2,'Rifa de Navidad en El Palo','2025-12-18','El Palo','Rifa tradicional del barrio.',100,800,2000),(12,5,'Encuentro Cultural Pedregalejo','2025-02-27','Pedregalejo','Reunión vecinal con actividades.',300,600,5000),(13,3,'Concierto en el Auditorio Eduardo Ocón','2025-03-21','Parque de Málaga','Presentación de artistas emergentes.',250,250,6500),(14,1,'Carrera Río Guadalhorce','2025-04-06','Río Guadalhorce','',370,800,9000),(15,2,'Rifa en el Barrio de Huelin','2025-05-30','Huelin','Rifa comunitaria con premios locales.',150,100,2000),(16,5,'Feria Artesanal del Centro Histórico','2025-06-11','Centro Histórico','Exposición y venta de artesanías.',370,300,1000),(17,3,'Concierto en Gibralfaro','2025-07-25','Castillo de Gibralfaro','Concierto nocturno con vistas panorámicas.',100,250,600),(18,1,'Carrera Playa de la Misericordia','2025-08-02','Playa de la Misericordia','Carrera playera de 3 km.',200,150,900),(19,2,'Rifa del Puerto de Málaga','2025-09-19','Puerto de Málaga','Rifa de recaudación solidaria.',300,900,950),(20,5,'Encuentro de Arte en la Térmica','2025-10-27','La Térmica','Actividades culturales y exposiciones.',150,400,400);
 /*!40000 ALTER TABLE `evento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -308,4 +311,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-30 18:18:01
+-- Dump completed on 2025-12-01 18:47:45
