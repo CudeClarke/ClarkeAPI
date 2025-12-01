@@ -1,10 +1,10 @@
-package DB;
+package DB.UserDAO;
 
 import Usuario.*;
 import java.sql.*;
 
 public class UsuarioDAOMySQL implements iUsuarioDAO{
-    private Connection connection;
+    private final Connection connection;
 
     public UsuarioDAOMySQL(Connection connection) {
         this.connection = connection;
@@ -15,14 +15,15 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
      * @param usuario Objeto con los datos a introducir en la bd.
      * @return True si se inserto correctamente o false si, o ya estaba en la bd u ocurrio un error.
      */
-    public boolean register(UsuarioBase usuario) {
-        String sql = "INSERT INTO usuario (nombre, email, dni, spam) VALUES (?, ?, ?, ?)";
+    public boolean register(iUsuario usuario) {
+        String sql = "INSERT INTO usuario (nombre, apellidos, email, dni, spam) VALUES (?, ?, ?, ?, ?)";
 
         try(PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, usuario.getNombre());
-            stmt.setString(2, usuario.getEmail());
-            stmt.setString(3, usuario.getDni());
-            stmt.setBoolean(4, usuario.isSpam());
+            stmt.setString(2, usuario.getApellidos());
+            stmt.setString(3, usuario.getEmail());
+            stmt.setString(4, usuario.getDni());
+            stmt.setBoolean(5, usuario.isSpam());
 
             int rowsAffected = stmt.executeUpdate();
             return (rowsAffected > 0);
@@ -37,7 +38,7 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
      * @param usuario Objeto con la informacion del usuario
      * @return True si se actualiza o false en otro caso
      */
-    public boolean update(UsuarioBase usuario) {
+    public boolean update(iUsuario usuario) {
         String sql = "UPDATE usuario SET nombre=?, email=?, spam=? WHERE dni=?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)){
@@ -68,7 +69,7 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
             stmt.setString(1, dni);
             try (ResultSet rs = stmt.executeQuery()){
                 if (rs.next()) {
-                    user = new UsuarioBase(rs.getString("nombre"), rs.getString("apellido"), rs.getString("email"), rs.getString("dni"));
+                    user = new UsuarioBase(rs.getString("nombre"), rs.getString("apellidos"), rs.getString("email"), rs.getString("dni"));
                 }
             }
         } catch (SQLException e){

@@ -2,21 +2,24 @@ package Usuario;
 
 public class UsuarioBase implements iUsuario {
     private String nombre;
-    private String apellido;
+    private String apellidos;
     private String email;
     private String dni;
     private boolean spam;
 
-    public UsuarioBase(String nombre, String apellido, String email, String dni) {
+    public UsuarioBase(){}
+
+    public UsuarioBase(String nombre, String apellidos, String email, String dni) {
         this.nombre = nombre;
-        this.apellido = apellido;
+        this.apellidos = apellidos;
         this.email = email;
         this.dni = dni;
         this.spam = false;
     }
 
-    public UsuarioBase(String nombre, String apellido, String email, String dni, boolean spam) {
+    public UsuarioBase(String nombre, String apellidos, String email, String dni, boolean spam) {
         this.nombre = nombre;
+        this.apellidos = apellidos;
         this.email = email;
         this.dni = dni;
         this.spam = spam;
@@ -33,13 +36,13 @@ public class UsuarioBase implements iUsuario {
     }
 
     @Override
-    public String getApellido() {
-        return apellido;
+    public String getApellidos() {
+        return apellidos;
     }
 
     @Override
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
     }
 
     public String getEmail() {
@@ -68,6 +71,6 @@ public class UsuarioBase implements iUsuario {
 
     @Override
     public String toString() {
-        return "User [DNI=" + dni + ", Nombre=" + nombre + ", Apellido=" + apellido + ", Spam=" + spam + "]";
+        return "User [DNI=" + dni + ", Nombre=" + nombre + ", Apellido=" + apellidos + ", Spam=" + spam + "]";
     }
 }
