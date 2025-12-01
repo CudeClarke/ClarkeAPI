@@ -60,15 +60,15 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
      * @param dni String que buscamos.
      * @return El usuario si existe o null en otro caso.
      */
-    public UsuarioBase searchByDni(String dni) {
+    public iUsuario searchByDni(String dni) {
         String sql = "SELECT * FROM usuario WHERE dni = ?";
-        UsuarioBase user = null;
+        iUsuario user = null;
 
         try(PreparedStatement stmt = connection.prepareStatement(sql)){
             stmt.setString(1, dni);
             try (ResultSet rs = stmt.executeQuery()){
                 if (rs.next()) {
-                    user = new UsuarioBase(rs.getString("nombre"), rs.getString("email"), rs.getString("dni"));
+                    user = new UsuarioBase(rs.getString("nombre"), rs.getString("apellido"), rs.getString("email"), rs.getString("dni"));
                 }
             }
         } catch (SQLException e){
