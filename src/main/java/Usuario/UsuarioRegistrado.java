@@ -44,7 +44,7 @@ public class UsuarioRegistrado extends UsuarioBase {
     }
 
     public String toString(){
-        return "UsuarioRegistrado [DNI=" + super.getDni() + ", Nombre=" + super.getNombre() + ", Apellido=" + super.getApellido() +
+        return "UsuarioRegistrado [DNI=" + super.getDni() + ", Nombre=" + super.getNombre() + ", Apellido=" + super.getApellidos() +
                 ", TLF=" + tlf + ", Direccion=" + ", Socio=" + socio + direccion + ", Spam=" + super.isSpam() + "]";
     }
 }
