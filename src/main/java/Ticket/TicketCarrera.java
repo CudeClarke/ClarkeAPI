@@ -17,6 +17,6 @@ public class TicketCarrera extends Ticket {
     }
 
     public String toString(){
-        return "Carrera [Nombre=" + getNombre() + ", DNI=" +getDniBeneficiario() + ", ID=" + getId() + "Dorsal=" + dorsal + "]";
+        return "Carrera [Nombre=" + super.getNombre() + ", DNI=" + super.getDniBeneficiario() + ", ID=" + super.getId() + "Dorsal=" + dorsal + "]";
     }
 }

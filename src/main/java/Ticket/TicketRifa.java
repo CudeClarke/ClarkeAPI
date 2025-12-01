@@ -17,6 +17,6 @@ public class TicketRifa extends Ticket {
     }
 
     public String toString(){
-        return "Rifa [Nombre=" + getNombre() + ", DNI=" + getDniBeneficiario() + ", ID=" + getId() + "ID boleto=" + idBoleto + "]";
+        return "Rifa [Nombre=" + super.getNombre() + ", DNI=" + super.getDniBeneficiario() + ", ID=" + super.getId() + "ID boleto=" + idBoleto + "]";
     }
 }

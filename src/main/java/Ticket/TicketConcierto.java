@@ -17,6 +17,6 @@ public class TicketConcierto extends Ticket{
     }
 
     public String toString(){
-        return "Concierto [Nombre=" + getNombre() + ", DNI=" + getDniBeneficiario() + ", ID=" + getId() + "Asiento=" + asiento + "]";
+        return "Concierto [Nombre=" + super.getNombre() + ", DNI=" + super.getDniBeneficiario() + ", ID=" + super.getId() + "Asiento=" + asiento + "]";
     }
 }
