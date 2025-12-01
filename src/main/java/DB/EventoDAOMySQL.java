@@ -36,7 +36,7 @@ public class EventoDAOMySQL implements iEventoDAO {
     /**
      * Metodo para buscar un evento a partir de su nombre.
      * @param nombreBuscado Nombre del evento que se desea buscar.
-     * @return Objeto EventoAbstracto si existe, o null en caso contrario.
+     * @return Objeto iEvento si existe, o null en caso contrario.
      */
     public iEvento searchByName(String nombreBuscado) {
         String sql = """
@@ -169,7 +169,7 @@ public class EventoDAOMySQL implements iEventoDAO {
 
     /**
      * Metodo para recuperar todos los eventos registrados en la base de datos.
-     * @return Lista que contiene todos los objetos EventoAbstracto almacenados.
+     * @return Lista que contiene todos los objetos iEvento almacenados.
      */
     @Override
     public List<iEvento> getAllEventos() {
