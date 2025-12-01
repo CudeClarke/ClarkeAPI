@@ -36,6 +36,6 @@ public class Ticket implements iTicket {
     }
 
     public String toString(){
-        return "Ticket [NOMBRE=" + nombre + ", DNI=" + dniBeneficiario + ", ID=" + id + "]";
+        return "Ticket [Nombre=" + nombre + ", DNI=" + dniBeneficiario + ", ID=" + id + "]";
     }
 }
