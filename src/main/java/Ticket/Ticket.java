@@ -15,11 +15,27 @@ public class Ticket implements iTicket {
         return nombre;
     }
 
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
     public String getDniBeneficiario() {
         return dniBeneficiario;
     }
 
+    public void setDniBeneficiario(String dniBeneficiario) {
+        this.dniBeneficiario = dniBeneficiario;
+    }
+
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String toString(){
+        return "Ticket [Nombre=" + nombre + ", DNI=" + dniBeneficiario + ", ID=" + id + "]";
     }
 }

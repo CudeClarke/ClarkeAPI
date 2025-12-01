@@ -5,15 +5,15 @@ public class UsuarioRegistrado extends UsuarioBase {
     private boolean socio;
     private int tlf;
 
-    public UsuarioRegistrado(String nombre, String email, String dni, boolean spam, String direccion, int tlf) {
-        super(nombre, email, dni, spam);
+    public UsuarioRegistrado(String nombre, String apellido, String email, String dni, boolean spam, String direccion, int tlf) {
+        super(nombre, apellido, email, dni, spam);
         this.direccion = direccion;
         this.tlf = tlf;
         this.socio = false;
     }
 
-    public UsuarioRegistrado(String nombre, String email, String dni, String direccion, int tlf) {
-        super(nombre, email, dni);
+    public UsuarioRegistrado(String nombre, String apellido, String email, String dni, String direccion, int tlf) {
+        super(nombre, apellido, email, dni);
         this.direccion = direccion;
         this.tlf = tlf;
         this.socio = true;
@@ -41,5 +41,10 @@ public class UsuarioRegistrado extends UsuarioBase {
 
     public void setTlf(int tlf) {
         this.tlf = tlf;
+    }
+
+    public String toString(){
+        return "UsuarioRegistrado [DNI=" + super.getDni() + ", Nombre=" + super.getNombre() + ", Apellido=" + super.getApellido() +
+                ", TLF=" + tlf + ", Direccion=" + ", Socio=" + socio + direccion + ", Spam=" + super.isSpam() + "]";
     }
 }

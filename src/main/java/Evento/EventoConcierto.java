@@ -38,4 +38,9 @@ public class EventoConcierto extends EventoAbstracto {
         this.fecha = fecha;
     }
 
+    @Override
+    public String toString(){
+        return "Concierto [Artista=" +  artista + ", ubicacion=" + ubicacion + ", fecha=" + fecha + ", Aforo" + getArtista() +"]";
+    }
+
 }
