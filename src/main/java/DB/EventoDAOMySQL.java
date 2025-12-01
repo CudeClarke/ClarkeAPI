@@ -18,7 +18,7 @@ public class EventoDAOMySQL implements iEventoDAO {
     // -------------------------------------------------------
     // Sujeto a cambios por el factory
     // -------------------------------------------------------
-    private EventoAbstracto buildEvento(ResultSet rs) throws SQLException {
+    private iEvento buildEvento(ResultSet rs) throws SQLException {
 
         String nombre = rs.getString("nombre");
         int objetivo = rs.getInt("objetivo");
@@ -38,7 +38,7 @@ public class EventoDAOMySQL implements iEventoDAO {
      * @param nombreBuscado Nombre del evento que se desea buscar.
      * @return Objeto EventoAbstracto si existe, o null en caso contrario.
      */
-    public EventoAbstracto searchByName(String nombreBuscado) {
+    public iEvento searchByName(String nombreBuscado) {
         String sql = """
             SELECT e.*, te.nombre AS tipo_evento
             FROM evento e
@@ -63,8 +63,8 @@ public class EventoDAOMySQL implements iEventoDAO {
      * @return Lista de eventos que tienen dicha etiqueta.
      */
     @Override
-    public List<EventoAbstracto> searchByTag(String tag) {
-        List<EventoAbstracto> lista = new ArrayList<>();
+    public List<iEvento> searchByTag(String tag) {
+        List<iEvento> lista = new ArrayList<>();
 
         String sql = """
             SELECT e.*, te.nombre AS tipo_evento
@@ -92,8 +92,8 @@ public class EventoDAOMySQL implements iEventoDAO {
      * @return Lista de eventos asociados al patrocinador indicado.
      */
     @Override
-    public List<EventoAbstracto> searchByPatrocinador(String patrocinador) {
-        List<EventoAbstracto> lista = new ArrayList<>();
+    public List<iEvento> searchByPatrocinador(String patrocinador) {
+        List<iEvento> lista = new ArrayList<>();
 
         String sql = """
             SELECT e.*, te.nombre AS tipo_evento
@@ -172,8 +172,8 @@ public class EventoDAOMySQL implements iEventoDAO {
      * @return Lista que contiene todos los objetos EventoAbstracto almacenados.
      */
     @Override
-    public List<EventoAbstracto> getAllEventos() {
-        List<EventoAbstracto> lista = new ArrayList<>();
+    public List<iEvento> getAllEventos() {
+        List<iEvento> lista = new ArrayList<>();
 
         String sql = """
             SELECT e.*, te.nombre AS tipo_evento
