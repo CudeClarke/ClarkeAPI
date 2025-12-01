@@ -15,4 +15,8 @@ public class EntradaConcierto extends EntradaAbstracta {
     public void setSeccion(int seccion) {
         this.seccion = seccion;
     }
+
+    public String toString(){
+        return "EntradaConcierto [seccion=" + seccion + "precio=" + super.getPrecio() + "]";
+    }
 }

@@ -24,4 +24,8 @@ public class EntradaAbstracta implements iEntrada {
     public void setPrecio(float precio) {
         this.precio = precio;
     }
+
+    public String toString(){
+        return "Entrada Abstracta [subAforo=" + subAforo + ", precio=" + precio + "]";
+    }
 }

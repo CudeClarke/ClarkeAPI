@@ -7,4 +7,16 @@ public class TicketCarrera extends Ticket {
         super(nombre, dniBeneficiario, id);
         this.dorsal = dorsal;
     }
+
+    public int getDorsal() {
+        return dorsal;
+    }
+
+    public void setDorsal(int dorsal) {
+        this.dorsal = dorsal;
+    }
+
+    public String toString(){
+        return "Carrera [Nombre=" + super.getNombre() + ", DNI=" + super.getDniBeneficiario() + ", ID=" + super.getId() + "Dorsal=" + dorsal + "]";
+    }
 }
