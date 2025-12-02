@@ -1,27 +1,61 @@
 package Evento;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class EventoAbstracto implements iEvento {
     private String nombre;
     private int recaudacion;
     private int objetivoRecaudacion;
     private int aforo;
 
-    enum Patrocinadores{
-        // Agrega aqui todos los patrocinadores que necesites
-    }
-
-    enum Tags {
-        CENA,
-        CARRERA,
-        RIFA
-        // Agrega aquí todos los tags que necesites
-    }
+    private Set<Tag> tags;
+    private Set<Patrocinador> patrocinadores;
 
     public EventoAbstracto(String nombre, int objetivoRecaudacion, int aforo) {
         this.nombre = nombre;
         this.objetivoRecaudacion = objetivoRecaudacion;
         this.aforo = aforo;
         recaudacion = 0;
+
+        tags = new HashSet<>();
+        patrocinadores = new HashSet<>();
+    }
+
+    /**
+     * Metodo para agregar un tag a un evento
+     * @param tag no nulo a agregar a la lista
+     */
+    public void addTag(Tag tag) {
+        if (tag != null) {
+            tags.add(tag);
+        }
+    }
+
+    /**
+     * Metodo para borrar un tag de un evento
+     * @param tag a eliminar de la lista
+     */
+    public void removeTag(Tag tag) {
+        tags.remove(tag);
+    }
+
+    /**
+     * Metodo para agregar un patrocinador a un evento
+     * @param p patrocinador no nulo a agregar
+     */
+    public void addPatrocinador(Patrocinador p) {
+        if (p != null) {
+            patrocinadores.add(p);
+        }
+    }
+
+    /**
+     * Metodo para eliminar un patrociandor de un evento
+     * @param p patrocinador a eliminar de la lista
+     */
+    public void removePatrocinador(Patrocinador p) {
+        patrocinadores.remove(p);
     }
 
     public String getNombre() {
