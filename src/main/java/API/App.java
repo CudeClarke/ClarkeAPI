@@ -10,5 +10,9 @@ public class App {
 
         app.get("/user/{dni}", UserHandlers.getUser);
         app.post("/newUser", UserHandlers.storeUser);
+
+	    app.get("/api/eventos", EventoHandlers.getEvents);
+	    app.get("/api/eventos/{nombre}", EventoHandlers.getEventByName);
+	    app.post("/api/eventos", EventoHandlers.addEvent);
     }
 }
