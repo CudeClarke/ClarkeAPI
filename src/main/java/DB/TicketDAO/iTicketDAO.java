@@ -1,4 +1,4 @@
-package DB;
+package DB.TicketDAO;
 
 import Ticket.*;
 import Usuario.UsuarioBase;
