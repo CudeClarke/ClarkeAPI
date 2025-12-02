@@ -6,6 +6,17 @@ public class EventoAbstracto implements iEvento {
     private int objetivoRecaudacion;
     private int aforo;
 
+    enum Patrocinadores{
+        // Agrega aqui todos los patrocinadores que necesites
+    }
+
+    enum Tags {
+        CENA,
+        CARRERA,
+        RIFA
+        // Agrega aquí todos los tags que necesites
+    }
+
     public EventoAbstracto(String nombre, int objetivoRecaudacion, int aforo) {
         this.nombre = nombre;
         this.objetivoRecaudacion = objetivoRecaudacion;
