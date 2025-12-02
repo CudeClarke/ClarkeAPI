@@ -11,8 +11,13 @@ public class App {
         app.get("/user/{dni}", UserHandlers.getUser);
         app.post("/newUser", UserHandlers.storeUser);
 
-	    app.get("/api/eventos", EventoHandlers.getEvents);
-	    app.get("/api/eventos/{nombre}", EventoHandlers.getEventByName);
-	    app.post("/api/eventos", EventoHandlers.addEvent);
+        app.get("/api/eventos", EventoHandlers.getEvents);
+        app.get("/api/eventos/{nombre}", EventoHandlers.getEventByName);
+        app.post("/api/eventos", EventoHandlers.addEvent);
+
+        app.get("/api/tickets", TicketHandler.getTickets);
+        app.get("/api/tickets/{id}", TicketHandler.getTicketById);
+        app.post("/api/tickets", TicketHandler.addTicket);
+        app.delete("/api/tickets/{id}", TicketHandler.deleteTicket);
     }
 }
