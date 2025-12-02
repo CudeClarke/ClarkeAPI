@@ -8,7 +8,11 @@ public class EventoRifa extends EventoAbstracto {
 
     public EventoRifa(String nombre, int objetivoRecaudacion, int aforo, List<Integer> premios) {
         super(nombre, objetivoRecaudacion, aforo);
-        this.premios = List.copyOf(premios);
+        if (premios == null) {
+            this.premios = List.of();
+        } else {
+            this.premios = List.copyOf(premios);
+        }
     }
 
     public List<Integer> getPremios() {
