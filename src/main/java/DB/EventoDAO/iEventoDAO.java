@@ -1,4 +1,4 @@
-package DB;
+package DB.EventoDAO;
 
 import Evento.*;
 import java.util.List;
