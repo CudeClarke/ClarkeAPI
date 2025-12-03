@@ -10,6 +10,11 @@ public class TicketCarrera extends Ticket {
         this.dorsal = dorsal;
     }
 
+    public TicketCarrera(iUsuario usuario, String dniAsistente, float pagoExtra, int dorsal) {
+        super(usuario, dniAsistente, pagoExtra);
+        this.dorsal = dorsal;
+    }
+
     public int getDorsal() {
         return dorsal;
     }
