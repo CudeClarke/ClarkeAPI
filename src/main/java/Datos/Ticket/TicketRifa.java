@@ -5,8 +5,8 @@ import Datos.Usuario.iUsuario;
 public class TicketRifa extends Ticket {
     private int idBoleto;
 
-    public TicketRifa(iUsuario usuario, String dniBeneficiario, int id, int idBoleto) {
-        super(usuario, dniBeneficiario, id);
+    public TicketRifa(iUsuario usuario, String dniBeneficiario, int idBoleto) {
+        super(usuario, dniBeneficiario);
         this.idBoleto = idBoleto;
     }
 
@@ -19,6 +19,6 @@ public class TicketRifa extends Ticket {
     }
 
     public String toString(){
-        return "Rifa [Usuario=" + super.getUsuario().toString() + ", DNI=" + super.getDniAsistente() + ", ID=" + super.getId() + "ID boleto=" + idBoleto + "]";
+        return "Rifa [Usuario=" + super.getUsuario().toString() + ", DNI=" + super.getDniAsistente() + "ID boleto=" + idBoleto + "]";
     }
 }

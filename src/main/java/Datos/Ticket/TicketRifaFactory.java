@@ -4,7 +4,7 @@ import Datos.Usuario.iUsuario;
 
 public class TicketRifaFactory extends TicketFactory{
     @Override
-    public iTicket createTicket(iUsuario usuario, String dniAsistente, int id, int idBoleto) {
-        return new TicketRifa(usuario, dniAsistente, id, idBoleto);
+    public iTicket createTicket(iUsuario usuario, String dniAsistente, String idBoleto) {
+        return new TicketRifa(usuario, dniAsistente, Integer.parseInt(idBoleto));
     }
 }

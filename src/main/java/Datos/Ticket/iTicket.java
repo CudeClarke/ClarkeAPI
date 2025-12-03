@@ -7,6 +7,4 @@ public interface iTicket {
     public void setUsuario(iUsuario usuario);
     public String getDniAsistente();
     public void setDniAsistente(String dniAsistente);
-    public int getId();
-    public void setId(int id);
 }
