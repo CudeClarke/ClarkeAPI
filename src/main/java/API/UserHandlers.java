@@ -42,7 +42,7 @@ public class UserHandlers {
             }
         }
         if (user != null){
-            if (userDAO.register(user)){
+            if (userDAO.registerUsuarioBase(user)){
                 res = json_generator.status_response(0, "User added to database");
             }else{
                 res = json_generator.status_response(1, "Could not add user to database");
