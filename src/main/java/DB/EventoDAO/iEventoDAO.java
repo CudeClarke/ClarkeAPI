@@ -12,5 +12,7 @@ public interface iEventoDAO {
     List<iEvento> searchByPatrocinador(String patrocinador);
     List<iEvento> getAllEventos();
     Map<String, Integer> countEntradasPorEvento(int idEvento);
-    boolean AñadirEvento();
+    boolean AñadirEvento(int idevento,int id_tipo_evento,String nombre,Date fecha,int aforo,
+                         double recaudacion, double objetivo,String lugar,
+                         String descripcion);
 }
