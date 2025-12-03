@@ -1,12 +1,7 @@
 package DB.TicketDAO;
 
-<<<<<<< HEAD
 import Datos.Ticket.*;
 import Datos.Usuario.UsuarioBase;
-=======
-import Ticket.*;
-import Usuario.*;
->>>>>>> develop
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -1,14 +1,9 @@
 package DB.TicketDAO;
 
-<<<<<<< HEAD
 import Datos.Ticket.*;
 import Datos.Usuario.UsuarioBase;
 
 import java.sql.ResultSet;
-=======
-import Ticket.*;
-import Usuario.*;
->>>>>>> develop
 import java.util.List;
 
 public interface iTicketDAO {
