@@ -1,25 +1,31 @@
 package Datos.Evento;
 
+import Datos.Entrada.Entrada;
+
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Evento implements iEvento {
     private String nombre;
+    private String ubicacion;
     private int recaudacion;
     private int objetivoRecaudacion;
-    private int aforo;
 
     private Set<String> tags;
     private Set<Patrocinador> patrocinadores;
+    private List<Entrada> entradas;
 
-    public Evento(String nombre, int objetivoRecaudacion, int aforo) {
+    public Evento(String nombre, String ubicacion, int objetivoRecaudacion) {
         this.nombre = nombre;
+        this.ubicacion = ubicacion;
         this.objetivoRecaudacion = objetivoRecaudacion;
-        this.aforo = aforo;
         recaudacion = 0;
 
         tags = new HashSet<>();
         patrocinadores = new HashSet<>();
+        entradas = new ArrayList<>();
     }
 
     /**
@@ -58,6 +64,36 @@ public class Evento implements iEvento {
         patrocinadores.remove(p);
     }
 
+    public void addEntrada(Entrada e) {
+        if (e != null) {
+            entradas.add(e);
+        }
+    }
+
+    public void deleteEntrada(Entrada e) {
+        entradas.remove(e);
+    }
+
+    public List<Entrada> getEntradas() {
+        return entradas;
+    }
+
+    public String getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(String ubicacion) {
+        this.ubicacion = ubicacion;
+    }
+
+    public Set<String> getTags() {
+        return tags;
+    }
+
+    public Set<Patrocinador> getPatrocinadores() {
+        return patrocinadores;
+    }
+
     public String getNombre() {
         return nombre;
     }
@@ -82,16 +118,8 @@ public class Evento implements iEvento {
         this.objetivoRecaudacion = objetivoRecaudacion;
     }
 
-    public int getAforo() {
-        return aforo;
-    }
-
-    public void setAforo(int aforo) {
-        this.aforo = aforo;
-    }
-
     @Override
     public String toString(){
-        return "Evento Abstracto [NOMBRE=" + nombre + "RECAUDACION=" + recaudacion + "OBJRECAUDACION" + objetivoRecaudacion +"AFORO=" + aforo + "]";
+        return "Evento Abstracto [NOMBRE=" + nombre + "RECAUDACION=" + recaudacion + "OBJRECAUDACION" + objetivoRecaudacion + "]";
     }
 }

@@ -1,6 +1,6 @@
 package Datos.Entrada;
 
-import Ticket.iTicket;
+import Datos.Ticket.iTicket;
 
 public interface iEntrada {
     public int getSubAforo();

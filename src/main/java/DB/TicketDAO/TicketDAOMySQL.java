@@ -1,7 +1,7 @@
 package DB.TicketDAO;
 
 import Datos.Ticket.*;
-import Datos.Usuario.UsuarioBase;
+import Datos.Usuario.iUsuario;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -70,11 +70,10 @@ public class TicketDAOMySQL implements iTicketDAO {
                 while(rs.next()){
                     int id = rs.getInt("ID_TICKET");
                     int type = ticketType(id);
-                    String nombre = rs.getString(""); //nombre must be eliminated once changed ticket class
                     String dni = rs.getString("DNI_USUARIO");
                     int info = rs.getInt("Informacion");
                     TicketFactory factory = getFactoryByType(type);
-                    iTicket ticket = factory.createTicket(nombre, dni, id, info);
+                    iTicket ticket = factory.createTicket(user, dni, id, info);
                     ticketList.add((ticket));
                 }
             }catch(SQLException e){
@@ -101,7 +100,7 @@ public class TicketDAOMySQL implements iTicketDAO {
                         int id = rs.getInt("ID_TICKET");
                         int info = rs.getInt("informacion");
                         TicketFactory factory = getFactoryByType(type);
-                        iTicket ticket = factory.createTicket(nombre, dni, id, info);
+                        iTicket ticket = factory.createTicket(user, dni, id, info);
                         ticketList.add(ticket);
                 }
 

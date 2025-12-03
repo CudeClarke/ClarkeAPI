@@ -1,5 +1,10 @@
 package Datos.Evento;
 
+import Datos.Entrada.Entrada;
+
+import java.util.List;
+import java.util.Set;
+
 public interface iEvento {
     public String getNombre();
     public void setNombre(String nombre);
@@ -7,11 +12,16 @@ public interface iEvento {
     public void setRecaudacion(int recaudacion);
     public int getObjetivoRecaudacion();
     public void setObjetivoRecaudacion(int objetivoRecaudacion);
-    public int getAforo();
-    public void setAforo(int aforo);
+    public String getUbicacion();
+    public void setUbicacion(String ubicacion);
+    public Set<String> getTags();
+    public Set<Patrocinador> getPatrocinadores();
+    public List<Entrada> getEntradas();
     
     public void addTag(String tag);
     public void removeTag(String tag);
     public void addPatrocinador(Patrocinador p);
     public void removePatrocinador(Patrocinador p);
+    public void addEntrada(Entrada e);
+    public void deleteEntrada(Entrada e);
 }

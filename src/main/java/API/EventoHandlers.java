@@ -5,7 +5,7 @@ import java.util.List;
 import java.sql.Date; 
 
 import DB.EventoDAO.*;
-import Evento.*;        
+import Datos.Evento.*;
 import utils.json_generator; 
 
 public class EventoHandlers {
