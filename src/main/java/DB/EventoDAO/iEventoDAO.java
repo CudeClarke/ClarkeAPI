@@ -2,7 +2,7 @@ package DB.EventoDAO;
 
 import Datos.Evento.*;
 import java.util.List;
-import java.util.Map;
+
 
 public interface iEventoDAO {
     List<iEvento> getAllEventos();
@@ -12,4 +12,6 @@ public interface iEventoDAO {
     boolean registerEvento(iEvento evento, int tipo);
     boolean updateEvento(iEvento evento);
     boolean deleteEvento(iEvento evento);
+
+    int getID(iEvento evento);
 }

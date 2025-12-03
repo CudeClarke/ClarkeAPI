@@ -17,10 +17,9 @@ public class TicketDAOMySQL implements iTicketDAO {
     }
 
     /**
-     * Method to the retrieve the type of a certain ticket, based on the event type
+     * Method to the retrieve the type of a specific ticket, based on the event type
      * @param id the id of the ticket whose type you want to confirm
      */
-    @Override
     public int ticketType(int id) {
         String sql = "SELECT e.ID_TIPO_EVENTO as tipo FROM ticket t JOIN entrada en ON en.ID_ENTRADA = t.ID_ENTRADA JOIN evento e ON e.ID_EVENTO = en.ID_EVENTO where t.ID_TICKET = ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
@@ -38,7 +37,6 @@ public class TicketDAOMySQL implements iTicketDAO {
         return 0;
     }
 
-    @Override
     public TicketFactory getFactoryByType(int type){
         switch(type){
             case 1 -> {
@@ -149,6 +147,21 @@ public class TicketDAOMySQL implements iTicketDAO {
             System.err.println("Error deleting an user: " + e.getMessage());
             return false;
         }
+    }
+
+    @Override
+    public List<iTicket> searchByUser(String dni) {
+        return List.of();
+    }
+
+    @Override
+    public List<iTicket> searchByEntrada(int idEntrada) {
+        return List.of();
+    }
+
+    @Override
+    public boolean registerTicket(iTicket ticket, String dniComprador, int idEntrada) {
+        return false;
     }
 }
 

@@ -1,13 +1,11 @@
 package DB.TicketDAO;
 
 import Datos.Ticket.*;
-import Datos.Usuario.iUsuario;
-
 import java.util.List;
 
 public interface iTicketDAO {
-    List<iTicket> searchByUser(iUsuario user);
-    List<iTicket> searchByType(int type);
-    boolean registerTicket(String DNI_Beneficiario, int id, String type);
+    List<iTicket> searchByUser(String dni);
+    List<iTicket> searchByEntrada(int idEntrada);
+    boolean registerTicket(iTicket ticket, String dniComprador, int idEntrada);
     boolean deleteTicket(String id);
 }
