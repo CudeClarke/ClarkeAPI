@@ -33,7 +33,7 @@ CREATE TABLE `clasifica` (
   `ID_EVENTO` int NOT NULL,
   PRIMARY KEY (`ID_ETIQUETA`,`ID_EVENTO`),
   KEY `CLASIFICA_EVENTO_FK_idx` (`ID_EVENTO`),
-  CONSTRAINT `CLASIFICA_ETIQUETA_FK` FOREIGN KEY (`ID_ETIQUETA`) REFERENCES `etiquetas` (`ID_ETIQUETA`),
+  CONSTRAINT `CLASIFICA_ETIQUETAS_FK` FOREIGN KEY (`ID_ETIQUETA`) REFERENCES `etiquetas` (`ID_ETIQUETA`),
   CONSTRAINT `CLASIFICA_EVENTO_FK` FOREIGN KEY (`ID_EVENTO`) REFERENCES `evento` (`ID_EVENTO`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -56,16 +56,16 @@ DROP TABLE IF EXISTS `entrada`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `entrada` (
-  `ID_ENTRADA` int NOT NULL,
+  `ID_ENTRADA` int NOT NULL AUTO_INCREMENT,
   `ID_EVENTO` int NOT NULL,
   `Precio` double NOT NULL,
   `Cantidad` int NOT NULL,
-  `Información` varchar(80) DEFAULT NULL,
+  `Informacion` varchar(80) DEFAULT NULL,
   PRIMARY KEY (`ID_ENTRADA`,`ID_EVENTO`),
   UNIQUE KEY `ID_ENTRADA_UNIQUE` (`ID_ENTRADA`),
   KEY `ENTRADA_EVENTO_FK_idx` (`ID_EVENTO`),
   CONSTRAINT `ENTRADA_EVENTO_FK` FOREIGN KEY (`ID_EVENTO`) REFERENCES `evento` (`ID_EVENTO`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -86,11 +86,11 @@ DROP TABLE IF EXISTS `etiquetas`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `etiquetas` (
-  `ID_ETIQUETA` int NOT NULL,
+  `ID_ETIQUETA` int NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(45) NOT NULL,
   PRIMARY KEY (`ID_ETIQUETA`),
   UNIQUE KEY `ID_ETIQUETA_UNIQUE` (`ID_ETIQUETA`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -111,20 +111,21 @@ DROP TABLE IF EXISTS `evento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `evento` (
-  `ID_EVENTO` int NOT NULL,
+  `ID_EVENTO` int NOT NULL AUTO_INCREMENT,
   `ID_TIPO_EVENTO` int NOT NULL,
   `Nombre` varchar(45) NOT NULL,
   `Fecha` date NOT NULL,
   `Lugar` varchar(45) DEFAULT NULL,
   `Descripcion` varchar(200) DEFAULT NULL,
-  `aforo` int NOT NULL,
-  `recaudacion` double NOT NULL,
+  `Recaudacion` double NOT NULL,
   `objetivo` double NOT NULL,
+  `Informacion` varchar(75) DEFAULT NULL,
+  `Imagen` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`ID_EVENTO`),
   UNIQUE KEY `ID_EVENTO_UNIQUE` (`ID_EVENTO`),
   KEY `EVENTO_TIPO_EVENTO_FK_idx` (`ID_TIPO_EVENTO`),
   CONSTRAINT `EVENTO_TIPO_EVENTO_FK` FOREIGN KEY (`ID_TIPO_EVENTO`) REFERENCES `tipo_evento` (`ID_TIPO_EVENTO`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -133,7 +134,7 @@ CREATE TABLE `evento` (
 
 LOCK TABLES `evento` WRITE;
 /*!40000 ALTER TABLE `evento` DISABLE KEYS */;
-INSERT INTO `evento` VALUES (1,3,'Concierto en la Malagueta','2025-02-10','La Malagueta','Presentación musical al aire libre.',2000,5000,10000),(2,1,'Carrera Paseo Marítimo','2025-03-02','Paseo Marítimo Pablo Ruiz Picasso','Carrera popular de 5 km junto al mar.',500,2000,2500),(3,2,'Rifa Solidaria en Teatinos','2025-04-01','Teatinos','Rifa benéfica organizada por asociaciones locales.',300,1500,3000),(4,5,'Festival Cultural Soho','2025-05-12','Barrio del Soho','Actividades culturales y talleres artísticos.',600,6000,6500),(5,3,'Concierto en el Cervantes','2025-06-20','Teatro Cervantes','Actuación de banda local.',1500,5000,9000),(6,1,'Carrera del Parque del Oeste','2025-07-05','Parque del Oeste','Competición deportiva para todas las edades.',4400,5200,4000),(7,2,'Rifa del Mercado de Atarazanas','2025-08-15','Mercado Central de Atarazanas','Rifa de productos locales.',610,3500,3000),(8,5,'Taller Creativo en el Muelle Uno','2025-09-09','Muelle Uno','Taller artístico abierto al público.',320,400,9000),(9,3,'Concierto en Plaza de la Merced','2025-10-03','Plaza de la Merced','Evento musical gratuito.',640,510,200),(10,1,'Carrera Montes de Málaga','2025-11-14','Montes de Málaga','Carrera de montaña de 10 km.',700,5000,900),(11,2,'Rifa de Navidad en El Palo','2025-12-18','El Palo','Rifa tradicional del barrio.',100,800,2000),(12,5,'Encuentro Cultural Pedregalejo','2025-02-27','Pedregalejo','Reunión vecinal con actividades.',300,600,5000),(13,3,'Concierto en el Auditorio Eduardo Ocón','2025-03-21','Parque de Málaga','Presentación de artistas emergentes.',250,250,6500),(14,1,'Carrera Río Guadalhorce','2025-04-06','Río Guadalhorce','',370,800,9000),(15,2,'Rifa en el Barrio de Huelin','2025-05-30','Huelin','Rifa comunitaria con premios locales.',150,100,2000),(16,5,'Feria Artesanal del Centro Histórico','2025-06-11','Centro Histórico','Exposición y venta de artesanías.',370,300,1000),(17,3,'Concierto en Gibralfaro','2025-07-25','Castillo de Gibralfaro','Concierto nocturno con vistas panorámicas.',100,250,600),(18,1,'Carrera Playa de la Misericordia','2025-08-02','Playa de la Misericordia','Carrera playera de 3 km.',200,150,900),(19,2,'Rifa del Puerto de Málaga','2025-09-19','Puerto de Málaga','Rifa de recaudación solidaria.',300,900,950),(20,5,'Encuentro de Arte en la Térmica','2025-10-27','La Térmica','Actividades culturales y exposiciones.',150,400,400);
+INSERT INTO `evento` VALUES (1,3,'Concierto en la Malagueta','2025-02-10','La Malagueta','Presentación musical al aire libre.',5000,10000,NULL,NULL),(2,1,'Carrera Paseo Marítimo','2025-03-02','Paseo Marítimo Pablo Ruiz Picasso','Carrera popular de 5 km junto al mar.',2000,2500,NULL,NULL),(3,2,'Rifa Solidaria en Teatinos','2025-04-01','Teatinos','Rifa benéfica organizada por asociaciones locales.',1500,3000,NULL,NULL),(4,4,'Festival Cultural Soho','2025-05-12','Barrio del Soho','Actividades culturales y talleres artísticos.',6000,6500,NULL,NULL),(5,3,'Concierto en el Cervantes','2025-06-20','Teatro Cervantes','Actuación de banda local.',5000,9000,NULL,NULL),(6,1,'Carrera del Parque del Oeste','2025-07-05','Parque del Oeste','Competición deportiva para todas las edades.',5200,4000,NULL,NULL),(7,2,'Rifa del Mercado de Atarazanas','2025-08-15','Mercado Central de Atarazanas','Rifa de productos locales.',3500,3000,NULL,NULL),(8,4,'Taller Creativo en el Muelle Uno','2025-09-09','Muelle Uno','Taller artístico abierto al público.',400,9000,NULL,NULL),(9,3,'Concierto en Plaza de la Merced','2025-10-03','Plaza de la Merced','Evento musical gratuito.',510,200,NULL,NULL),(10,1,'Carrera Montes de Málaga','2025-11-14','Montes de Málaga','Carrera de montaña de 10 km.',5000,900,NULL,NULL),(11,2,'Rifa de Navidad en El Palo','2025-12-18','El Palo','Rifa tradicional del barrio.',800,2000,NULL,NULL),(12,4,'Encuentro Cultural Pedregalejo','2025-02-27','Pedregalejo','Reunión vecinal con actividades.',600,5000,NULL,NULL),(13,3,'Concierto en el Auditorio Eduardo Ocón','2025-03-21','Parque de Málaga','Presentación de artistas emergentes.',250,6500,NULL,NULL),(14,1,'Carrera Río Guadalhorce','2025-04-06','Río Guadalhorce','',800,9000,NULL,NULL),(15,2,'Rifa en el Barrio de Huelin','2025-05-30','Huelin','Rifa comunitaria con premios locales.',100,2000,NULL,NULL),(16,4,'Feria Artesanal del Centro Histórico','2025-06-11','Centro Histórico','Exposición y venta de artesanías.',300,1000,NULL,NULL),(17,3,'Concierto en Gibralfaro','2025-07-25','Castillo de Gibralfaro','Concierto nocturno con vistas panorámicas.',250,600,NULL,NULL),(18,1,'Carrera Playa de la Misericordia','2025-08-02','Playa de la Misericordia','Carrera playera de 3 km.',150,900,NULL,NULL),(19,2,'Rifa del Puerto de Málaga','2025-09-19','Puerto de Málaga','Rifa de recaudación solidaria.',900,950,NULL,NULL),(20,4,'Encuentro de Arte en la Térmica','2025-10-27','La Térmica','Actividades culturales y exposiciones.',400,400,NULL,NULL);
 /*!40000 ALTER TABLE `evento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -145,11 +146,12 @@ DROP TABLE IF EXISTS `patrocinador`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `patrocinador` (
-  `ID_PATROCINADOR` int NOT NULL,
+  `ID_PATROCINADOR` int NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(45) NOT NULL,
+  `Imagen` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`ID_PATROCINADOR`),
   UNIQUE KEY `ID_PATROCINADOR_UNIQUE` (`ID_PATROCINADOR`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -158,7 +160,7 @@ CREATE TABLE `patrocinador` (
 
 LOCK TABLES `patrocinador` WRITE;
 /*!40000 ALTER TABLE `patrocinador` DISABLE KEYS */;
-INSERT INTO `patrocinador` VALUES (1,'Cervezas Victoria'),(2,'Unicaja Banco'),(3,'Ayuntamiento de Málaga'),(4,'Coca-Cola Málaga'),(5,'El Corte Inglés Málaga'),(6,'Muelle Uno'),(7,'Diario SUR'),(8,'San Miguel'),(9,'Puerto de Málaga'),(10,'Universidad de Málaga'),(11,'Centro Comercial Larios'),(12,'Aeropuerto Málaga-Costa del Sol');
+INSERT INTO `patrocinador` VALUES (1,'Cervezas Victoria',NULL),(2,'Unicaja Banco',NULL),(3,'Ayuntamiento de Málaga',NULL),(4,'Coca-Cola Málaga',NULL),(5,'El Corte Inglés Málaga',NULL),(6,'Muelle Uno',NULL),(7,'Diario SUR',NULL),(8,'San Miguel',NULL),(9,'Puerto de Málaga',NULL),(10,'Universidad de Málaga',NULL),(11,'Centro Comercial Larios',NULL),(12,'Aeropuerto Málaga-Costa del Sol',NULL);
 /*!40000 ALTER TABLE `patrocinador` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -224,19 +226,19 @@ DROP TABLE IF EXISTS `ticket`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ticket` (
-  `ID_TICKET` int NOT NULL,
+  `ID_TICKET` int NOT NULL AUTO_INCREMENT,
   `DNI_USUARIO` varchar(9) NOT NULL,
   `ID_ENTRADA` int NOT NULL,
-  `DNI_Beneficiario` varchar(9) DEFAULT NULL,
+  `Dni_asistente` varchar(9) DEFAULT NULL,
   `Pago_extra` varchar(45) DEFAULT NULL,
-  `Información` varchar(45) DEFAULT NULL,
+  `Informacion` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`ID_TICKET`,`DNI_USUARIO`,`ID_ENTRADA`),
   UNIQUE KEY `ID_TICKET_UNIQUE` (`ID_TICKET`),
   KEY `TICKET_USUARIO_FK_idx` (`DNI_USUARIO`),
   KEY `TICKET_ENTRADA_FK_idx` (`ID_ENTRADA`),
   CONSTRAINT `TICKET_ENTRADA_FK` FOREIGN KEY (`ID_ENTRADA`) REFERENCES `entrada` (`ID_ENTRADA`),
   CONSTRAINT `TICKET_USUARIO_FK` FOREIGN KEY (`DNI_USUARIO`) REFERENCES `usuario` (`DNI`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -257,10 +259,10 @@ DROP TABLE IF EXISTS `tipo_evento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tipo_evento` (
-  `ID_TIPO_EVENTO` int NOT NULL,
+  `ID_TIPO_EVENTO` int NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(45) NOT NULL,
   PRIMARY KEY (`ID_TIPO_EVENTO`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -269,7 +271,7 @@ CREATE TABLE `tipo_evento` (
 
 LOCK TABLES `tipo_evento` WRITE;
 /*!40000 ALTER TABLE `tipo_evento` DISABLE KEYS */;
-INSERT INTO `tipo_evento` VALUES (1,'CARRERA'),(2,'RIFA'),(3,'CONCIERTO'),(4,'CENA'),(5,'OTRO');
+INSERT INTO `tipo_evento` VALUES (1,'CARRERA'),(2,'RIFA'),(3,'CONCIERTO'),(4,'OTRO');
 /*!40000 ALTER TABLE `tipo_evento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -285,7 +287,7 @@ CREATE TABLE `usuario` (
   `Nombre` varchar(45) NOT NULL,
   `Apellidos` varchar(45) NOT NULL,
   `Email` varchar(45) NOT NULL,
-  `SPAM` tinyint(1) NOT NULL,
+  `Spam` tinyint(1) NOT NULL,
   PRIMARY KEY (`DNI`),
   UNIQUE KEY `DNI_UNIQUE` (`DNI`),
   UNIQUE KEY `Email_UNIQUE` (`Email`)
@@ -311,4 +313,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-12-01 18:47:45
+-- Dump completed on 2025-12-03 11:32:38
