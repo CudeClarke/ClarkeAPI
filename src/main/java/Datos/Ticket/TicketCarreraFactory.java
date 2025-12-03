@@ -4,7 +4,7 @@ import Datos.Usuario.iUsuario;
 
 public class TicketCarreraFactory extends TicketFactory{
     @Override
-    public iTicket createTicket(iUsuario nombre, String dniBeneficiario, int id, int dorsal) {
-        return new TicketCarrera(nombre, dniBeneficiario, id, dorsal);
+    public iTicket createTicket(iUsuario usuario, String dniAsistente, int id, int dorsal) {
+        return new TicketCarrera(usuario, dniAsistente, id, dorsal);
     }
 }

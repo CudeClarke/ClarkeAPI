@@ -1,10 +1,12 @@
 package Datos.Ticket;
 
+import Datos.Usuario.iUsuario;
+
 public class TicketConcierto extends Ticket{
     private int asiento;
 
-    public TicketConcierto(String nombre, String dniBeneficiario, int id, int asiento) {
-        super(nombre, dniBeneficiario, id);
+    public TicketConcierto(iUsuario usuario, String dniAsistente, int id, int asiento) {
+        super(usuario, dniAsistente, id);
         this.asiento = asiento;
     }
 
@@ -17,6 +19,6 @@ public class TicketConcierto extends Ticket{
     }
 
     public String toString(){
-        return "Concierto [Nombre=" + super.getNombre() + ", DNI=" + super.getDniAsistente() + ", ID=" + super.getId() + "Asiento=" + asiento + "]";
+        return "Concierto [Usuario=" + super.getUsuario().toString() + ", DNI=" + super.getDniAsistente() + ", ID=" + super.getId() + "Asiento=" + asiento + "]";
     }
 }
