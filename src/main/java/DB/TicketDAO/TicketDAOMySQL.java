@@ -117,7 +117,7 @@ public class TicketDAOMySQL implements iTicketDAO {
      * Method for registering certain ticket in the database
      */
     @Override
-    public boolean registerTicket(String nombre, String dni, int id, String info) {
+    public boolean registerTicket(String dni, int id, String info) {
         String sql = "INSERT INTO ticket (nombre, DNI_USUARIO, ID_TICKET, Informacion) VALUES (?, ?, ?, ?)";
         try(PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, nombre);

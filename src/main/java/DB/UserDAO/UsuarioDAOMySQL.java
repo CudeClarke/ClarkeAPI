@@ -15,7 +15,7 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
      * @param usuario Objeto con los datos a introducir en la bd.
      * @return True si se inserto correctamente o false si, o ya estaba en la bd u ocurrio un error.
      */
-    public boolean register(iUsuario usuario) {
+    public boolean registerUsuario(iUsuario usuario) {
         String sql = "INSERT INTO usuario (nombre, apellidos, email, dni, spam) VALUES (?, ?, ?, ?, ?)";
 
         try(PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -83,7 +83,7 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
      * @param dni String del usuario a borrar.
      * @return True si se borro correctamente o False en otro caso.
      */
-    public boolean delete(String dni) {
+    public boolean deleteUsuario(String dni) {
         String sql = "DELETE FROM usuarios WHERE dni = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
