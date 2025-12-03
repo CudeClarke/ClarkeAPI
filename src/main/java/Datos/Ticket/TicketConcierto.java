@@ -10,6 +10,11 @@ public class TicketConcierto extends Ticket{
         this.asiento = asiento;
     }
 
+    public TicketConcierto(iUsuario usuario, String dniAsistente, float pagoExtra, String asiento) {
+        super(usuario, dniAsistente, pagoExtra);
+        this.asiento = asiento;
+    }
+
     public String getAsiento() {
         return asiento;
     }
