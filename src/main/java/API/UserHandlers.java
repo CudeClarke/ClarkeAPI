@@ -5,7 +5,7 @@ import io.javalin.http.Handler;
 import DB.UserDAO.UsuarioDAOFactory;
 import DB.UserDAO.UsuarioDAOMySQLFactory;
 import DB.UserDAO.iUsuarioDAO;
-import Usuario.*;
+import Datos.Usuario.*;
 import utils.json_generator;
 
 public class UserHandlers {

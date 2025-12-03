@@ -1,4 +1,4 @@
-package Usuario;
+package Datos.Usuario;
 
 public class UsuarioBase implements iUsuario {
     private String nombre;

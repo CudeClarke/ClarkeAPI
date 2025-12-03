@@ -1,18 +1,18 @@
-package Evento;
+package Datos.Evento;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class EventoAbstracto implements iEvento {
+public class Evento implements iEvento {
     private String nombre;
     private int recaudacion;
     private int objetivoRecaudacion;
     private int aforo;
 
-    private Set<Tag> tags;
+    private Set<String> tags;
     private Set<Patrocinador> patrocinadores;
 
-    public EventoAbstracto(String nombre, int objetivoRecaudacion, int aforo) {
+    public Evento(String nombre, int objetivoRecaudacion, int aforo) {
         this.nombre = nombre;
         this.objetivoRecaudacion = objetivoRecaudacion;
         this.aforo = aforo;
@@ -26,7 +26,7 @@ public class EventoAbstracto implements iEvento {
      * Metodo para agregar un tag a un evento
      * @param tag no nulo a agregar a la lista
      */
-    public void addTag(Tag tag) {
+    public void addTag(String tag) {
         if (tag != null) {
             tags.add(tag);
         }
@@ -36,7 +36,7 @@ public class EventoAbstracto implements iEvento {
      * Metodo para borrar un tag de un evento
      * @param tag a eliminar de la lista
      */
-    public void removeTag(Tag tag) {
+    public void removeTag(String tag) {
         tags.remove(tag);
     }
 

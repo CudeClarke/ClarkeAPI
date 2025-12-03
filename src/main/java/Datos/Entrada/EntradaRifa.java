@@ -1,6 +1,6 @@
-package Evento;
+package Datos.Entrada;
 
-public class EntradaRifa extends EntradaAbstracta {
+public class EntradaRifa extends Entrada {
 
     public EntradaRifa(int subAforo, float precio) {
         super(subAforo, precio);

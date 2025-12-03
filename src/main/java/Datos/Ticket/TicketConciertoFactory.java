@@ -1,4 +1,4 @@
-package Ticket;
+package Datos.Ticket;
 
 public class TicketConciertoFactory extends TicketFactory{
     @Override

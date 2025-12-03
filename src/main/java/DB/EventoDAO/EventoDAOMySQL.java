@@ -1,6 +1,6 @@
 package DB.EventoDAO;
 
-import Evento.*;
+import Datos.Evento.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,7 +29,7 @@ public class EventoDAOMySQL implements iEventoDAO {
             case "CARRERA" -> new EventoCarrera(nombre, objetivo, aforo,null,0);
             case "CONCIERTO" -> new EventoConcierto(nombre, objetivo, aforo, null, null, null);
             case "RIFA" -> new EventoRifa(nombre, objetivo, aforo,null);
-            default -> new EventoAbstracto(nombre, objetivo, aforo);
+            default -> new Evento(nombre, objetivo, aforo);
         };
     }
 

@@ -1,4 +1,4 @@
-package Evento;
+package Datos.Evento;
 
 import java.util.Objects;
 

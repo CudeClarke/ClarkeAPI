@@ -1,6 +1,6 @@
 package DB.UserDAO;
 
-import Usuario.*;
+import Datos.Usuario.*;
 import java.sql.*;
 
 public class UsuarioDAOMySQL implements iUsuarioDAO{

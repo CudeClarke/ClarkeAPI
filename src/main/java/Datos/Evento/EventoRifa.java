@@ -1,9 +1,8 @@
-package Evento;
+package Datos.Evento;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class EventoRifa extends EventoAbstracto {
+public class EventoRifa extends Evento {
     private List<Integer> premios;
 
     public EventoRifa(String nombre, int objetivoRecaudacion, int aforo, List<Integer> premios) {

@@ -1,8 +1,8 @@
-package Evento;
+package Datos.Evento;
 
 import java.util.Date;
 
-public class EventoConcierto extends EventoAbstracto {
+public class EventoConcierto extends Evento {
     private String artista;
     private String ubicacion;
     private Date fecha;

@@ -1,6 +1,6 @@
-package Evento;
+package Datos.Evento;
 
-public class EventoCarrera extends EventoAbstracto {
+public class EventoCarrera extends Evento {
     private String ubicacion;
     private int recorrido;
 
