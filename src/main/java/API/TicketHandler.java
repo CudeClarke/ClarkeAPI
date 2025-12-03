@@ -4,8 +4,8 @@ import io.javalin.http.Handler;
 import java.util.List;
 
 import DB.TicketDAO.*;
-import Ticket.*;
-import Usuario.*;
+import Datos.Ticket.*;
+import Datos.Usuario.*;
 import utils.json_generator;
 
 public class TicketHandler {

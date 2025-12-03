@@ -1,6 +1,6 @@
 package DB.EventoDAO;
 
-import Evento.*;
+import Datos.Evento.*;
 import java.util.List;
 import java.util.Map;
 

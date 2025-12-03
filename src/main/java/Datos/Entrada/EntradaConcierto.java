@@ -1,6 +1,6 @@
-package Evento;
+package Datos.Entrada;
 
-public class EntradaConcierto extends EntradaAbstracta {
+public class EntradaConcierto extends Entrada {
     private int seccion;
 
     public EntradaConcierto(int subAforo, float precio,  int seccion) {
