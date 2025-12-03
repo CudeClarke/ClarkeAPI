@@ -2,6 +2,7 @@ package Datos.Evento;
 
 import Datos.Entrada.Entrada;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -14,6 +15,12 @@ public interface iEvento {
     public void setObjetivoRecaudacion(int objetivoRecaudacion);
     public String getUbicacion();
     public void setUbicacion(String ubicacion);
+    public String getDescripcion();
+    public void setDescripcion(String descripcion);
+    public Date getDate();
+    public void setDate(Date date);
+    public String getUrl();
+    public void setUrl(String url);
     public Set<String> getTags();
     public Set<Patrocinador> getPatrocinadores();
     public List<Entrada> getEntradas();

@@ -1,17 +1,13 @@
 package Datos.Evento;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class EventoConcierto extends Evento {
     private String artista;
-    private String ubicacion;
-    private Date fecha;
 
-    public EventoConcierto(String nombre, int objetivoRecaudacion, int aforo, String artista, String ubicacion, Date fecha) {
-        super(nombre, objetivoRecaudacion, aforo);
+    public EventoConcierto(String nombre, String ubicacion, int objetivoRecaudacion, String descripcion, Date date, String url, String artista) {
+        super(nombre, ubicacion, objetivoRecaudacion, descripcion, date, url);
         this.artista = artista;
-        this.ubicacion = ubicacion;
-        this.fecha = fecha;
     }
 
     public String getArtista() {
@@ -20,27 +16,6 @@ public class EventoConcierto extends Evento {
 
     public void setArtista(String artista) {
         this.artista = artista;
-    }
-
-    public String getUbicacion() {
-        return ubicacion;
-    }
-
-    public void setUbicacion(String ubicacion) {
-        this.ubicacion = ubicacion;
-    }
-
-    public Date getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
-    }
-
-    @Override
-    public String toString(){
-        return "Concierto [Artista=" +  artista + ", ubicacion=" + ubicacion + ", fecha=" + fecha + ", Aforo" + getArtista() +"]";
     }
 
 }

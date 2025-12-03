@@ -2,26 +2,30 @@ package Datos.Evento;
 
 import Datos.Entrada.Entrada;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.sql.Date;
 
 public class Evento implements iEvento {
     private String nombre;
     private String ubicacion;
     private int recaudacion;
     private int objetivoRecaudacion;
+    private String descripcion;
+    private Date date;
+    private String url;
 
     private Set<String> tags;
     private Set<Patrocinador> patrocinadores;
     private List<Entrada> entradas;
 
-    public Evento(String nombre, String ubicacion, int objetivoRecaudacion) {
+    public Evento(String nombre, String ubicacion, int objetivoRecaudacion, String descripcion, Date date, String url) {
         this.nombre = nombre;
         this.ubicacion = ubicacion;
         this.objetivoRecaudacion = objetivoRecaudacion;
+        this.descripcion = descripcion;
         recaudacion = 0;
+        this.date = date;
+        this.url = url;
 
         tags = new HashSet<>();
         patrocinadores = new HashSet<>();
@@ -116,6 +120,30 @@ public class Evento implements iEvento {
 
     public void setObjetivoRecaudacion(int objetivoRecaudacion) {
         this.objetivoRecaudacion = objetivoRecaudacion;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     @Override

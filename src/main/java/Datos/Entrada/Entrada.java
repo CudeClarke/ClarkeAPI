@@ -9,12 +9,26 @@ public class Entrada implements iEntrada {
     private int subAforo;
     private float precio;
     private List<iTicket> tickets;
+    private String informacion;
 
-    public Entrada(int subAforo, float precio) {
+    public Entrada(int subAforo, float precio, String informacion) {
         this.subAforo = subAforo;
         this.precio = precio;
+        this.informacion = informacion;
 
         this.tickets = new ArrayList<iTicket>();
+    }
+
+    public List<iTicket> getTickets() {
+        return tickets;
+    }
+
+    public String getInformacion() {
+        return informacion;
+    }
+
+    public void setInformacion(String informacion) {
+        this.informacion = informacion;
     }
 
     public void addTicket(iTicket ticket) {

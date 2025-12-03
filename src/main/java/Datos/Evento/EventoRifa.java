@@ -1,17 +1,15 @@
 package Datos.Evento;
 
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EventoRifa extends Evento {
     private List<Integer> premios;
 
-    public EventoRifa(String nombre, int objetivoRecaudacion, int aforo, List<Integer> premios) {
-        super(nombre, objetivoRecaudacion, aforo);
-        if (premios == null) {
-            this.premios = List.of();
-        } else {
-            this.premios = List.copyOf(premios);
-        }
+    public EventoRifa(String nombre, String ubicacion, int objetivoRecaudacion, String descripcion, Date date, String url) {
+        super(nombre, ubicacion, objetivoRecaudacion, descripcion, date, url);
+        premios = new ArrayList<>();
     }
 
     public List<Integer> getPremios() {
