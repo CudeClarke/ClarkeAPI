@@ -96,7 +96,6 @@ public class TicketHandler {
                 res = json_generator.status_response(1, "Nombre y DNI son obligatorios.");
             } else {
                 boolean exito = ticketDAO.registerTicket(
-                        datos.nombre,
                         datos.dni,
                         datos.id,
                         datos.info);

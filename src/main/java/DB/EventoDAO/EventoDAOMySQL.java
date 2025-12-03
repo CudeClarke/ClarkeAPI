@@ -221,4 +221,24 @@ public class EventoDAOMySQL implements iEventoDAO {
         }
         return mapa;
     }
+
+    @Override
+    public boolean registerEvento(iEvento evento, int tipo) {
+        return false;
+    }
+
+    @Override
+    public boolean updateEvento(iEvento evento) {
+        return false;
+    }
+
+    @Override
+    public boolean deleteEvento(iEvento evento) {
+        return false;
+    }
+
+    @Override
+    public int getID(iEvento evento) {
+        return 0;
+    }
 }

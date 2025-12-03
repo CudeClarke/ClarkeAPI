@@ -2,6 +2,7 @@ package DB.UserDAO;
 
 import Datos.Usuario.*;
 import java.sql.*;
+import java.util.List;
 
 public class UsuarioDAOMySQL implements iUsuarioDAO{
     private final Connection connection;
@@ -15,7 +16,7 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
      * @param usuario Objeto con los datos a introducir en la bd.
      * @return True si se inserto correctamente o false si, o ya estaba en la bd u ocurrio un error.
      */
-    public boolean register(iUsuario usuario) {
+    public boolean registerUsuarioBase(UsuarioBase usuario) {
         String sql = "INSERT INTO usuario (nombre, apellidos, email, dni, spam) VALUES (?, ?, ?, ?, ?)";
 
         try(PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -33,12 +34,17 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
         }
     }
 
+    @Override
+    public boolean registerUsuarioRegistrado(UsuarioRegistrado usuario) {
+        return false;
+    }
+
     /**
      * Metodo para actualizar un usuario partiendo del dni
      * @param usuario Objeto con la informacion del usuario
      * @return True si se actualiza o false en otro caso
      */
-    public boolean update(iUsuario usuario) {
+    public boolean updateUsuario(iUsuario usuario) {
         String sql = "UPDATE usuario SET nombre=?, email=?, spam=? WHERE dni=?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)){
@@ -54,6 +60,11 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
             System.err.println("Error updating an user: " + e.getMessage());
             return false;
         }
+    }
+
+    @Override
+    public List<iUsuario> getAllUsuarios() {
+        return List.of();
     }
 
     /**
@@ -83,7 +94,7 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
      * @param dni String del usuario a borrar.
      * @return True si se borro correctamente o False en otro caso.
      */
-    public boolean delete(String dni) {
+    public boolean deleteUsuario(String dni) {
         String sql = "DELETE FROM usuarios WHERE dni = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
