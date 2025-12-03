@@ -1,4 +1,4 @@
-package Usuario;
+package Datos.Usuario;
 
 public class UsuarioRegistrado extends UsuarioBase {
     private String direccion;

@@ -1,4 +1,4 @@
-package Usuario;
+package Datos.Usuario;
 
 public interface iUsuario {
     public String getNombre();

@@ -1,6 +1,6 @@
 package DB.UserDAO;
 
-import Usuario.*;
+import Datos.Usuario.*;
 
 public interface iUsuarioDAO {
     boolean register(iUsuario usuario);
