@@ -5,8 +5,8 @@ import Datos.Usuario.iUsuario;
 public class TicketCarrera extends Ticket {
     private int dorsal;
 
-    public TicketCarrera(iUsuario usuario, String dniAsistente, int id, int dorsal) {
-        super(usuario, dniAsistente, id);
+    public TicketCarrera(iUsuario usuario, String dniAsistente, int dorsal) {
+        super(usuario, dniAsistente);
         this.dorsal = dorsal;
     }
 
@@ -19,6 +19,6 @@ public class TicketCarrera extends Ticket {
     }
 
     public String toString(){
-        return "Carrera [Usuario=" + super.getUsuario().toString() + ", DNI=" + super.getDniAsistente() + ", ID=" + super.getId() + "Dorsal=" + dorsal + "]";
+        return "Carrera [Usuario=" + super.getUsuario().toString() + ", DNI=" + super.getDniAsistente() + "Dorsal=" + dorsal + "]";
     }
 }
