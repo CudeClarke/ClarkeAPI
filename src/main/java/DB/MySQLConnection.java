@@ -36,7 +36,7 @@ public final class MySQLConnection implements iDatabase{
         }
     }
 
-    public static synchronized MySQLConnection getDatabase() {
+    static synchronized MySQLConnection getDatabase() {
         if (instance == null) {
             instance = new MySQLConnection();
         } else {
