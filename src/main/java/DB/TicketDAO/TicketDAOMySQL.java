@@ -21,6 +21,7 @@ public class TicketDAOMySQL implements iTicketDAO {
     }
 
     public static TicketDAOMySQL getInstance() {
+        if (instance == null) instance = new TicketDAOMySQL();
         return instance;
     }
 

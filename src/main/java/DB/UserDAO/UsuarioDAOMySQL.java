@@ -15,6 +15,7 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
     }
 
     public static UsuarioDAOMySQL getInstance() {
+        if (instance == null) instance = new UsuarioDAOMySQL();
         return instance;
     }
 

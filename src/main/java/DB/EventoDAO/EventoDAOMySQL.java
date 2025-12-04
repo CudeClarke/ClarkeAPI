@@ -17,6 +17,7 @@ public class EventoDAOMySQL implements iEventoDAO {
     }
 
     public static EventoDAOMySQL getInstance() {
+        if (instance == null) instance = new EventoDAOMySQL();
         return instance;
     }
 
