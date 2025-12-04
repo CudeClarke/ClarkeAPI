@@ -13,12 +13,12 @@ public class MySQLAccessFactory implements DatabaseAccessFactory{
     
     @Override
     public iUsuarioDAO getUsuarioDAO() {
-        return new UsuarioDAOMySQL(mySQLConnection.getConnection());
+        return UsuarioDAOMySQL.getInstance();
     }
 
     @Override
     public iEventoDAO getEventoDAO() {
-        return new EventoDAOMySQL(mySQLConnection.getConnection());
+        return EventoDAOMySQL.getInstance();
     }
 
     @Override
@@ -29,6 +29,6 @@ public class MySQLAccessFactory implements DatabaseAccessFactory{
 
     @Override
     public iTicketDAO getTicketDAO() {
-        return new TicketDAOMySQL(mySQLConnection.getConnection());
+        return TicketDAOMySQL.getInstance();
     }
 }

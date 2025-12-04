@@ -1,15 +1,22 @@
 package DB.UserDAO;
 
+import DB.MySQLConnection;
 import Datos.Usuario.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UsuarioDAOMySQL implements iUsuarioDAO{
+    private static UsuarioDAOMySQL instance;
     private final Connection connection;
 
-    public UsuarioDAOMySQL(Connection connection) {
-        this.connection = connection;
+    private UsuarioDAOMySQL() {
+        this.connection = MySQLConnection.getDatabase().getConnection();
+    }
+
+    public static UsuarioDAOMySQL getInstance() {
+        if (instance == null) instance = new UsuarioDAOMySQL();
+        return instance;
     }
 
     /**
