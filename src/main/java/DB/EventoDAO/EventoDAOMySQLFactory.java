@@ -1,6 +1,5 @@
 package DB.EventoDAO;
 
-import DB.DatabaseFactory;
 import DB.iDatabase;
 
 public class EventoDAOMySQLFactory extends EventoDAOFactory{
