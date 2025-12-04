@@ -1,5 +1,6 @@
 package DB.EventoDAO;
 
+import DB.MySQLConnection;
 import Datos.Evento.*;
 import java.sql.*;
 import java.util.ArrayList;
@@ -8,11 +9,16 @@ import java.util.List;
 import java.util.Map;
 
 public class EventoDAOMySQL implements iEventoDAO {
+    private static EventoDAOMySQL instance;
+    private final Connection connection;
 
-    private Connection connection;
+    private EventoDAOMySQL() {
+        this.connection = MySQLConnection.getDatabase().getConnection();
+    }
 
-    public EventoDAOMySQL(Connection connection) {
-        this.connection = connection;
+    public static EventoDAOMySQL getInstance() {
+        if (instance == null) instance = new EventoDAOMySQL();
+        return instance;
     }
 
     // -------------------------------------------------------
