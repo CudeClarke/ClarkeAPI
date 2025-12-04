@@ -13,16 +13,16 @@ public final class MySQLConnection implements iDatabase{
 
 
     private MySQLConnection(){
+        connect();
+    }
+
+    public void connect(){
         try {
             this.connection = DriverManager.getConnection(url, user, password);
             System.out.println("Connected to MySQL successfully");
         } catch (SQLException e) {
             System.err.println("MySQL failed to establish connection:  " + e.getMessage());
         }
-    }
-
-    public Connection getConnection() {
-        return connection;
     }
 
     public void disconnect() {
@@ -34,6 +34,10 @@ public final class MySQLConnection implements iDatabase{
         } catch (SQLException e) {
             System.err.println("MySQL connection could not be close:  " + e.getMessage());
         }
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 
     public static synchronized MySQLConnection getDatabase() {

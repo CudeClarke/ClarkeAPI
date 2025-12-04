@@ -12,6 +12,10 @@ public class MariaDBConnection implements iDatabase {
     private final String password = "pwd";
 
     private MariaDBConnection(){
+        connect();
+    }
+
+    public void connect(){
         try{
             // Cargar explicitamente el Driver
             Class.forName("org.mariadb.jdbc.Driver");
@@ -24,10 +28,6 @@ public class MariaDBConnection implements iDatabase {
         }
     }
 
-    public Connection getConnection() {
-        return connection;
-    }
-
     public void disconnect() {
         try {
             if (connection != null && !connection.isClosed()) {
@@ -37,6 +37,10 @@ public class MariaDBConnection implements iDatabase {
         } catch (SQLException e) {
             System.err.println("MariaDB connection could not be closed: " + e.getMessage());
         }
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 
     public static synchronized MariaDBConnection getDatabase(){

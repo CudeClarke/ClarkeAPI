@@ -1,6 +1,5 @@
 package DB.TicketDAO;
 
-import DB.DatabaseFactory;
 import DB.iDatabase;
 
 public class TicketDAOMySQLFactory extends TicketDAOFactory {
