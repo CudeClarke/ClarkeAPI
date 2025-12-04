@@ -12,6 +12,10 @@ public class MariaDBConnection implements iDatabase {
     private final String password = "pwd";
 
     private MariaDBConnection(){
+        connect();
+    }
+
+    public void connect(){
         try{
             // Cargar explicitamente el Driver
             Class.forName("org.mariadb.jdbc.Driver");
@@ -22,10 +26,6 @@ public class MariaDBConnection implements iDatabase {
         } catch (SQLException e) {
             System.err.println("MariaDB failed to establish connection:  " + e.getMessage());
         }
-    }
-
-    public Connection getConnection() {
-        return connection;
     }
 
     public void disconnect() {
@@ -39,7 +39,11 @@ public class MariaDBConnection implements iDatabase {
         }
     }
 
-    public synchronized MariaDBConnection getDatabase(){
+    public Connection getConnection() {
+        return connection;
+    }
+
+    public static synchronized MariaDBConnection getDatabase(){
         if (instance == null) {
             instance = new MariaDBConnection();
         } else {

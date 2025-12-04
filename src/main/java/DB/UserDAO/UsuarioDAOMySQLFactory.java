@@ -1,6 +1,5 @@
 package DB.UserDAO;
 
-import DB.DatabaseFactory;
 import DB.iDatabase;
 
 public class UsuarioDAOMySQLFactory extends UsuarioDAOFactory{
