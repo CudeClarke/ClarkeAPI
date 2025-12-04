@@ -1,5 +1,6 @@
 package DB.TicketDAO;
 
+import DB.MySQLConnection;
 import Datos.Ticket.*;
 import Datos.Usuario.UsuarioBase;
 import Datos.Usuario.iUsuario;
@@ -12,9 +13,15 @@ import java.util.List;
 
 //MUST DELETE NOMBRE ONCE TICKET CLASS IS CHANGED
 public class TicketDAOMySQL implements iTicketDAO {
-    private Connection connection;
-    public TicketDAOMySQL(Connection connection){
-        this.connection = connection;
+    private static TicketDAOMySQL instance;
+    private final Connection connection;
+
+    private TicketDAOMySQL(){
+        this.connection = MySQLConnection.getDatabase().getConnection();
+    }
+
+    public static TicketDAOMySQL getInstance() {
+        return instance;
     }
 
     /**
