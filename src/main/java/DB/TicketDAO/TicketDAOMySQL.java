@@ -1,6 +1,7 @@
 package DB.TicketDAO;
 
 import Datos.Ticket.*;
+import Datos.Usuario.UsuarioBase;
 import Datos.Usuario.iUsuario;
 
 import java.sql.Connection;
@@ -36,7 +37,10 @@ public class TicketDAOMySQL implements iTicketDAO {
         }
         return 0;
     }
-
+    /**
+     * Method to the create a ticket of a certain type
+     * @param type the type of the ticket that we are trying to create
+     */
     public TicketFactory getFactoryByType(int type){
         switch(type){
             case 1 -> {
@@ -54,40 +58,14 @@ public class TicketDAOMySQL implements iTicketDAO {
         }
     }
 
-    /**
-     * Method to retrieve all tickets purchased by a user with a given DNI
-     * @param user the user whose tickets are to be retrieved
-     */
-    @Override
-    public List<iTicket>  searchByUser(iUsuario user) {
-        List<iTicket> ticketList = new ArrayList<>();
-        String sql = "SELECT * FROM ticket WHERE DNI_USUARIO = ?";
-        try(PreparedStatement st = connection.prepareStatement(sql)) {
-            st.setString(1, user.getDni());
-            try(ResultSet rs = st.executeQuery()){
-                while(rs.next()){
-                    int id = rs.getInt("ID_TICKET");
-                    int type = ticketType(id);
-                    String dni = rs.getString("DNI_USUARIO");
-                    int info = rs.getInt("Informacion");
-                    TicketFactory factory = getFactoryByType(type);
-                    iTicket ticket = factory.createTicket(user, dni, id, info);
-                    ticketList.add((ticket));
-                }
-            }catch(SQLException e){
-                System.err.println("Error searching ticket/s for user: " + e.getMessage());
-            }
-        }catch (SQLException e){
-            System.err.println("Error searching ticket/s for user:" + e.getMessage());
-        }
-        return ticketList;
-    }
+
+
 
     /**
      * Method to retrieve all tickets that are from the same type
      * @param type the type of the tickets we are retrieving
      */
-    public List<iTicket>  searchByType(int type) {
+    /*public List<iTicket>  searchByType(int type) {
         List<iTicket> ticketList = new ArrayList<>();
         String sql = "SELECT * FROM ticket t JOIN entrada en ON en.ID_ENTRADA = t.ID_ENTRADA JOIN evento e ON e.ID_EVENTO = en.ID_EVENTO where e.ID_TIPO_EVENTO = ?";
         try(PreparedStatement st = connection.prepareStatement(sql)) {
@@ -111,17 +89,95 @@ public class TicketDAOMySQL implements iTicketDAO {
         return ticketList;
     }
 
+*/
+
+
+
+    /**
+     * Method to retrieve all tickets purchased by a user with a given DNI
+     * @param dni the dni of the user whose tickets are to be retrieved
+     */
+    @Override
+    public List<iTicket> searchByUser(String dni) {
+        List<iTicket> ticketList = new ArrayList<>();
+        String sql = "SELECT * FROM ticket WHERE DNI_USUARIO = ?";
+        try(PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, dni);
+            try(ResultSet rs = st.executeQuery()){
+                while(rs.next()){
+                    int id = rs.getInt("ID_TICKET");
+                    int type = ticketType(id);
+                    iUsuario user = new UsuarioBase("a", "b", "c",dni); //SHOULD BE IMPLEMENTED CORRECTLY
+                    String Dni_asistente = rs.getString("Dni_Asistente");
+                    String info = rs.getString("Informacion");
+                    TicketFactory factory = getFactoryByType(type);
+                    float pago_extra = rs.getFloat("Pago_extra");
+                    iTicket ticket;
+                    if(pago_extra == 0) {
+                        ticket = factory.createTicket(user, Dni_asistente, info);
+                    }else{
+                        ticket = factory.createTicket(user, Dni_asistente, pago_extra, info);
+                    }
+                    ticketList.add((ticket));
+                    ticketList.add((ticket));
+                }
+            }catch(SQLException e){
+                System.err.println("Error searching ticket/s for user: " + e.getMessage());
+            }
+        }catch (SQLException e){
+            System.err.println("Error searching ticket/s for user:" + e.getMessage());
+        }
+        return ticketList;
+    }
+
+    /**
+     * Method to retrieve all tickets linked to the given entry
+     * @param idEntrada The id of the entry whose tickets we want to list
+     */
+    @Override
+    public List<iTicket> searchByEntrada(int idEntrada) {
+        List<iTicket> ticketList = new ArrayList<>();
+        String sql = "SELECT * FROM ticket WHERE ID_ENTRADA = ?";
+        try(PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, idEntrada);
+            try(ResultSet rs = st.executeQuery()){
+                while(rs.next()){
+                    int id = rs.getInt("ID_TICKET");
+                    int type = ticketType(id);
+                    iUsuario user = new UsuarioBase("a","b","c",rs.getString("DNI_USUARIO"));
+                    String Dni_asistente = rs.getString("Dni_asistente");
+                    String info = rs.getString("Informacion");
+                    TicketFactory factory = getFactoryByType(type);
+                    float pago_extra = rs.getFloat("Pago_extra");
+                    iTicket ticket;
+                    if(pago_extra == 0) {
+                        ticket = factory.createTicket(user, Dni_asistente, info);
+                    }else{
+                        ticket = factory.createTicket(user, Dni_asistente, pago_extra, info);
+                    }
+                    ticketList.add((ticket));
+                }
+            }catch(SQLException e){
+                System.err.println("Error searching ticket/s for user: " + e.getMessage());
+            }
+        }catch (SQLException e){
+            System.err.println("Error searching ticket/s for user:" + e.getMessage());
+        }
+        return ticketList;
+    }
+
     /**
      * Method for registering certain ticket in the database
      */
     @Override
-    public boolean registerTicket(String dni, int id, String info) {
-        String sql = "INSERT INTO ticket (nombre, DNI_USUARIO, ID_TICKET, Informacion) VALUES (?, ?, ?, ?)";
+    public boolean registerTicket(iTicket ticket, String dniComprador, int idEntrada, String informacion) {
+        String sql = "INSERT INTO ticket (DNI_USUARIO, ID_ENTRADA, Dni_asistente, Pago_extra, Informacion) VALUES (?, ?, ?, ?, ?)";
         try(PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, nombre);
-            stmt.setString(2, dni);
-            stmt.setInt(3, id);
-            stmt.setString(6,  info);
+            stmt.setString(1, dniComprador);
+            stmt.setInt(2, idEntrada);
+            stmt.setString(3, ticket.getDniAsistente());
+            stmt.setFloat(4, ticket.getPagoExtra());
+            stmt.setString(5, informacion);
             int rowsAffected = stmt.executeUpdate();
             return (rowsAffected > 0);
         } catch (SQLException e){
@@ -147,21 +203,6 @@ public class TicketDAOMySQL implements iTicketDAO {
             System.err.println("Error deleting an user: " + e.getMessage());
             return false;
         }
-    }
-
-    @Override
-    public List<iTicket> searchByUser(String dni) {
-        return List.of();
-    }
-
-    @Override
-    public List<iTicket> searchByEntrada(int idEntrada) {
-        return List.of();
-    }
-
-    @Override
-    public boolean registerTicket(iTicket ticket, String dniComprador, int idEntrada) {
-        return false;
     }
 }
 
