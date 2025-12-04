@@ -2,8 +2,6 @@ package API;
 
 import io.javalin.validation.ValidationException;
 import io.javalin.http.Handler;
-import DB.UserDAO.UsuarioDAOFactory;
-import DB.UserDAO.UsuarioDAOMySQLFactory;
 import DB.UserDAO.iUsuarioDAO;
 import Datos.Usuario.*;
 import utils.json_generator;
