@@ -4,27 +4,27 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class MySQLConnection implements iDatabase{
+public final class MySQLConnection implements iDatabase{
+    private static MySQLConnection instance;
     private Connection connection;
     private final String url = "jdbc:mysql://localhost:3306/ClarkeDB";
     private final String user = "clarke";
     private final String password = "cudeca";
 
-    @Override
-    public Connection getConnection() {
+
+    private MySQLConnection(){
+        connect();
+    }
+
+    public void connect(){
         try {
-            if(this.connection == null) {
-                this.connection = DriverManager.getConnection(url, user, password);
-                System.out.println("Connected to MySQL successfully");
-            }
-            return this.connection;
+            this.connection = DriverManager.getConnection(url, user, password);
+            System.out.println("Connected to MySQL successfully");
         } catch (SQLException e) {
             System.err.println("MySQL failed to establish connection:  " + e.getMessage());
-            return null;
         }
     }
 
-    @Override
     public void disconnect() {
         try {
             if(this.connection != null && !this.connection.isClosed()) {
@@ -34,5 +34,24 @@ public class MySQLConnection implements iDatabase{
         } catch (SQLException e) {
             System.err.println("MySQL connection could not be close:  " + e.getMessage());
         }
+    }
+
+    public Connection getConnection() {
+        return connection;
+    }
+
+    public static synchronized MySQLConnection getDatabase() {
+        if (instance == null) {
+            instance = new MySQLConnection();
+        } else {
+            try {
+                if (instance.connection.isClosed()) {
+                    instance = new MySQLConnection();
+                }
+            } catch (SQLException e) {
+                instance = new MySQLConnection();
+            }
+        }
+        return instance;
     }
 }
