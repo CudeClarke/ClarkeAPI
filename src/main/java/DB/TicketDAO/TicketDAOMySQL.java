@@ -17,7 +17,7 @@ public class TicketDAOMySQL implements iTicketDAO {
     private final Connection connection;
 
     private TicketDAOMySQL(){
-        this.connection = MySQLConnection.getDatabase().getConnection();
+        this.connection = MySQLConnection.getInstance().getConnection();
     }
 
     public static TicketDAOMySQL getInstance() {
