@@ -40,7 +40,7 @@ public final class MySQLConnection implements iDatabase{
         return connection;
     }
 
-    public static synchronized MySQLConnection getDatabase() {
+    public static synchronized MySQLConnection getInstance() {
         if (instance == null) {
             instance = new MySQLConnection();
         } else {

@@ -13,7 +13,7 @@ public class EventoDAOMySQL implements iEventoDAO {
     private final Connection connection;
 
     private EventoDAOMySQL() {
-        this.connection = MySQLConnection.getDatabase().getConnection();
+        this.connection = MySQLConnection.getInstance().getConnection();
     }
 
     public static EventoDAOMySQL getInstance() {
