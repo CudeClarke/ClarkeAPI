@@ -10,11 +10,7 @@ import DB.UserDAO.iUsuarioDAO;
 
 public class MySQLAccessFactory implements iDatabaseAccessFactory {
     private static MySQLAccessFactory instance;
-    private MySQLConnection mySQLConnection;
-
-    private MySQLAccessFactory(){
-        mySQLConnection = MySQLConnection.getInstance();
-    }
+    private MySQLAccessFactory(){}
 
     public static MySQLAccessFactory getInstance() {
         if (instance == null) instance = new MySQLAccessFactory();
