@@ -8,9 +8,9 @@ import DB.TicketDAO.iTicketDAO;
 import DB.UserDAO.UsuarioDAOMySQL;
 import DB.UserDAO.iUsuarioDAO;
 
-public class MySQLAccessFactory implements DatabaseAccessFactory{
-    MySQLConnection mySQLConnection = MySQLConnection.getDatabase();
-    
+public class MySQLAccessFactory implements iDatabaseAccessFactory {
+    MySQLConnection mySQLConnection = MySQLConnection.getInstance();
+
     @Override
     public iUsuarioDAO getUsuarioDAO() {
         return UsuarioDAOMySQL.getInstance();

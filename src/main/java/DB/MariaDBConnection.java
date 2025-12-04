@@ -43,7 +43,7 @@ public class MariaDBConnection implements iDatabase {
         return connection;
     }
 
-    public static synchronized MariaDBConnection getDatabase(){
+    public static synchronized MariaDBConnection getInstance(){
         if (instance == null) {
             instance = new MariaDBConnection();
         } else {

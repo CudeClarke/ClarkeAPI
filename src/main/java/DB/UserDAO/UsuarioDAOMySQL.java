@@ -11,7 +11,7 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
     private final Connection connection;
 
     private UsuarioDAOMySQL() {
-        this.connection = MySQLConnection.getDatabase().getConnection();
+        this.connection = MySQLConnection.getInstance().getConnection();
     }
 
     public static UsuarioDAOMySQL getInstance() {
