@@ -2,11 +2,12 @@ package API;
 
 import io.javalin.http.Handler;
 import Datos.Usuario.*;
+import DB.MySQLAccessFactory;
 import utils.json_generator;
 import Managers.UserManager;
 
 public class UserHandlers {
-    private static final UserManager userManager = new UserManager();
+    private static final UserManager userManager = new UserManager(MySQLAccessFactory.getInstance());
     
     public static Handler getUserByDni = ctx -> {
         String dni = ctx.pathParam("dni");

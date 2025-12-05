@@ -1,17 +1,17 @@
 package Managers;
 
 import DB.iDatabaseAccessFactory;
-import DB.MySQLAccessFactory;
 import DB.UserDAO.iUsuarioDAO;
 import Datos.Usuario.*;
 
 import java.util.List;
 
 public class UserManager {
-    private final iDatabaseAccessFactory factory = MySQLAccessFactory.getInstance();
-    private final iUsuarioDAO userDAO = factory.getUsuarioDAO();
+    private final iUsuarioDAO userDAO;
 
-    public UserManager(){}
+    public UserManager(iDatabaseAccessFactory factory){
+        userDAO = factory.getUsuarioDAO();
+    }
 
     private boolean validDni(String dni){ return dni.length() == 9 && Character.isLetter(dni.charAt(dni.length() - 1));}
 
