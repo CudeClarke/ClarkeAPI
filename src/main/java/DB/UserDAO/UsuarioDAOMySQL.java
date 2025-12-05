@@ -24,7 +24,7 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
      * @param usuario Objeto con los datos a introducir en la bd, puede ser base o registrado.
      * @return True si se inserto correctamente o false si, o ya estaba en la bd u ocurrio un error.
      */
-    public boolean registerUsuarioBase(UsuarioBase usuario) {
+    public boolean registerUsuario(iUsuario usuario) {
         String sqlUsuario = "INSERT INTO usuario (DNI, Nombre, Apellidos, Email, SPAM) VALUES (?, ?, ?, ?, ?)";
         String sqlRegistrado = "INSERT INTO registrado (DNI_USUARIO, Telefono, Direccion_postal) VALUES (?, ?, ?)";
 
@@ -155,7 +155,7 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
      * @param dni String que buscamos.
      * @return El usuario (base/registrado) si existe o null en otro caso.
      */
-    public UsuarioBase searchByDni(String dni) {
+    public iUsuario searchByDni(String dni) {
         String sql = "SELECT u.*, r.Telefono, r.Direccion_postal " +
                 "FROM usuario u " +
                 "LEFT JOIN registrado r ON u.DNI = r.DNI_USUARIO " +
@@ -176,8 +176,8 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
         return user;
     }
 
-    public List<UsuarioBase> listAllUsuarios() {
-        List<UsuarioBase> list = new ArrayList<>();
+    public List<iUsuario> getAllUsuarios() {
+        List<iUsuario> list = new ArrayList<>();
         String sql = "SELECT u.*, r.Telefono, r.Direccion_postal " +
                 "FROM usuario u " +
                 "LEFT JOIN registrado r ON u.DNI = r.DNI_USUARIO";
