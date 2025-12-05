@@ -8,8 +8,8 @@ public class App {
     public static void main(String[] args) {
         Javalin app = Javalin.create().start(PORT);
 
-        app.get("/user/{dni}", UserHandlers.getUser);
-        app.post("/newUser", UserHandlers.storeUser);
+        app.get("/user/{dni}", UserHandlers.getUserByDni);
+        app.post("/newUser", UserHandlers.registerUser);
 /*
         app.get("/api/eventos", EventoHandlers.getEvents);
         app.get("/api/eventos/{nombre}", EventoHandlers.getEventByName);
