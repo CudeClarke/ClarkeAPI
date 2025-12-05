@@ -10,8 +10,10 @@ public interface iEntrada {
     public float getPrecio();
     public void setPrecio(float precio);
     public List<iTicket> getTickets();
-    public void setInformacion(String informacion);
-    public String getInformacion();
+    public void setNombre(String nombre);
+    public String getNombre();
+    public String getDescripcion();
+    public void setDescripcion(String descripcion);
 
     public void addTicket(iTicket ticket);
     public void removeTicket(iTicket ticket);

@@ -1,22 +1,12 @@
 package Datos.Entrada;
 
 public class EntradaConcierto extends Entrada {
-    private int seccion;
 
-    public EntradaConcierto(int subAforo, float precio,  int seccion) {
-        super(subAforo, precio);
-        this.seccion = seccion;
-    }
-
-    public int getSeccion() {
-        return seccion;
-    }
-
-    public void setSeccion(int seccion) {
-        this.seccion = seccion;
+    public EntradaConcierto(int subAforo, float precio, String nombre, String descripcion,  int seccion) {
+        super(subAforo, precio, nombre, descripcion);
     }
 
     public String toString(){
-        return "EntradaConcierto [seccion=" + seccion + "precio=" + super.getPrecio() + "]";
+        return "EntradaConcierto [seccion=" + super.getPrecio() + "]";
     }
 }
