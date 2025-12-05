@@ -9,12 +9,14 @@ public class Entrada implements iEntrada {
     private int subAforo;
     private float precio;
     private List<iTicket> tickets;
-    private String informacion;
+    private String nombre;
+    private String descripcion;
 
-    public Entrada(int subAforo, float precio, String informacion) {
+    public Entrada(int subAforo, float precio, String nombre, String descripcion) {
         this.subAforo = subAforo;
         this.precio = precio;
-        this.informacion = informacion;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
 
         this.tickets = new ArrayList<iTicket>();
     }
@@ -23,12 +25,20 @@ public class Entrada implements iEntrada {
         return tickets;
     }
 
-    public String getInformacion() {
-        return informacion;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setInformacion(String informacion) {
-        this.informacion = informacion;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public void addTicket(iTicket ticket) {
