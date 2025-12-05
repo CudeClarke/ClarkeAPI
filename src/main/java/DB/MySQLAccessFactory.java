@@ -1,6 +1,7 @@
 package DB;
 
 import DB.EntradaDAO.iEntradaDAO;
+import DB.EntradaDAO.EntradaDAOMySQL;
 import DB.EventoDAO.EventoDAOMySQL;
 import DB.EventoDAO.iEventoDAO;
 import DB.TicketDAO.TicketDAOMySQL;
@@ -29,8 +30,7 @@ public class MySQLAccessFactory implements iDatabaseAccessFactory {
 
     @Override
     public iEntradaDAO getEntradaDAO() {
-        //No EntradaDAOMySQL implemented
-        return null;
+        return EntradaDAOMySQL.getInstance();
     }
 
     @Override
