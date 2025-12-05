@@ -10,8 +10,8 @@ public interface iEventoDAO {
     List<iEvento> searchByPatrocinador(String patrocinador);
     iEvento searchByName(String nombre);
     boolean registerEvento(iEvento evento, int tipo);
-    boolean updateEvento(iEvento evento);
-    boolean deleteEvento(iEvento evento);
+    boolean updateEvento(int id, iEvento evento);
+    boolean deleteEvento(int idEvento);
 
     int getID(iEvento evento);
 }
