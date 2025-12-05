@@ -3,12 +3,13 @@ package Datos.Evento;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EventoRifa extends Evento {
     private List<Integer> premios;
 
-    public EventoRifa(String nombre, String ubicacion, int objetivoRecaudacion, String descripcion, Date date, String url) {
-        super(nombre, ubicacion, objetivoRecaudacion, descripcion, date, url);
+    public EventoRifa(String nombre, String ubicacion, int recaudacion, int objetivoRecaudacion, String descripcion, Date date, String url) {
+        super(nombre, ubicacion, recaudacion, objetivoRecaudacion, descripcion, date, url);
         premios = new ArrayList<>();
     }
 
@@ -19,6 +20,10 @@ public class EventoRifa extends Evento {
     public void setPremios(List<Integer> premios) {
         this.premios = List.copyOf(premios);
     }
+
+    public String getInformacion() { return premios.stream()
+            .map(String::valueOf) // O .map(n -> String.valueOf(n))
+            .collect(Collectors.joining(", "));}
 
     @Override
     public String toString() {

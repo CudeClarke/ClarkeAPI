@@ -6,9 +6,7 @@ import java.util.ArrayList;
 public class EventoRifaFactory extends EventoFactory{
 
     @Override
-    public iEvento createEvento(String nombre, String ubicacion, int objetivoRecaudacion, String descripcion, Date date, String url, String informacion) {
-        // TODO: Convertir informacion_extra a los atributos necesarios de la clase concreta
-        // El código se deja así ante el inminente refactor de las clases de datos
-        return new EventoRifa(nombre, ubicacion, objetivoRecaudacion, descripcion, date, url);
+    public iEvento createEvento(String nombre, String ubicacion, int recaudacion, int objetivoRecaudacion, String descripcion, Date date, String url, String informacion) {
+        return new EventoRifa(nombre, ubicacion, recaudacion, objetivoRecaudacion, descripcion, date, url);
     }
 }

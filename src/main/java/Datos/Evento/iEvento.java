@@ -21,6 +21,7 @@ public interface iEvento {
     public void setDate(Date date);
     public String getUrl();
     public void setUrl(String url);
+    public String getInformacion();
     public Set<String> getTags();
     public Set<Patrocinador> getPatrocinadores();
     public List<Entrada> getEntradas();
