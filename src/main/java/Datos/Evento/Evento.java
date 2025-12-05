@@ -32,6 +32,20 @@ public class Evento implements iEvento {
         entradas = new ArrayList<>();
     }
 
+    public Evento(String nombre, String ubicacion, int recaudacion, int objetivoRecaudacion, String descripcion, Date date, String url) {
+        this.nombre = nombre;
+        this.ubicacion = ubicacion;
+        this.objetivoRecaudacion = objetivoRecaudacion;
+        this.descripcion = descripcion;
+        this.recaudacion = recaudacion;
+        this.date = date;
+        this.url = url;
+
+        tags = new HashSet<>();
+        patrocinadores = new HashSet<>();
+        entradas = new ArrayList<>();
+    }
+
     /**
      * Metodo para agregar un tag a un evento
      * @param tag no nulo a agregar a la lista
@@ -145,6 +159,8 @@ public class Evento implements iEvento {
     public void setUrl(String url) {
         this.url = url;
     }
+
+    public String getInformacion() { return ""; }
 
     @Override
     public String toString(){

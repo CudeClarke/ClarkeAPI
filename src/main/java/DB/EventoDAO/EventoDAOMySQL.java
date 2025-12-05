@@ -55,9 +55,8 @@ public class EventoDAOMySQL implements iEventoDAO {
         EventoFactory factory = getFactoryByID(tipoID);
 
         iEvento evento = factory.createEvento(
-                nombre, ubicacion, objetivo, descripcion, fecha, url, informacionExtra
+                nombre, ubicacion,recaudacion, objetivo, descripcion, fecha, url, informacionExtra
         );
-        evento.setRecaudacion(recaudacion);
 
         return evento;
     }
