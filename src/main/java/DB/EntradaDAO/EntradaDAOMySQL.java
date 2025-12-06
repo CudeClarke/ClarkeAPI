@@ -19,6 +19,14 @@ public class EntradaDAOMySQL implements iEntradaDAO {
         if (instance == null) instance = new EntradaDAOMySQL();
         return instance;
     }
+
+    /**
+     * IMPORTANTE: SOLO SE USA EN TESTING
+     * @param connection
+     */
+    public EntradaDAOMySQL(Connection connection) {
+        this.connection = connection;
+    }
     
     private iEntrada buildEntrada(ResultSet rs) throws SQLException {
         int subAforo = rs.getInt("Cantidad");
