@@ -1,73 +1,120 @@
 package DB.UserDAO;
 
-import DB.MySQLConnection;
 import Datos.Usuario.UsuarioBase;
-import Datos.Usuario.UsuarioRegistrado;
-import Datos.Usuario.iUsuario;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 
+import Datos.Usuario.*;
+
+@ExtendWith(MockitoExtension.class)
 class UsuarioDAOMySQLTest {
-    private Connection connection;
+    // Create false actors
+    @Mock
+    private Connection connectionMock;
+    @Mock
+    private PreparedStatement preparedStatementMock;
+    @Mock
+    private ResultSet resultSetMock;
+
     private UsuarioDAOMySQL usuarioDAO;
 
-    private final String DNI_TEST = "12345678A";
-
     @BeforeEach
-    void setUp() {
-        connection = MySQLConnection.getInstance().getConnection();
-        usuarioDAO = UsuarioDAOMySQL.getInstance();
-    }
-
-    @AfterEach
-    void tearDown() throws SQLException {
-        String sqlDeleteRegistrado = "DELETE FROM registrado WHERE DNI_USUARIO = ?";
-        String sqlDeleteUsuario = "DELETE FROM usuario WHERE DNI = ?";
-
-        try (PreparedStatement psReg = connection.prepareStatement(sqlDeleteRegistrado);
-             PreparedStatement psUser = connection.prepareStatement(sqlDeleteUsuario)) {
-
-            // Primero tabla hija
-            psReg.setString(1, DNI_TEST);
-            psReg.executeUpdate();
-
-            // Luego tabla padre
-            psUser.setString(1, DNI_TEST);
-            psUser.executeUpdate();
-        }
+    void setUp() throws SQLException {
+        // Before each test, initialize a false connection
+        usuarioDAO = new UsuarioDAOMySQL(connectionMock);
     }
 
     @Test
-    @DisplayName("Registrar y Buscar Usuario Registrado")
-    void testRegisterSearch() {
-        // GIVEN
-        UsuarioRegistrado nuevo = new UsuarioRegistrado(
-                "TestNombre", "TestApellido", "test@junit.com", DNI_TEST, true,
-                "Calle Test 123", "600000000"
+    void testRegisterUsuario() throws SQLException {
+        UsuarioRegistrado usuario = new UsuarioRegistrado(
+                "Juan", "Perez", "juan@test.com", "12345678A", false, "Calle Falsa 123", "600000000"
         );
+        // When DAO ask for a PreparedStatement, we give a false one.
+        when(connectionMock.prepareStatement(anyString())).thenReturn(preparedStatementMock);
+        // When update is executed, return 1 (rows affected)
+        when(preparedStatementMock.executeUpdate()).thenReturn(1);
 
-        // WHEN
-        boolean registrado = usuarioDAO.registerUsuario(nuevo);
+        boolean result = usuarioDAO.registerUsuario(usuario);
 
-        // THEN
-        assertTrue(registrado, "El registro debería devolver true");
+        assertTrue(result, "Register should return true");
 
-        iUsuario recuperado = usuarioDAO.searchByDni(DNI_TEST);
-        assertNotNull(recuperado, "El usuario recuperado no debe ser null");
+        // A few extra verifications
+        // Verify that autocommit has been deactivated
+        verify(connectionMock).setAutoCommit(false);
+        // Verify that 2 statements where prepared (one for base, one for registrado)
+        verify(connectionMock, times(2)).prepareStatement(anyString());
+        // Verify that commit was done
+        verify(connectionMock).commit();
+    }
 
-        // Verificamos que recupera la subclase correcta
-        assertInstanceOf(UsuarioRegistrado.class, recuperado, "Debe ser instancia de UsuarioRegistrado");
+    @Test
+    void testRegisterUsuarioFailRollback() throws SQLException {
+        UsuarioBase usuario = new UsuarioBase("Ana", "Gomez", "ana@test.com", "87654321B", true);
 
-        UsuarioRegistrado ur = (UsuarioRegistrado) recuperado;
-        assertEquals("Calle Test 123", ur.getDireccion());
-        assertEquals("600000000", ur.getTlf());
+        when(connectionMock.prepareStatement(anyString())).thenReturn(preparedStatementMock);
+        // Simulates throwing an exception when update is executed
+        when(preparedStatementMock.executeUpdate()).thenThrow(new SQLException("Conexion error"));
+
+        boolean resultado = usuarioDAO.registerUsuario(usuario);
+        assertFalse(resultado, "Register should fail and return false");
+
+        // Verify that rollback attempt was made
+        verify(connectionMock).rollback();
+    }
+
+    @Test
+    void testSearchByDniFound() throws SQLException {
+        String dniBuscado = "12345678A";
+
+        // Configuration of all the calls that must be done
+        // connection -> prepareStatement -> executeQuery -> ResultSet
+        when(connectionMock.prepareStatement(anyString())).thenReturn(preparedStatementMock);
+        when(preparedStatementMock.executeQuery()).thenReturn(resultSetMock);
+
+        // Simulates the behavior of the ResultSet
+        when(resultSetMock.next()).thenReturn(true); // Hay un resultado
+        when(resultSetMock.getString("DNI")).thenReturn(dniBuscado);
+        when(resultSetMock.getString("Nombre")).thenReturn("Carlos");
+        when(resultSetMock.getString("Apellidos")).thenReturn("Sainz");
+        when(resultSetMock.getString("Email")).thenReturn("carlos@test.com");
+        when(resultSetMock.getBoolean("SPAM")).thenReturn(false);
+
+        when(resultSetMock.getString("Direccion_postal")).thenReturn("Calle Circuito 55");
+        when(resultSetMock.getString("Telefono")).thenReturn("600111222");
+
+        var resultado = usuarioDAO.searchByDni(dniBuscado);
+
+        assertNotNull(resultado);
+        // Verifies the inheritance
+        assertInstanceOf(UsuarioRegistrado.class, resultado);
+
+        // Checks specific data
+        UsuarioRegistrado ur = (UsuarioRegistrado) resultado;
+        assertEquals("Calle Circuito 55", ur.getDireccion());
+        assertEquals("Carlos", ur.getNombre());
+    }
+
+    @Test
+    void testDeleteUsuario() throws SQLException {
+        String dni = "12345678A";
+        when(connectionMock.prepareStatement(anyString())).thenReturn(preparedStatementMock);
+        // Simulates removing a row
+        when(preparedStatementMock.executeUpdate()).thenReturn(1);
+
+        boolean resultado = usuarioDAO.deleteUsuario(dni);
+
+        assertTrue(resultado);
+        verify(connectionMock).commit();
     }
 }
