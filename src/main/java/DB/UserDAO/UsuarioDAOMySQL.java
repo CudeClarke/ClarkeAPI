@@ -20,6 +20,14 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
     }
 
     /**
+     * IMPORTANTE: SOLO SE USA EN TESTING
+     * @param connection
+     */
+    public UsuarioDAOMySQL(Connection connection) {
+        this.connection = connection;
+    }
+
+    /**
      * Metodo para registrar un usuario en la base de datos, aprovechando la herencia.
      * @param usuario Objeto con los datos a introducir en la bd, puede ser base o registrado.
      * @return True si se inserto correctamente o false si, o ya estaba en la bd u ocurrio un error.
