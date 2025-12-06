@@ -20,11 +20,12 @@ public class EntradaDAOMySQL implements iEntradaDAO {
         return instance;
     }
     
-    private Entrada buildEntrada(ResultSet rs) throws SQLException {
+    private iEntrada buildEntrada(ResultSet rs) throws SQLException {
         int subAforo = rs.getInt("Cantidad");
         float precio = rs.getFloat("Precio");
-        String info = rs.getString("Informacion");
-        return new Entrada(subAforo, precio, info);
+        String nombre = rs.getString("Nombre");
+        String descripcion = rs.getString("Descripcion");
+        return new Entrada(subAforo, precio, nombre, descripcion);
     }
 
     /**
@@ -56,13 +57,14 @@ public class EntradaDAOMySQL implements iEntradaDAO {
      */
     @Override
     public boolean registerEntrada(iEntrada entrada, int idEvento) {
-        String sql = "INSERT INTO entrada (ID_EVENTO, Precio, Cantidad, Informacion) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO entrada (ID_EVENTO, Precio, Cantidad, Nombre, Descripcion) VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, idEvento);
             stmt.setFloat(2, entrada.getPrecio());
             stmt.setInt(3, entrada.getSubAforo());
-            stmt.setString(4, entrada.getInformacion());
+            stmt.setString(4, entrada.getNombre());
+            stmt.setString(5, entrada.getDescripcion());
 
             return stmt.executeUpdate() > 0;
 
@@ -80,13 +82,14 @@ public class EntradaDAOMySQL implements iEntradaDAO {
      */
     @Override
     public boolean updateEntrada(int id, iEntrada entrada) {
-        String sql = "UPDATE entrada SET Precio = ?, Cantidad = ?, Informacion = ? WHERE ID_ENTRADA = ?";
+        String sql = "UPDATE entrada SET Precio = ?, Cantidad = ?, Nombre = ?, Descripcion = ? WHERE ID_ENTRADA = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setFloat(1, entrada.getPrecio());
             stmt.setInt(2, entrada.getSubAforo());
-            stmt.setString(3, entrada.getInformacion());
-            stmt.setInt(4, id);
+            stmt.setString(3, entrada.getNombre());
+            stmt.setString(4, entrada.getDescripcion());
+            stmt.setInt(5, id);
 
             return stmt.executeUpdate() > 0;
 
@@ -123,12 +126,13 @@ public class EntradaDAOMySQL implements iEntradaDAO {
      */
     @Override
     public int getID(iEntrada entrada, int idEvento) {
-        String sql = "SELECT ID_ENTRADA FROM entrada WHERE ID_EVENTO = ? AND Precio = ? AND Informacion = ?";
+        String sql = "SELECT ID_ENTRADA FROM entrada WHERE ID_EVENTO = ? AND Precio = ? AND Nombre = ? AND Descripcion = ?";
         
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, idEvento);
             stmt.setFloat(2, entrada.getPrecio());
-            stmt.setString(3, entrada.getInformacion());
+            stmt.setString(3, entrada.getNombre());
+            stmt.setString(4, entrada.getDescripcion());
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) return rs.getInt("ID_ENTRADA");
             }
