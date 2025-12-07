@@ -24,7 +24,13 @@ public class EventoManager {
     }
 
     public List<iEvento> getAllEventos(){
-        return eventoDAO.getAllEventos();
+        List<iEvento> eventos = eventoDAO.getAllEventos();
+        for (int i = 0; i<eventos.size(); i++){
+            iEvento current = eventos.get(i);
+            current.setTags(eventoDAO.getTags(i+1));
+            current.setPatrocinadores(eventoDAO.getPatrocinadores(i+1));
+        }
+        return eventos;
     }
 
     public iEvento searchByName(String name){
