@@ -19,6 +19,10 @@ public class App {
         app.get("/api/tickets/{id}", TicketHandler.getTicketById);
         app.post("/api/tickets", TicketHandler.addTicket);
         app.delete("/api/tickets/{id}", TicketHandler.deleteTicket);
+
+	    app.get("/api/eventos/{id}/entradas", EntradaHandlers.getEntradasByEvento);
+        app.post("/api/entradas", EntradaHandlers.addEntrada);
+        app.delete("/api/entradas/{id}", EntradaHandlers.deleteEntrada);
  */
     }
 }
