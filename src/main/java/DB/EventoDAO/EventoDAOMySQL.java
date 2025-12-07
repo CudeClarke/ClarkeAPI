@@ -28,7 +28,7 @@ public class EventoDAOMySQL implements iEventoDAO {
             case ID_CARRERA -> new EventoCarreraFactory();
             case ID_RIFA -> new EventoRifaFactory();
             case ID_CONCIERTO -> new EventoConciertoFactory();
-            default -> throw new IllegalArgumentException("Unknown event type ID: " + type);
+            default -> new EventoDefaultFactory();
         };
     }
 
@@ -51,6 +51,11 @@ public class EventoDAOMySQL implements iEventoDAO {
         String url = rs.getString("Imagen");
         int recaudacion = rs.getInt("Recaudacion");
         String informacionExtra = rs.getString("Informacion");
+
+        ubicacion = (ubicacion == null)? "" : ubicacion;
+        descripcion = (descripcion == null)? "" : descripcion;
+        informacionExtra = (informacionExtra == null)? "" : informacionExtra;
+        url = (url == null)? "default.png" : url;
 
         EventoFactory factory = getFactoryByID(tipoID);
 
