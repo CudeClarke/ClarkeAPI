@@ -1,3 +1,4 @@
+/*
 package API;
 
 import io.javalin.http.Handler;
@@ -137,3 +138,4 @@ public class TicketHandler {
         ctx.json(res);
     };
 }
+*/
