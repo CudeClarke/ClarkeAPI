@@ -26,6 +26,14 @@ public class TicketDAOMySQL implements iTicketDAO {
     }
 
     /**
+     * Constructor package-visible, needed for testing
+     * @param connection
+     */
+    TicketDAOMySQL(Connection connection) {
+        this.connection = connection;
+    }
+
+    /**
      * Method to the retrieve the type of a specific ticket, based on the event type
      * @param id the id of the ticket whose type you want to confirm
      */
