@@ -33,6 +33,14 @@ public class EventoDAOMySQL implements iEventoDAO {
         };
     }
 
+    /**
+     * Constructor package-visible, needed for testing
+     * @param connection
+     */
+    EventoDAOMySQL(Connection connection) {
+        this.connection = connection;
+    }
+
     private void setOptionalString(PreparedStatement stmt, int index, String value) throws SQLException {
         if (value != null && !value.isBlank()) {
             stmt.setString(index, value);
