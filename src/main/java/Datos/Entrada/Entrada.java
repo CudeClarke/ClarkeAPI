@@ -12,6 +12,9 @@ public class Entrada implements iEntrada {
     private String nombre;
     private String descripcion;
 
+    // Empty builder, should not be used. Used for json deserialization purposes exclusively by Jackson
+    public Entrada(){}
+
     public Entrada(int subAforo, float precio, String nombre, String descripcion) {
         this.subAforo = subAforo;
         this.precio = precio;

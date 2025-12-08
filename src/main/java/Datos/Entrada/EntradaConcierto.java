@@ -2,7 +2,10 @@ package Datos.Entrada;
 
 public class EntradaConcierto extends Entrada {
 
-    public EntradaConcierto(int subAforo, float precio, String nombre, String descripcion,  int seccion) {
+    // Empty builder, should not be used. Used for json deserialization purposes exclusively by Jackson
+    public EntradaConcierto(){}
+
+    public EntradaConcierto(int subAforo, float precio, String nombre, String descripcion) {
         super(subAforo, precio, nombre, descripcion);
     }
 
