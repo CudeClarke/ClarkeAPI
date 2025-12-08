@@ -4,6 +4,8 @@ public class UsuarioRegistrado extends UsuarioBase {
     private String direccion;
     private String tlf;
 
+    public UsuarioRegistrado(){}
+
     public UsuarioRegistrado(String nombre, String apellido, String email, String dni, boolean spam, String direccion, String tlf) {
         super(nombre, apellido, email, dni, spam);
         this.direccion = direccion;
