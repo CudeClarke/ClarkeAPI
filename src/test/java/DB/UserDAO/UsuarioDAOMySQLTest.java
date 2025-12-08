@@ -117,4 +117,59 @@ class UsuarioDAOMySQLTest {
         assertTrue(resultado);
         verify(connectionMock).commit();
     }
+
+    @Test
+    void testUpgradeUsuarioToRegistrado() throws SQLException {
+        UsuarioRegistrado usuario = new UsuarioRegistrado(
+                "Carlos", "Sainz", "carlos@notferrari.com", "55555555X", false, "Calle Circuito 1", "600123456"
+        );
+
+        // Creates especific mocks for each statement (update and insert)
+        PreparedStatement psUpdate = mock(PreparedStatement.class);
+        PreparedStatement psInsert = mock(PreparedStatement.class);
+
+        // Configures the connection to return the correct PreparedStatement depending on the SQL statement
+        // Using lenient() just because we are using specific stubs different from the generic anyString()
+        lenient().when(connectionMock.prepareStatement(contains("UPDATE"))).thenReturn(psUpdate);
+        lenient().when(connectionMock.prepareStatement(contains("INSERT"))).thenReturn(psInsert);
+
+        // Simulamos éxito en ambas operaciones
+        // Simulates the success of both actions
+        when(psUpdate.executeUpdate()).thenReturn(1); // 1 row updated in usuario
+        when(psInsert.executeUpdate()).thenReturn(1); // 1 row inserted in registrado
+
+        boolean result = usuarioDAO.upgradUsuarioToRegistrado(usuario);
+
+        assertTrue(result, "Upgrade should return true");
+
+        // Verifications
+        verify(connectionMock).setAutoCommit(false);
+        verify(psUpdate).executeUpdate();
+        verify(psInsert).executeUpdate();
+        verify(connectionMock).commit();
+    }
+
+    @Test
+    void testUpgradeUsuarioToRegistradoFailUserNotFound() throws SQLException {
+        UsuarioRegistrado usuario = new UsuarioRegistrado(
+                "Carlos", "Sainz", "email", "NO_EXISTE", false, "Dir", "Tlf"
+        );
+
+        PreparedStatement psUpdate = mock(PreparedStatement.class);
+
+        // Configures only the UPDATE
+        lenient().when(connectionMock.prepareStatement(contains("UPDATE"))).thenReturn(psUpdate);
+
+        // Simulate that UPDATE return 0 (no DNI found)
+        when(psUpdate.executeUpdate()).thenReturn(0);
+
+        boolean result = usuarioDAO.upgradUsuarioToRegistrado(usuario);
+
+        assertFalse(result, "Upgrade should return false if user DNI does not exist");
+
+        // Verifications
+        verify(connectionMock).rollback();
+        // Ensures that no attempt was ever made if insert failed
+        verify(connectionMock, never()).prepareStatement(contains("INSERT"));
+    }
 }
