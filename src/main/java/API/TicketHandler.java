@@ -3,15 +3,14 @@ package API;
 import io.javalin.http.Handler;
 import java.util.List;
 
-import DB.TicketDAO.*;
 import Datos.Ticket.*;
 import Datos.Usuario.*;
+import Managers.TicketManager;
 import utils.json_generator;
 
 public class TicketHandler {
 
-    private final static TicketDAOFactory factory = new TicketDAOMySQLFactory();
-    private final static iTicketDAO ticketDAO = factory.createTicketDAO();
+    private final static TicketManager ticketManager = new TicketManager(DB.MySQLAccessFactory.getInstance());
 
     public static class DatosTicket {
         public String nombre;
@@ -30,8 +29,7 @@ public class TicketHandler {
 
         try {
             if (dni != null && !dni.isBlank()) {
-                iUsuario user = new UsuarioBase("", "", "", dni);
-                List<iTicket> lista = ticketDAO.searchByUser(user);
+                List<iTicket> lista = ticketManager.searchByUser(dni);
 
                 if (lista != null && !lista.isEmpty()) {
                     res = json_generator.Java_to_json(lista);
@@ -39,14 +37,8 @@ public class TicketHandler {
                     res = json_generator.status_response(1, "No tickets found for user with DNI: " + dni);
                 }
             } else if (typeParam != null && !typeParam.isBlank()) {
-                int type = Integer.parseInt(typeParam);
-                List<iTicket> lista = ticketDAO.searchByType(type);
-
-                if (lista != null && !lista.isEmpty()) {
-                    res = json_generator.Java_to_json(lista);
-                } else {
-                    res = json_generator.status_response(1, "No tickets found for type: " + type);
-                }
+                // Search by type not supported in TicketManager
+                res = json_generator.status_response(1, "Search by type not implemented yet");
             } else {
                 res = json_generator.status_response(1, "Please specify 'dni' or 'type' query parameter");
             }
@@ -61,27 +53,8 @@ public class TicketHandler {
     };
 
     public static Handler getTicketById = ctx -> {
-        String idParam = ctx.pathParam("id");
-        String res = json_generator.status_response(1, "Invalid ticket ID format");
-
-        if (idParam != null && !idParam.isBlank()) {
-            try {
-                int id = Integer.parseInt(idParam);
-                int type = ticketDAO.ticketType(id);
-
-                if (type > 0) {
-                    res = String.format("{\"id\": %d, \"type\": %d, \"message\": \"Ticket found\"}", id, type);
-                } else {
-                    res = json_generator.status_response(1, "Could not find ticket in database");
-                }
-            } catch (NumberFormatException e) {
-                res = json_generator.status_response(1, "Invalid ID format");
-            } catch (Exception e) {
-                e.printStackTrace();
-                res = json_generator.status_response(1, "Database Error: " + e.getMessage());
-            }
-        }
-
+        // ticketType method not available in TicketManager
+        String res = json_generator.status_response(1, "Get Ticket By ID not supported in this version");
         ctx.json(res);
     };
 
@@ -95,13 +68,19 @@ public class TicketHandler {
                     datos.dni == null || datos.dni.isBlank()) {
                 res = json_generator.status_response(1, "Nombre y DNI son obligatorios.");
             } else {
-                boolean exito = ticketDAO.registerTicket(
+                // Create ticket object for registration
+                iUsuario user = new UsuarioBase(datos.nombre, "", "", datos.dni);
+                iTicket ticket = new Ticket(user, datos.dni);
+
+                boolean exito = ticketManager.registerTicket(
+                        ticket,
                         datos.dni,
                         datos.id,
                         datos.info);
 
                 if (exito) {
-                    res = json_generator.status_response(0, "Ticket registrado correctamente.");
+                    // Return the created ticket object instead of just status
+                    res = json_generator.Java_to_json(ticket);
                 } else {
                     res = json_generator.status_response(1, "Fallo al registrar ticket (DB Error/Duplicado).");
                 }
@@ -121,7 +100,7 @@ public class TicketHandler {
 
         if (idParam != null && !idParam.isBlank()) {
             try {
-                boolean exito = ticketDAO.deleteTicket(idParam);
+                boolean exito = ticketManager.deleteTicket(idParam);
 
                 if (exito) {
                     res = json_generator.status_response(0, "Ticket eliminado correctamente.");
