@@ -95,7 +95,60 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
      */
     @Override
     public boolean upgradUsuarioToRegistrado(UsuarioRegistrado usuario) {
-        return false;
+        // Actualizamos los datos base por si han cambiado
+        String sqlUpdateBase = "UPDATE usuario SET Nombre=?, Apellidos=?, Email=?, SPAM=? WHERE DNI=?";
+        // Insertamos la nueva fila en la tabla registrado
+        String sqlInsertRegistrado = "INSERT INTO registrado (DNI_USUARIO, Telefono, Direccion_postal) VALUES (?, ?, ?)";
+
+        PreparedStatement psUpdate = null;
+        PreparedStatement psInsert = null;
+
+        try {
+            connection.setAutoCommit(false); // Inicio transacción
+
+            // Actualizar tabla padre
+            psUpdate = connection.prepareStatement(sqlUpdateBase);
+            psUpdate.setString(1, usuario.getNombre());
+            psUpdate.setString(2, usuario.getApellidos());
+            psUpdate.setString(3, usuario.getEmail());
+            psUpdate.setBoolean(4, usuario.isSpam());
+            psUpdate.setString(5, usuario.getDni());
+
+            int filasUsuario = psUpdate.executeUpdate();
+
+            if (filasUsuario == 0) {
+                connection.rollback();
+                return false;
+            }
+
+            // Insertar en tabla hija
+            psInsert = connection.prepareStatement(sqlInsertRegistrado);
+            psInsert.setString(1, usuario.getDni());
+            psInsert.setString(2, usuario.getTlf());
+            psInsert.setString(3, usuario.getDireccion());
+
+            psInsert.executeUpdate();
+
+            connection.commit(); // Confirmar cambios
+            return true;
+
+        } catch (SQLException e) {
+            System.err.println("Error upgrading user: " + e.getMessage());
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            return false;
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+                if (psUpdate != null) psUpdate.close();
+                if (psInsert != null) psInsert.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
