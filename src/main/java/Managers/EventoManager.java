@@ -14,7 +14,7 @@ public class EventoManager {
     }
 
     private boolean validEvent(iEvento evento){return (evento.getNombre() != null && !evento.getNombre().isBlank() && evento.getDate() != null);}
-    private int getEventType(iEvento evento){
+    public int getEventType(iEvento evento){
         return switch (evento) {
             case EventoCarrera _ -> 1;
             case EventoRifa _ -> 2;
