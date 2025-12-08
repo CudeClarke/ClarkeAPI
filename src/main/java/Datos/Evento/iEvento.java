@@ -23,7 +23,9 @@ public interface iEvento {
     public void setUrl(String url);
     public String getInformacion();
     public Set<String> getTags();
+    public void setTags(Set<String> tags);
     public Set<Patrocinador> getPatrocinadores();
+    public void setPatrocinadores(Set<Patrocinador> patrocinadores);
     public List<Entrada> getEntradas();
     
     public void addTag(String tag);

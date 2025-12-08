@@ -108,8 +108,16 @@ public class Evento implements iEvento {
         return tags;
     }
 
+    public void setTags(Set<String> tags) {
+        this.tags = tags;
+    }
+
     public Set<Patrocinador> getPatrocinadores() {
         return patrocinadores;
+    }
+
+    public void setPatrocinadores(Set<Patrocinador> patrocinadores) {
+        this.patrocinadores = patrocinadores;
     }
 
     public String getNombre() {

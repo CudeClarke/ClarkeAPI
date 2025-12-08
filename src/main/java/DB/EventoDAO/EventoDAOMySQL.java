@@ -5,6 +5,7 @@ import Datos.Evento.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class EventoDAOMySQL implements iEventoDAO {
     private static EventoDAOMySQL instance;
@@ -282,5 +283,15 @@ public class EventoDAOMySQL implements iEventoDAO {
             System.err.println("Error getting event ID: " + e.getMessage());
         }
         return 0;
+    }
+
+    @Override
+    public Set<String> getTags(int idEvento) {
+        return Set.of();
+    }
+
+    @Override
+    public Set<Patrocinador> getPatrocinadores(int idEvento) {
+        return Set.of();
     }
 }
