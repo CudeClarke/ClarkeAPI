@@ -6,6 +6,8 @@ import Datos.Entrada.EntradaRifa;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.javalin.http.Handler;
 import java.util.List;
 import java.util.Objects;
@@ -55,10 +57,19 @@ public class EntradaHandlers {
             if (idParam.matches("\\d+")) {
                 int idEvento = Integer.parseInt(idParam);
                 
-                List<iEntrada> lista = manager.getEntradasByEvento(idEvento);
+                List<iEntrada> entradas = manager.getEntradasByEvento(idEvento);
 
-                if (lista != null && !lista.isEmpty()) {
-                    res = json_generator.Java_to_json(lista);
+                if (entradas != null && !entradas.isEmpty()) {
+                    ObjectMapper mapper = new ObjectMapper();
+                    ArrayNode jsonArray = mapper.createArrayNode();
+                    for (int i = 0; i<entradas.size(); i++){
+                        ObjectNode current_node = mapper.createObjectNode();
+                        current_node.put("idEvento", idEvento);
+                        current_node.put("idEntrada", i+1);
+                        current_node.putPOJO("entrada", entradas.get(i));
+                        jsonArray.add(current_node);
+                    }
+                    res = jsonArray.toString();
                 } else {
                     res = json_generator.status_response(1, "No hay entradas");
                 }
