@@ -3,6 +3,9 @@ package API;
 import io.javalin.http.Handler;
 import io.javalin.http.Context;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import Managers.EventoManager;
 import DB.MySQLAccessFactory;
@@ -39,10 +42,14 @@ public class EventoHandlers {
 
     public static Handler getEvents = ctx -> {
         String res = "";
-        List<iEvento> lista = eventoManager.getAllEventos();
+        List<iEvento> eventos = eventoManager.getAllEventos();
 
-        if (lista != null && !lista.isEmpty()) {
-            res = json_generator.Java_to_json(lista);
+        if (eventos != null && !eventos.isEmpty()) {
+            Map<Integer, iEvento> eventos_ids = IntStream.range(1, eventos.size() + 1).boxed()
+                    .collect(Collectors.toMap(
+                            i -> i,
+                            i -> eventos.get(i-1)));
+            res = json_generator.Java_to_json(eventos_ids);
         } else {
             res = json_generator.status_response(1, "No events found in database");
         }
