@@ -1,7 +1,15 @@
 package API;
 
+import Datos.Entrada.EntradaCarrera;
+import Datos.Entrada.EntradaConcierto;
+import Datos.Entrada.EntradaRifa;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Handler;
 import java.util.List;
+import java.util.Objects;
+
 import DB.MySQLAccessFactory;
 import Managers.EntradaManager;
 import Datos.Entrada.iEntrada;
@@ -11,26 +19,39 @@ public class EntradaHandlers {
 
     private static final EntradaManager manager = new EntradaManager(MySQLAccessFactory.getInstance());
 
-    // DTO
-    // Está aquí porque el JSON recibe id_evento pero la clase Entrada
-    // no tiene ese campo. Hay que modificar todos los tipos de entrada para solucionarlo
-    public static class EntradaDTO {
-        public int id_evento; 
-        public int cantidad;    
-        public float precio;
-        public String nombre;
-        public String descripcion;
-        
-        public EntradaDTO() {} 
+    private static iEntrada entradaFromJson(JsonNode json){
+        iEntrada entrada = null;
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            entrada = mapper.treeToValue(json, EntradaCarrera.class);
+        } catch (JsonProcessingException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Not EntradaCarrera");
+        }
+        if (entrada == null){
+            try {
+                entrada = mapper.treeToValue(json, EntradaConcierto.class);
+            } catch (JsonProcessingException e) {
+                System.out.println(e.getMessage());
+                System.out.println("Not EntradaConcierto");
+            }
+        }
+        if (entrada == null){
+            try {
+                entrada = mapper.treeToValue(json, EntradaRifa.class);
+            } catch (JsonProcessingException e) {
+                System.out.println(e.getMessage());
+                System.out.println("Not EntradaRifa");
+            }
+        }
+        return entrada;
     }
-
 
     public static Handler getEntradasByEvento = ctx -> {
         String res = json_generator.status_response(1, "Tipo de ID incorrecto");
 
         try {
             String idParam = ctx.pathParam("id");
-            // Validación de que es un número
             if (idParam.matches("\\d+")) {
                 int idEvento = Integer.parseInt(idParam);
                 
@@ -54,36 +75,28 @@ public class EntradaHandlers {
     public static Handler addEntrada = ctx -> {
         String res = json_generator.status_response(1, "Error");
 
-        try {
-            EntradaDTO dto = ctx.bodyAsClass(EntradaDTO.class);
+        ObjectMapper parser = new ObjectMapper();
+        JsonNode req = parser.readTree(ctx.body());
+        
+        int id_evento = -1;
+        iEntrada entrada = null;
+        if (req.has("idEvento")) {id_evento = req.get("idEvento").asInt();}
+        if (req.has("entrada")) {entrada = entradaFromJson(req.get("entrada"));}
 
-            if (dto != null) {
-                if (dto.nombre == null || dto.nombre.isBlank()) {
-                    res = json_generator.status_response(1, "Se necesita nombre");
-                } else {
-                    boolean exito = manager.addEntrada(
-                        dto.id_evento, 
-                        dto.cantidad, 
-                        dto.precio, 
-                        dto.nombre, 
-                        dto.descripcion
-                    );
-
-                    if (exito) {
-                        res = json_generator.status_response(0, "Entrada creada correctamente");
-                    } else {
-                        res = json_generator.status_response(1, "Ha ocurrido un error");
-                    }
-                }
+        if (id_evento > 0 && entrada != null) {
+            if (entrada.getNombre() == null || entrada.getNombre().isBlank()) {
+                res = json_generator.status_response(1, "Se necesita nombre");
             } else {
-                res = json_generator.status_response(1, "Cuerpo vacío");
+                boolean exito = manager.addEntrada(entrada, id_evento);
+                if (exito) {
+                    res = json_generator.status_response(0, "Entrada creada correctamente");
+                } else {
+                    res = json_generator.status_response(1, "Ha ocurrido un error");
+                }
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            res = json_generator.status_response(1, "Error parsing data: " + e.getMessage());
+        } else {
+            res = json_generator.status_response(1, "Cuerpo vacío");
         }
-
         ctx.json(res);
     };
 
