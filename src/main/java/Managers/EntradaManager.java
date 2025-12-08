@@ -14,24 +14,26 @@ public class EntradaManager {
         this.entradaDAO = factory.getEntradaDAO();
     }
 
+    private boolean validEntrada(iEntrada entrada){
+        return entrada.getSubAforo() > 0 && entrada.getPrecio() > 0;
+    }
+
     public List<iEntrada> getEntradasByEvento(int idEvento) {
         return entradaDAO.searchByEvento(idEvento);
     }
 
-    public boolean addEntrada(int idEvento, int cantidad, float precio, String nombre, String descripcion) {
-        if (cantidad < 0 || precio < 0) {
+    public boolean addEntrada(iEntrada entrada, int idEvento) {
+        if (!validEntrada(entrada)) {
             return false;
         }
-        
-        Entrada nuevaEntrada = new Entrada(cantidad, precio, nombre, descripcion);
-        return entradaDAO.registerEntrada(nuevaEntrada, idEvento);
+        return entradaDAO.registerEntrada(entrada, idEvento);
     }
 
-    public boolean updateEntrada(int idEntrada, int cantidad, float precio, String nombre, String descripcion) {
-        if (cantidad < 0 || precio < 0) return false;
-
-        Entrada entradaEditada = new Entrada(cantidad, precio, nombre, descripcion);
-        return entradaDAO.updateEntrada(idEntrada, entradaEditada);
+    public boolean updateEntrada(int idEntrada, iEntrada entrada) {
+        if (!validEntrada(entrada)) {
+            return false;
+        }
+        return entradaDAO.updateEntrada(idEntrada, entrada);
     }
 
     public boolean deleteEntrada(int idEntrada) {
