@@ -1,5 +1,9 @@
 package API;
 
+import com.fasterxml.jackson.core.TreeNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.javalin.http.Handler;
 import io.javalin.http.Context;
 import java.util.List;
@@ -45,11 +49,18 @@ public class EventoHandlers {
         List<iEvento> eventos = eventoManager.getAllEventos();
 
         if (eventos != null && !eventos.isEmpty()) {
-            Map<Integer, iEvento> eventos_ids = IntStream.range(1, eventos.size() + 1).boxed()
-                    .collect(Collectors.toMap(
-                            i -> i,
-                            i -> eventos.get(i-1)));
-            res = json_generator.Java_to_json(eventos_ids);
+            ObjectMapper mapper = new ObjectMapper();
+            ArrayNode jsonArray = mapper.createArrayNode();
+            for (int i = 0; i<eventos.size(); i++){
+                ObjectNode current_node = mapper.createObjectNode();
+                iEvento current_evento = eventos.get(i);
+                current_node.put("idEvento", i+1);
+                current_node.put("tipo", eventoManager.getEventType(current_evento));
+                current_node.putPOJO("evento", current_evento);
+                jsonArray.add(current_node);
+            }
+
+            res = jsonArray.toString();
         } else {
             res = json_generator.status_response(1, "No events found in database");
         }
