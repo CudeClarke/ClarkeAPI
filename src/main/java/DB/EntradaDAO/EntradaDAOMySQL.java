@@ -24,7 +24,7 @@ public class EntradaDAOMySQL implements iEntradaDAO {
      * IMPORTANTE: SOLO SE USA EN TESTING
      * @param connection
      */
-    public EntradaDAOMySQL(Connection connection) {
+    EntradaDAOMySQL(Connection connection) {
         this.connection = connection;
     }
     
