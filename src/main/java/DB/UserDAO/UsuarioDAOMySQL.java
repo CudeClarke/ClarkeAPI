@@ -89,6 +89,16 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
     }
 
     /**
+     * Metodo para convertir a un usuario ya existente en la base de datos en un usario registrado
+     * @param usuario UsuarioRegistrado a introducir en la base de datos
+     * @return True si se inserto correctamente o false si, o ya estaba en la bd u ocurrio un error.
+     */
+    @Override
+    public boolean upgradUsuarioToRegistrado(UsuarioRegistrado usuario) {
+        return false;
+    }
+
+    /**
      * Metodo para actualizar un usuario partiendo del dni
      * @param usuario Objeto con la informacion del usuario
      * @return True si se actualiza o false en otro caso
