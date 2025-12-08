@@ -28,8 +28,17 @@ public class UserManager {
 
     public boolean registerUsuario(iUsuario user){
         boolean res = false;
-        if (validDni(user.getDni())){
-            res = userDAO.registerUsuario(user);
+        if (validDni(user.getDni())) {
+            iUsuario usuario_bd = userDAO.searchByDni(user.getDni());
+            if (usuario_bd == null) {
+                res = userDAO.registerUsuario(user);
+            } else {
+                if (usuario_bd instanceof UsuarioBase && user instanceof UsuarioRegistrado user_registrado) {
+                    res = userDAO.upgradUsuarioToRegistrado(user_registrado);
+                } else {
+                    res = userDAO.updateUsuario(user);
+                }
+            }
         }
         return res;
     }
