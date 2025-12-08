@@ -23,7 +23,7 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
      * IMPORTANTE: SOLO SE USA EN TESTING
      * @param connection
      */
-    public UsuarioDAOMySQL(Connection connection) {
+    UsuarioDAOMySQL(Connection connection) {
         this.connection = connection;
     }
 
