@@ -331,9 +331,8 @@ public class EventoDAOMySQL implements iEventoDAO {
     @Override
     public Set<Patrocinador> getPatrocinadores(int idEvento) {
         Set<Patrocinador> patrocinadores = new HashSet<>();
-
         String sql = """
-            SELECT pa.Nombre, pa.Imagen, pa.Web
+            SELECT pa.Nombre, pa.Imagen
             FROM patrocinador pa
             JOIN patrocinio p ON pa.id_patrocinador = p.id_patrocinador
             WHERE p.id_evento = ?
