@@ -34,8 +34,26 @@ public class UsuarioRegistrado extends UsuarioBase {
         this.tlf = tlf;
     }
 
-    public String toString(){
-        return "UsuarioRegistrado [DNI=" + super.getDni() + ", Nombre=" + super.getNombre() + ", Apellido=" + super.getApellidos() +
-                ", TLF=" + tlf + ", Direccion=" + direccion + ", Spam=" + super.isSpam() + "]";
+    public String toString() {
+        return "UsuarioRegistrado{" +
+                "dni='" + getDni() + '\'' +
+                ", nombre='" + getNombre() + '\'' +
+                ", apellidos='" + getApellidos() + '\'' +
+                ", email='" + getEmail() + '\'' +
+                ", direccion='" + direccion + '\'' +
+                ", tlf='" + tlf + '\'' +
+                '}';
+    }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false; 
+        UsuarioRegistrado that = (UsuarioRegistrado) o;
+        return java.util.Objects.equals(direccion, that.direccion) &&
+                java.util.Objects.equals(tlf, that.tlf);
+    }
+
+    public int hashCode() {
+        return java.util.Objects.hash(super.hashCode(), direccion, tlf);
     }
 }

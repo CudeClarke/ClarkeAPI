@@ -69,8 +69,29 @@ public class UsuarioBase implements iUsuario {
         this.spam = spam;
     }
 
-    @Override
     public String toString() {
-        return "User [DNI=" + dni + ", Nombre=" + nombre + ", Apellido=" + apellidos + ", Spam=" + spam + "]";
+        return "UsuarioBase{" +
+                "dni='" + dni + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", apellidos='" + apellidos + '\'' +
+                ", email='" + email + '\'' +
+                ", spam=" + spam +
+                '}';
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        // Used getClass() to distinguish between UsuarioBase and UsuarioRegistrado
+        if (o == null || getClass() != o.getClass()) return false;
+        UsuarioBase that = (UsuarioBase) o;
+        return spam == that.spam &&
+                java.util.Objects.equals(nombre, that.nombre) &&
+                java.util.Objects.equals(apellidos, that.apellidos) &&
+                java.util.Objects.equals(email, that.email) &&
+                java.util.Objects.equals(dni, that.dni);
+    }
+
+    public int hashCode() {
+        return java.util.Objects.hash(nombre, apellidos, email, dni, spam);
     }
 }

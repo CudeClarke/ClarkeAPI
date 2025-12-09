@@ -25,15 +25,25 @@ public class EventoRifa extends Evento {
             .map(String::valueOf) // O .map(n -> String.valueOf(n))
             .collect(Collectors.joining(", "));}
 
-    @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Rifa [");
-        for(int i = 0; i < premios.size(); i++){
-            sb.append(premios.get(i));
-        }
-        sb.append("]");
-        return sb.toString();
+        return "EventoRifa{" +
+                "nombre='" + getNombre() + '\'' +
+                ", fecha=" + getDate() +
+                ", ubicacion='" + getUbicacion() + '\'' +
+                ", recaudado=" + getRecaudacion() +
+                ", premios=" + premios +
+                '}';
     }
 
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        EventoRifa that = (EventoRifa) o;
+        return java.util.Objects.equals(premios, that.premios);
+    }
+
+    public int hashCode() {
+        return java.util.Objects.hash(super.hashCode(), premios);
+    }
 }

@@ -10,6 +10,6 @@ public class EntradaConcierto extends Entrada {
     }
 
     public String toString(){
-        return "EntradaConcierto [seccion=" + super.getPrecio() + "]";
+        return super.toString();
     }
 }
