@@ -19,7 +19,7 @@ import utils.json_generator;
 
 public class EntradaHandlers {
 
-    private static final EntradaManager manager = new EntradaManager(MySQLAccessFactory.getInstance());
+    private static EntradaManager manager = new EntradaManager(MySQLAccessFactory.getInstance());
 
     private static iEntrada entradaFromJson(JsonNode json){
         iEntrada entrada = null;
