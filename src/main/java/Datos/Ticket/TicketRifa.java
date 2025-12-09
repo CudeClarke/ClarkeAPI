@@ -23,7 +23,22 @@ public class TicketRifa extends Ticket {
         this.idBoleto = idBoleto;
     }
 
-    public String toString(){
-        return "Rifa [Usuario=" + super.getUsuario().toString() + ", DNI=" + super.getDniAsistente() + "ID boleto=" + idBoleto + "]";
+    public String toString() {
+        return "TicketRifa{" +
+                super.toString() +
+                ", idBoleto=" + idBoleto +
+                '}';
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        TicketRifa that = (TicketRifa) o;
+        return idBoleto == that.idBoleto;
+    }
+
+    public int hashCode() {
+        return java.util.Objects.hash(super.hashCode(), idBoleto);
     }
 }

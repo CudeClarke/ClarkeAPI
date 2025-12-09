@@ -21,4 +21,22 @@ public class EventoCarrera extends Evento {
     @Override
     public String getInformacion() { return String.valueOf(recorrido);}
 
+    public String toString() {
+        return "EventoCarrera{" +
+                super.toString() +
+                ", recorrido=" + recorrido + "km" +
+                '}';
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        EventoCarrera that = (EventoCarrera) o;
+        return recorrido == that.recorrido;
+    }
+
+    public int hashCode() {
+        return java.util.Objects.hash(super.hashCode(), recorrido);
+    }
 }

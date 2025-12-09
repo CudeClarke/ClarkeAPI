@@ -23,7 +23,22 @@ public class TicketCarrera extends Ticket {
         this.dorsal = dorsal;
     }
 
-    public String toString(){
-        return "Carrera [Usuario=" + super.getUsuario().toString() + ", DNI=" + super.getDniAsistente() + "Dorsal=" + dorsal + "]";
+    public String toString() {
+        return "TicketCarrera{" +
+                super.toString() +
+                ", dorsal=" + dorsal +
+                '}';
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        TicketCarrera that = (TicketCarrera) o;
+        return dorsal == that.dorsal;
+    }
+
+    public int hashCode() {
+        return java.util.Objects.hash(super.hashCode(), dorsal);
     }
 }
