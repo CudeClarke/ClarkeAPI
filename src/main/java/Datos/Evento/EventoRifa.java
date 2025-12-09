@@ -27,7 +27,10 @@ public class EventoRifa extends Evento {
 
     public String toString() {
         return "EventoRifa{" +
-                super.toString() +
+                "nombre='" + getNombre() + '\'' +
+                ", fecha=" + getDate() +
+                ", ubicacion='" + getUbicacion() + '\'' +
+                ", recaudado=" + getRecaudacion() +
                 ", premios=" + premios +
                 '}';
     }

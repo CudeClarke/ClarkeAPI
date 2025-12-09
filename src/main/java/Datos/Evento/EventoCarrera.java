@@ -23,7 +23,10 @@ public class EventoCarrera extends Evento {
 
     public String toString() {
         return "EventoCarrera{" +
-                super.toString() +
+                "nombre='" + getNombre() + '\'' +
+                ", fecha=" + getDate() +
+                ", ubicacion='" + getUbicacion() + '\'' +
+                ", recaudado=" + getRecaudacion() +
                 ", recorrido=" + recorrido + "km" +
                 '}';
     }

@@ -23,11 +23,13 @@ public class EventoConcierto extends Evento {
 
     public String toString() {
         return "EventoConcierto{" +
-                super.toString() +
-                ", artista='" + artista + '\'' +
+                "nombre='" + getNombre() + '\'' +
+                ", fecha=" + getDate() +
+                ", ubicacion='" + getUbicacion() + '\'' +
+                ", recaudado=" + getRecaudacion() +
+                ", artista='" + artista + '\'' + //
                 '}';
     }
-
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

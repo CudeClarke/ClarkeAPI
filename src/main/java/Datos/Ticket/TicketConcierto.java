@@ -24,8 +24,10 @@ public class TicketConcierto extends Ticket{
     }
 
     public String toString() {
+        String dniUser = (getUsuario() != null) ? getUsuario().getDni() : "null";
         return "TicketConcierto{" +
-                super.toString() +
+                "comprador=" + dniUser +
+                ", asistente='" + getDniAsistente() + '\'' +
                 ", asiento='" + asiento + '\'' +
                 '}';
     }

@@ -35,10 +35,11 @@ public class UsuarioRegistrado extends UsuarioBase {
     }
 
     public String toString() {
-        return "UsuarioRegistrado{" +
-                super.toString() + 
-                ", direccion='" + direccion + '\'' +
-                ", tlf='" + tlf + '\'' +
+        String dniUser = (getUsuario() != null) ? getUsuario().getDni() : "null";
+        return "TicketRifa{" +
+                "comprador=" + dniUser +
+                ", asistente='" + getDniAsistente() + '\'' +
+                ", idBoleto=" + idBoleto + // Campo propio
                 '}';
     }
 
