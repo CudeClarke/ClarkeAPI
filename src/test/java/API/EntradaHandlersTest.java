@@ -164,7 +164,7 @@ class EntradaHandlersTest {
     }
 
     @Test
-    void testDeleteEntrada_Exitoso() throws Exception {
+    void testDeleteEntrada_Success() throws Exception {
         when(ctxMock.pathParam("id")).thenReturn("10");
         when(entradaManagerMock.deleteEntrada(10)).thenReturn(true);
 
