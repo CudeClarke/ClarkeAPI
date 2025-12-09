@@ -35,14 +35,15 @@ public class UsuarioRegistrado extends UsuarioBase {
     }
 
     public String toString() {
-        String dniUser = (getUsuario() != null) ? getUsuario().getDni() : "null";
-        return "TicketRifa{" +
-                "comprador=" + dniUser +
-                ", asistente='" + getDniAsistente() + '\'' +
-                ", idBoleto=" + idBoleto + // Campo propio
+        return "UsuarioRegistrado{" +
+                "dni='" + getDni() + '\'' +
+                ", nombre='" + getNombre() + '\'' +
+                ", apellidos='" + getApellidos() + '\'' +
+                ", email='" + getEmail() + '\'' +
+                ", direccion='" + direccion + '\'' +
+                ", tlf='" + tlf + '\'' +
                 '}';
     }
-
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
