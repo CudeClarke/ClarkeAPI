@@ -170,8 +170,28 @@ public class Evento implements iEvento {
 
     public String getInformacion() { return ""; }
 
-    @Override
-    public String toString(){
-        return "Evento Abstracto [NOMBRE=" + nombre + "RECAUDACION=" + recaudacion + "OBJRECAUDACION" + objetivoRecaudacion + "]";
+    public String toString() {
+        return "Evento{" +
+                "nombre='" + nombre + '\'' +
+                ", fecha=" + date +
+                ", ubicacion='" + ubicacion + '\'' +
+                ", recaudado=" + recaudacion +
+                ", tags=" + (tags != null ? tags.size() : 0) +
+                '}';
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        // Used getClass() as Concierto is not the same as Carrera
+        if (o == null || getClass() != o.getClass()) return false;
+        Evento evento = (Evento) o;
+        return java.util.Objects.equals(nombre, evento.nombre) &&
+                java.util.Objects.equals(date, evento.date) &&
+                java.util.Objects.equals(ubicacion, evento.ubicacion) &&
+                java.util.Objects.equals(url, evento.url);
+    }
+
+    public int hashCode() {
+        return java.util.Objects.hash(nombre, ubicacion, date, url);
     }
 }

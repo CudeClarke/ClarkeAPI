@@ -68,7 +68,27 @@ public class Entrada implements iEntrada {
         this.precio = precio;
     }
 
-    public String toString(){
-        return "Datos.Entrada Abstracta [subAforo=" + subAforo + ", precio=" + precio + "]";
+    public String toString() {
+        return "Entrada{" +
+                "nombre='" + nombre + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", precio=" + precio +
+                ", subAforo=" + subAforo +
+                ", ticketsVendidos=" + (tickets != null ? tickets.size() : 0) +
+                '}';
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Entrada entrada = (Entrada) o;
+        return subAforo == entrada.subAforo &&
+                Float.compare(entrada.precio, precio) == 0 &&
+                java.util.Objects.equals(nombre, entrada.nombre) &&
+                java.util.Objects.equals(descripcion, entrada.descripcion);
+    }
+
+    public int hashCode() {
+        return java.util.Objects.hash(subAforo, precio, nombre, descripcion);
     }
 }

@@ -43,7 +43,26 @@ public class Ticket implements iTicket {
         this.pagoExtra = pagoExtra;
     }
 
-    public String toString(){
-        return "Ticket [Nombre=" + usuario.toString() + ", DNI=" + dniAsistente + "]";
+    public String toString() {
+        String dniUser = (usuario != null) ? usuario.getDni() : "null";
+        return "Ticket{" +
+                "comprador=" + dniUser +
+                ", asistente='" + dniAsistente + '\'' +
+                ", pagoExtra=" + pagoExtra +
+                '}';
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        // Used getClass() so a TicketCarrera can never be the same as a TicketConcierto
+        if (o == null || getClass() != o.getClass()) return false;
+        Ticket ticket = (Ticket) o;
+        return Float.compare(ticket.pagoExtra, pagoExtra) == 0 &&
+                java.util.Objects.equals(dniAsistente, ticket.dniAsistente) &&
+                java.util.Objects.equals(usuario, ticket.usuario);
+    }
+
+    public int hashCode() {
+        return java.util.Objects.hash(usuario, dniAsistente, pagoExtra);
     }
 }

@@ -23,7 +23,24 @@ public class TicketConcierto extends Ticket{
         this.asiento = asiento;
     }
 
-    public String toString(){
-        return "Concierto [Usuario=" + super.getUsuario().toString() + ", DNI=" + super.getDniAsistente() + "Asiento=" + asiento + "]";
+    public String toString() {
+        String dniUser = (getUsuario() != null) ? getUsuario().getDni() : "null";
+        return "TicketConcierto{" +
+                "comprador=" + dniUser +
+                ", asistente='" + getDniAsistente() + '\'' +
+                ", asiento='" + asiento + '\'' +
+                '}';
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        TicketConcierto that = (TicketConcierto) o;
+        return java.util.Objects.equals(asiento, that.asiento);
+    }
+
+    public int hashCode() {
+        return java.util.Objects.hash(super.hashCode(), asiento);
     }
 }

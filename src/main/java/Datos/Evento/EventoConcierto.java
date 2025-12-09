@@ -21,4 +21,24 @@ public class EventoConcierto extends Evento {
     @Override
     public String getInformacion() { return artista; }
 
+    public String toString() {
+        return "EventoConcierto{" +
+                "nombre='" + getNombre() + '\'' +
+                ", fecha=" + getDate() +
+                ", ubicacion='" + getUbicacion() + '\'' +
+                ", recaudado=" + getRecaudacion() +
+                ", artista='" + artista + '\'' + //
+                '}';
+    }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        EventoConcierto that = (EventoConcierto) o;
+        return java.util.Objects.equals(artista, that.artista);
+    }
+
+    public int hashCode() {
+        return java.util.Objects.hash(super.hashCode(), artista);
+    }
 }
