@@ -5,12 +5,10 @@ import java.util.Objects;
 public class Patrocinador {
     private String nombre;
     private String logo;
-    private String web;
 
-    public Patrocinador(String nombre, String logo, String web) {
+    public Patrocinador(String nombre, String logo) {
         this.nombre = nombre;
         this.logo = logo;
-        this.web = web;
     }
 
     public String getNombre() {
@@ -29,28 +27,20 @@ public class Patrocinador {
         this.logo = logo;
     }
 
-    public String getWeb() {
-        return web;
-    }
-
-    public void setWeb(String web) {
-        this.web = web;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Patrocinador that = (Patrocinador) o;
-        return Objects.equals(nombre, that.nombre) && Objects.equals(logo, that.logo) && Objects.equals(web, that.web);
+        return Objects.equals(nombre, that.nombre) && Objects.equals(logo, that.logo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nombre, logo, web);
+        return Objects.hash(nombre, logo);
     }
 
     @Override
     public String toString() {
-        return "Patrocinador [nombre=" + nombre + ", logo=" + logo + ", web=" + web + "]";
+        return "Patrocinador [nombre=" + nombre + ", logo=" + logo + "]";
     }
 }
