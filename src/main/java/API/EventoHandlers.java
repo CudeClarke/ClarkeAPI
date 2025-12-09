@@ -17,7 +17,7 @@ import Datos.Evento.*;
 import utils.json_generator; 
 
 public class EventoHandlers {
-    private static final EventoManager eventoManager = new EventoManager(MySQLAccessFactory.getInstance());
+    private static EventoManager eventoManager = new EventoManager(MySQLAccessFactory.getInstance());
 
     private static iEvento eventoFromRequest(Context ctx){
         iEvento evento = null;
