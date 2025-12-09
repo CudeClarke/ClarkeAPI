@@ -1,16 +1,17 @@
 package DB.EventoDAO;
 
 import Datos.Evento.EventoConcierto;
+import Datos.Evento.Patrocinador;
 import Datos.Evento.iEvento;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.*;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -183,5 +184,66 @@ class EventoDAOMySQLTest {
         // Verifies that it was searched by Nombre and Fecha
         verify(preparedStatementMock).setString(1, "Evento X");
         verify(preparedStatementMock).setDate(2, fecha);
+    }
+
+    @Test
+    void testGetTags() throws SQLException {
+        int idEvento = 1;
+
+        // Prepares specific mocks
+        PreparedStatement psTags = mock(PreparedStatement.class);
+        ResultSet rsTags = mock(ResultSet.class);
+
+        // Configures the connection: If SQL statement contains tags, it return the mock
+        lenient().when(connectionMock.prepareStatement(contains("etiquetas"))).thenReturn(psTags);
+        when(psTags.executeQuery()).thenReturn(rsTags);
+
+        // Simulates loop
+        when(rsTags.next()).thenReturn(true, true, false);
+
+        // Simulates data retrieved from rs.getString("nombre") each round
+        when(rsTags.getString("nombre")).thenReturn("Rock", "Verano");
+
+        Set<String> tags = eventoDAO.getTags(idEvento);
+
+        assertNotNull(tags);
+        assertEquals(2, tags.size(), "Debería haber recuperado 2 etiquetas");
+        assertTrue(tags.contains("Rock"));
+        assertTrue(tags.contains("Verano"));
+
+        // Verifies the ID was correct
+        verify(psTags).setInt(1, idEvento);
+    }
+
+    @Test
+    void testGetPatrocinadores() throws SQLException {
+        int idEvento = 5;
+
+        // Specific mocks
+        PreparedStatement psPatrocinador = mock(PreparedStatement.class);
+        ResultSet rsPatrocinador = mock(ResultSet.class);
+
+        // Configures connection
+        lenient().when(connectionMock.prepareStatement(contains("FROM patrocinador"))).thenReturn(psPatrocinador);
+        when(psPatrocinador.executeQuery()).thenReturn(rsPatrocinador);
+
+        // Simulates 1 patrocinador found
+        when(rsPatrocinador.next()).thenReturn(true, false);
+
+        // Simulates the columns
+        when(rsPatrocinador.getString("Nombre")).thenReturn("RedBull");
+        when(rsPatrocinador.getString("Imagen")).thenReturn("redbull_logo.png");
+
+        Set<Patrocinador> resultado = eventoDAO.getPatrocinadores(idEvento);
+
+        assertNotNull(resultado);
+        assertEquals(1, resultado.size());
+
+        // Retrieves the object to check data
+        Patrocinador p = resultado.iterator().next();
+
+        assertEquals("RedBull", p.getNombre());
+
+        verify(psPatrocinador).setInt(1, idEvento);
     }
 }
