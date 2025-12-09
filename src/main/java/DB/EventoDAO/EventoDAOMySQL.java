@@ -98,7 +98,7 @@ public class EventoDAOMySQL implements iEventoDAO {
     /**
      * Metodo para buscar eventos que contengan una etiqueta concreta.
      * @param tag Nombre de la etiqueta asociada a los eventos.
-     * @return Lista de eventos que tienen dicha etiqueta.
+     * @return Lista de eventos que tienen dicha etiqueta ordenados por ID.
      */
     @Override
     public List<iEvento> searchByTag(String tag) {
@@ -110,6 +110,7 @@ public class EventoDAOMySQL implements iEventoDAO {
             JOIN clasifica c ON c.id_evento = e.id_evento
             JOIN etiquetas t ON t.id_etiqueta = c.id_etiqueta
             WHERE t.nombre = ?
+            ORDER BY e.ID_EVENTO ASC
             """;
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -126,7 +127,7 @@ public class EventoDAOMySQL implements iEventoDAO {
     /**
      * Metodo para buscar eventos patrocinados por un patrocinador concreto.
      * @param patrocinador Nombre del patrocinador.
-     * @return Lista de eventos asociados al patrocinador indicado.
+     * @return Lista de eventos asociados al patrocinador indicado ordenados por ID.
      */
     @Override
     public List<iEvento> searchByPatrocinador(String patrocinador) {
@@ -138,6 +139,7 @@ public class EventoDAOMySQL implements iEventoDAO {
             JOIN patrocinio p ON p.id_evento = e.id_evento
             JOIN patrocinador pa ON pa.id_patrocinador = p.id_patrocinador
             WHERE pa.nombre = ?
+            ORDER BY e.ID_EVENTO ASC
             """;
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -153,13 +155,13 @@ public class EventoDAOMySQL implements iEventoDAO {
 
     /**
      * Metodo para recuperar todos los eventos registrados en la base de datos.
-     * @return Lista que contiene todos los objetos iEvento almacenados.
+     * @return Lista que contiene todos los objetos iEvento almacenados ordenados por ID.
      */
     @Override
     public List<iEvento> getAllEventos() {
         List<iEvento> lista = new ArrayList<>();
 
-        String sql = "SELECT * FROM evento";
+        String sql = "SELECT * FROM evento ORDER BY ID_EVENTO ASC";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
@@ -304,7 +306,7 @@ public class EventoDAOMySQL implements iEventoDAO {
     public Set<String> getTags(int idEvento) {
         Set <String> tags = new HashSet<>();
         String sql = """
-            SELECT t.nombre
+            SELECT e.nombre
             FROM etiquetas e
             JOIN clasifica c ON e.id_etiqueta = c.id_etiqueta
             WHERE c.id_evento = ?
