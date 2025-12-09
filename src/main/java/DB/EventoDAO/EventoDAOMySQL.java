@@ -4,6 +4,7 @@ import DB.MySQLConnection;
 import Datos.Evento.*;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -293,13 +294,65 @@ public class EventoDAOMySQL implements iEventoDAO {
         return 0;
     }
 
+    /**
+     * Metodo para conseguir las etiquetas de un evento existente.
+     * @param idEvento Identificador del evento al que vamos a obtener las etiquetas.
+     * @return Lista de etiquetas del evento.
+     */
+
     @Override
     public Set<String> getTags(int idEvento) {
-        return Set.of();
+        Set <String> tags = new HashSet<>();
+        String sql = """
+            SELECT t.nombre
+            FROM etiquetas e
+            JOIN clasifica c ON e.id_etiqueta = c.id_etiqueta
+            WHERE c.id_evento = ?
+            """;
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, idEvento);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    tags.add(rs.getString("nombre"));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting tags for event ID: " + e.getMessage());
+        }
+        return tags;
     }
+
+    /**
+     * Metodo para conseguir los patrocinadores de un evento existente.
+     * @param idEvento Identificador del evento al que vamos a obtener los patrocinadores.
+     * @return Lista de patrocinadores del evento.
+     */
 
     @Override
     public Set<Patrocinador> getPatrocinadores(int idEvento) {
-        return Set.of();
+        Set<Patrocinador> patrocinadores = new HashSet<>();
+
+        String sql = """
+            SELECT pa.Nombre, pa.Imagen, pa.Web
+            FROM patrocinador pa
+            JOIN patrocinio p ON pa.id_patrocinador = p.id_patrocinador
+            WHERE p.id_evento = ?
+            """;
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, idEvento);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    String nombre = rs.getString("Nombre");
+                    String logo = rs.getString("Imagen");
+
+                    Patrocinador patrocinador = new Patrocinador(nombre, logo);
+                    patrocinadores.add(patrocinador);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting sponsors for event ID " + idEvento + ": " + e.getMessage());
+        }
+        return patrocinadores;
     }
 }
