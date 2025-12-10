@@ -1,6 +1,6 @@
 package Datos.Evento;
 
-import Datos.Entrada.Entrada;
+import Datos.Entrada.iEntrada;
 
 import java.util.*;
 
@@ -16,7 +16,7 @@ public class Evento implements iEvento {
 
     private Set<String> tags;
     private Set<Patrocinador> patrocinadores;
-    private List<Entrada> entradas;
+    private List<iEntrada> entradas;
 
     public Evento(){}
 
@@ -101,17 +101,17 @@ public class Evento implements iEvento {
         patrocinadores.remove(p);
     }
 
-    public void addEntrada(Entrada e) {
+    public void addEntrada(iEntrada e) {
         if (e != null) {
             entradas.add(e);
         }
     }
 
-    public void deleteEntrada(Entrada e) {
+    public void deleteEntrada(iEntrada e) {
         entradas.remove(e);
     }
 
-    public List<Entrada> getEntradas() {
+    public List<iEntrada> getEntradas() {
         return entradas;
     }
 
