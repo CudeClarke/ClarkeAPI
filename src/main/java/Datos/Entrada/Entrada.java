@@ -11,6 +11,7 @@ public class Entrada implements iEntrada {
     private List<iTicket> tickets;
     private String nombre;
     private String descripcion;
+    private int id;
 
     // Empty builder, should not be used. Used for json deserialization purposes exclusively by Jackson
     public Entrada(){}
@@ -20,6 +21,17 @@ public class Entrada implements iEntrada {
         this.precio = precio;
         this.nombre = nombre;
         this.descripcion = descripcion;
+        this.id = -1; // Inalid id
+
+        this.tickets = new ArrayList<iTicket>();
+    }
+
+    public Entrada(int id, int subAforo, float precio, String nombre, String descripcion) {
+        this.subAforo = subAforo;
+        this.precio = precio;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.id = id;
 
         this.tickets = new ArrayList<iTicket>();
     }
@@ -68,9 +80,18 @@ public class Entrada implements iEntrada {
         this.precio = precio;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String toString() {
         return "Entrada{" +
-                "nombre='" + nombre + '\'' +
+                "id='" + id + '\'' +
+                ", nombre='" + nombre + '\'' +
                 ", descripcion='" + descripcion + '\'' +
                 ", precio=" + precio +
                 ", subAforo=" + subAforo +
