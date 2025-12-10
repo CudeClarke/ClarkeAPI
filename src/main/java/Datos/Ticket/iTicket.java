@@ -9,4 +9,6 @@ public interface iTicket {
     public void setDniAsistente(String dniAsistente);
     public float getPagoExtra();
     public void setPagoExtra(float pagoExtra);
+    public int getId();
+    public void setId(int id);
 }

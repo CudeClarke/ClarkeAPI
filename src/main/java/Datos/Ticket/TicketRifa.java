@@ -15,6 +15,11 @@ public class TicketRifa extends Ticket {
         this.idBoleto = idBoleto;
     }
 
+    public TicketRifa(iUsuario usuario, String dniBeneficiario, float pagoExtra, int idBoleto, int id) {
+        super(usuario, dniBeneficiario, pagoExtra, id);
+        this.idBoleto = idBoleto;
+    }
+
     public int getIdBoleto() {
         return idBoleto;
     }
@@ -25,7 +30,7 @@ public class TicketRifa extends Ticket {
 
     public String toString() {
         String dniUser = (getUsuario() != null) ? getUsuario().getDni() : "null";
-        return "TicketRifa{" +
+        return "TicketRifa{" + "id" + getId()  +
                 "comprador=" + dniUser +
                 ", asistente='" + getDniAsistente() + '\'' +
                 ", idBoleto=" + idBoleto +

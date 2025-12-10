@@ -10,6 +10,11 @@ public class TicketCarreraFactory extends TicketFactory{
 
     @Override
     public iTicket createTicket(iUsuario usuario, String dniAsistente, float pagoExtra, String dorsal) {
-        return new TicketCarrera(usuario, dniAsistente, Integer.parseInt(dorsal));
+        return new TicketCarrera(usuario, dniAsistente, pagoExtra, Integer.parseInt(dorsal));
+    }
+
+    @Override
+    public iTicket createTicket(iUsuario usuario, String dniAsistente, float pagoExtra, String dorsal, int id) {
+        return new TicketCarrera(usuario, dniAsistente, pagoExtra, Integer.parseInt(dorsal),id);
     }
 }
