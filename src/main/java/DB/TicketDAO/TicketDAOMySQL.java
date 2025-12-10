@@ -130,9 +130,9 @@ public class TicketDAOMySQL implements iTicketDAO {
                     float pago_extra = rs.getFloat("Pago_extra");
                     iTicket ticket;
                     if(pago_extra == 0) {
-                        ticket = factory.createTicket(user, Dni_asistente, info);
+                        ticket = factory.createTicket(user, Dni_asistente, info, id);
                     }else{
-                        ticket = factory.createTicket(user, Dni_asistente, pago_extra, info);
+                        ticket = factory.createTicket(user, Dni_asistente, pago_extra, info, id);
                     }
                     ticketList.add((ticket));
                     ticketList.add((ticket));
@@ -167,9 +167,9 @@ public class TicketDAOMySQL implements iTicketDAO {
                     float pago_extra = rs.getFloat("Pago_extra");
                     iTicket ticket;
                     if(pago_extra == 0) {
-                        ticket = factory.createTicket(user, Dni_asistente, info);
+                        ticket = factory.createTicket(user, Dni_asistente, info, id);
                     }else{
-                        ticket = factory.createTicket(user, Dni_asistente, pago_extra, info);
+                        ticket = factory.createTicket(user, Dni_asistente, pago_extra, info, id);
                     }
                     ticketList.add((ticket));
                 }
