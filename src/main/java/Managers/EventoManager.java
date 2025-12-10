@@ -37,6 +37,10 @@ public class EventoManager {
         return eventoDAO.searchByName(name);
     }
 
+    public iEvento searchById(int idEvento){
+        return eventoDAO.searchById(idEvento);
+    }
+
     public List<iEvento> searchByTag(String tag){
         return eventoDAO.searchByTag(tag);
     }
