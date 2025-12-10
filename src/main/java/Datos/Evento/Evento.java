@@ -13,10 +13,13 @@ public class Evento implements iEvento {
     private String descripcion;
     private Date date;
     private String url;
+    private int ID;
 
     private Set<String> tags;
     private Set<Patrocinador> patrocinadores;
     private List<Entrada> entradas;
+
+    public Evento(){}
 
     public Evento(String nombre, String ubicacion, int objetivoRecaudacion, String descripcion, Date date, String url) {
         this.nombre = nombre;
@@ -26,6 +29,7 @@ public class Evento implements iEvento {
         recaudacion = 0;
         this.date = date;
         this.url = url;
+        this.ID = -1;
 
         tags = new HashSet<>();
         patrocinadores = new HashSet<>();
@@ -40,6 +44,22 @@ public class Evento implements iEvento {
         this.recaudacion = recaudacion;
         this.date = date;
         this.url = url;
+        this.ID = -1;
+
+        tags = new HashSet<>();
+        patrocinadores = new HashSet<>();
+        entradas = new ArrayList<>();
+    }
+
+    public Evento(String nombre, String ubicacion, int recaudacion, int objetivoRecaudacion, String descripcion, Date date, String url, int ID) {
+        this.nombre = nombre;
+        this.ubicacion = ubicacion;
+        this.objetivoRecaudacion = objetivoRecaudacion;
+        this.descripcion = descripcion;
+        this.recaudacion = recaudacion;
+        this.date = date;
+        this.url = url;
+        this.ID = ID;
 
         tags = new HashSet<>();
         patrocinadores = new HashSet<>();
@@ -170,9 +190,18 @@ public class Evento implements iEvento {
 
     public String getInformacion() { return ""; }
 
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
     public String toString() {
         return "Evento{" +
-                "nombre='" + nombre + '\'' +
+                "ID=" + ID +
+                ", nombre='" + nombre + '\'' +
                 ", fecha=" + date +
                 ", ubicacion='" + ubicacion + '\'' +
                 ", recaudado=" + recaudacion +
