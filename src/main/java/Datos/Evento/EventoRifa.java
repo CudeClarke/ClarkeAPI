@@ -1,6 +1,5 @@
 package Datos.Evento;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -8,17 +7,17 @@ import java.util.stream.Collectors;
 public class EventoRifa extends Evento {
     private List<Integer> premios;
 
-    public EventoRifa(String nombre, String ubicacion, int objetivoRecaudacion, String descripcion, Date date, String url) {
+    public EventoRifa(String nombre, String ubicacion, int objetivoRecaudacion, String descripcion, String date, String url) {
         super(nombre, ubicacion, objetivoRecaudacion, descripcion, date, url);
         premios = new ArrayList<>();
     }
 
-    public EventoRifa(String nombre, String ubicacion, int recaudacion, int objetivoRecaudacion, String descripcion, Date date, String url) {
+    public EventoRifa(String nombre, String ubicacion, int recaudacion, int objetivoRecaudacion, String descripcion, String date, String url) {
         super(nombre, ubicacion, recaudacion, objetivoRecaudacion, descripcion, date, url);
         premios = new ArrayList<>();
     }
 
-    public EventoRifa(String nombre, String ubicacion, int recaudacion, int objetivoRecaudacion, String descripcion, Date date, String url,  int ID) {
+    public EventoRifa(String nombre, String ubicacion, int recaudacion, int objetivoRecaudacion, String descripcion, String date, String url,  int ID) {
         super(nombre, ubicacion, recaudacion, objetivoRecaudacion, descripcion, date, url, ID);
         premios = new ArrayList<>();
     }

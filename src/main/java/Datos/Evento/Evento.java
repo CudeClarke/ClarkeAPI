@@ -3,7 +3,6 @@ package Datos.Evento;
 import Datos.Entrada.Entrada;
 
 import java.util.*;
-import java.sql.Date;
 
 public class Evento implements iEvento {
     private String nombre;
@@ -11,7 +10,7 @@ public class Evento implements iEvento {
     private int recaudacion;
     private int objetivoRecaudacion;
     private String descripcion;
-    private Date date;
+    private String date;
     private String url;
     private int ID;
 
@@ -21,7 +20,7 @@ public class Evento implements iEvento {
 
     public Evento(){}
 
-    public Evento(String nombre, String ubicacion, int objetivoRecaudacion, String descripcion, Date date, String url) {
+    public Evento(String nombre, String ubicacion, int objetivoRecaudacion, String descripcion, String date, String url) {
         this.nombre = nombre;
         this.ubicacion = ubicacion;
         this.objetivoRecaudacion = objetivoRecaudacion;
@@ -36,7 +35,7 @@ public class Evento implements iEvento {
         entradas = new ArrayList<>();
     }
 
-    public Evento(String nombre, String ubicacion, int recaudacion, int objetivoRecaudacion, String descripcion, Date date, String url) {
+    public Evento(String nombre, String ubicacion, int recaudacion, int objetivoRecaudacion, String descripcion, String date, String url) {
         this.nombre = nombre;
         this.ubicacion = ubicacion;
         this.objetivoRecaudacion = objetivoRecaudacion;
@@ -51,7 +50,7 @@ public class Evento implements iEvento {
         entradas = new ArrayList<>();
     }
 
-    public Evento(String nombre, String ubicacion, int recaudacion, int objetivoRecaudacion, String descripcion, Date date, String url, int ID) {
+    public Evento(String nombre, String ubicacion, int recaudacion, int objetivoRecaudacion, String descripcion, String date, String url, int ID) {
         this.nombre = nombre;
         this.ubicacion = ubicacion;
         this.objetivoRecaudacion = objetivoRecaudacion;
@@ -172,11 +171,11 @@ public class Evento implements iEvento {
         this.descripcion = descripcion;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

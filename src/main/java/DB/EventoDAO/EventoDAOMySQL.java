@@ -57,7 +57,7 @@ public class EventoDAOMySQL implements iEventoDAO {
         int objetivo = rs.getInt("Objetivo");
         String ubicacion = rs.getString("Lugar");
         String descripcion = rs.getString("Descripcion");
-        Date fecha = rs.getDate("Fecha");
+        String fecha = rs.getString("Fecha");
         String url = rs.getString("Imagen");
         int recaudacion = rs.getInt("Recaudacion");
         String informacionExtra = rs.getString("Informacion");
@@ -212,7 +212,7 @@ public class EventoDAOMySQL implements iEventoDAO {
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, tipo);
             stmt.setString(2, evento.getNombre());
-            stmt.setDate(3, evento.getDate());
+            stmt.setString(3, evento.getDate());
             setOptionalString(stmt, 4, evento.getUbicacion());
             setOptionalString(stmt, 5, evento.getDescripcion());
             stmt.setDouble(6, evento.getRecaudacion());
@@ -251,7 +251,7 @@ public class EventoDAOMySQL implements iEventoDAO {
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 
             stmt.setString(1, evento.getNombre());
-            stmt.setDate(2, evento.getDate());
+            stmt.setString(2, evento.getDate());
             setOptionalString(stmt, 3, evento.getUbicacion());
             setOptionalString(stmt, 4, evento.getDescripcion());
             stmt.setDouble(5, evento.getRecaudacion());
@@ -301,12 +301,12 @@ public class EventoDAOMySQL implements iEventoDAO {
     @Override
     public int getID(iEvento evento) {
         String nombre = evento.getNombre();
-        Date fecha = evento.getDate();  // Añado fecha ya que cabe la posibilidad de tener un evento con el mismo nombre
+        String fecha = evento.getDate();  // Añado fecha ya que cabe la posibilidad de tener un evento con el mismo nombre
         String sql = "SELECT ID_EVENTO FROM evento WHERE Nombre = ? AND Fecha = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, nombre);
-            stmt.setDate(2, fecha);
+            stmt.setString(2, fecha);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) return rs.getInt("ID_EVENTO");
             }
