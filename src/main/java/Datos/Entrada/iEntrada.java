@@ -14,6 +14,8 @@ public interface iEntrada {
     public String getNombre();
     public String getDescripcion();
     public void setDescripcion(String descripcion);
+    public int getId();
+    public void setId(int id);
 
     public void addTicket(iTicket ticket);
     public void removeTicket(iTicket ticket);

@@ -9,6 +9,10 @@ public class EntradaRifa extends Entrada {
         super(subAforo, precio, nombre, descripcion);
     }
 
+    public EntradaRifa(int id, int subAforo, float precio, String nombre, String descripcion, int seccion) {
+        super(id, subAforo, precio, nombre, descripcion);
+    }
+
     public String toString(){
         return super.toString();
     }

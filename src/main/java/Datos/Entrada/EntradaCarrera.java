@@ -9,6 +9,10 @@ public class EntradaCarrera extends Entrada {
         super(subAforo, precio, nombre, descripcion);
     }
 
+    public EntradaCarrera(int id, int subAforo, float precio, String nombre, String descripcion){
+        super(id, subAforo, precio, nombre, descripcion);
+    }
+
     public String toString(){
         return super.toString();
     }
