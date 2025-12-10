@@ -8,8 +8,18 @@ import java.util.stream.Collectors;
 public class EventoRifa extends Evento {
     private List<Integer> premios;
 
+    public EventoRifa(String nombre, String ubicacion, int objetivoRecaudacion, String descripcion, Date date, String url) {
+        super(nombre, ubicacion, objetivoRecaudacion, descripcion, date, url);
+        premios = new ArrayList<>();
+    }
+
     public EventoRifa(String nombre, String ubicacion, int recaudacion, int objetivoRecaudacion, String descripcion, Date date, String url) {
         super(nombre, ubicacion, recaudacion, objetivoRecaudacion, descripcion, date, url);
+        premios = new ArrayList<>();
+    }
+
+    public EventoRifa(String nombre, String ubicacion, int recaudacion, int objetivoRecaudacion, String descripcion, Date date, String url,  int ID) {
+        super(nombre, ubicacion, recaudacion, objetivoRecaudacion, descripcion, date, url, ID);
         premios = new ArrayList<>();
     }
 
@@ -27,7 +37,8 @@ public class EventoRifa extends Evento {
 
     public String toString() {
         return "EventoRifa{" +
-                "nombre='" + getNombre() + '\'' +
+                "ID=" + getID() +
+                ", nombre='" + getNombre() + '\'' +
                 ", fecha=" + getDate() +
                 ", ubicacion='" + getUbicacion() + '\'' +
                 ", recaudado=" + getRecaudacion() +

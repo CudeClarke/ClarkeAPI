@@ -27,6 +27,8 @@ public interface iEvento {
     public Set<Patrocinador> getPatrocinadores();
     public void setPatrocinadores(Set<Patrocinador> patrocinadores);
     public List<Entrada> getEntradas();
+    public int getID();
+    public void setID(int ID);
     
     public void addTag(String tag);
     public void removeTag(String tag);
