@@ -182,6 +182,11 @@ public class TicketDAOMySQL implements iTicketDAO {
         return ticketList;
     }
 
+    @Override
+    public iTicket searchById(int idTicket) {
+        return null;
+    }
+
     /**
      * Method for registering certain ticket in the database
      */
