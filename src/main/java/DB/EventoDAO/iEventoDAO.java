@@ -35,6 +35,13 @@ public interface iEventoDAO {
     iEvento searchByName(String nombre);
 
     /**
+     * Metodo para buscar un evento a partir de su id.
+     * @param idEvento Id del evento que se desea buscar.
+     * @return Objeto iEvento si existe, o null en caso contrario.
+     */
+    iEvento searchById(int idEvento);
+
+    /**
      * Metodo para añadir un nuevo evento a la base de datos.
      * Los campos LUGAR y DESCRIPCION son opcionales, por lo que
      * pueden recibirse como null y se insertarán como NULL.

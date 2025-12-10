@@ -51,7 +51,7 @@ public class EventoDAOMySQL implements iEventoDAO {
     }
 
     private iEvento buildEvento(ResultSet rs) throws SQLException {
-
+        int idEvento = rs.getInt("ID_EVENTO");
         int tipoID = rs.getInt("ID_TIPO_EVENTO");
         String nombre = rs.getString("Nombre");
         int objetivo = rs.getInt("Objetivo");
@@ -70,7 +70,7 @@ public class EventoDAOMySQL implements iEventoDAO {
         EventoFactory factory = getFactoryByID(tipoID);
 
         iEvento evento = factory.createEvento(
-                nombre, ubicacion,recaudacion, objetivo, descripcion, fecha, url, informacionExtra
+                nombre, ubicacion,recaudacion, objetivo, descripcion, fecha, url,idEvento, informacionExtra
         );
 
         return evento;
@@ -151,6 +151,26 @@ public class EventoDAOMySQL implements iEventoDAO {
             System.err.println("Error searching event by sponsoring: " + e.getMessage());
         }
         return lista;
+    }
+
+    /**
+     * Metodo para buscar un evento a partir de su id.
+     * @param idEvento Id del evento que se desea buscar.
+     * @return Objeto iEvento si existe, o null en caso contrario.
+     */
+    @Override
+    public iEvento searchById(int idEvento) {
+        String sql = "SELECT e.* FROM evento e WHERE e.ID_EVENTO = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, idEvento);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return buildEvento(rs);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error searching event by id: " + e.getMessage());
+        }
+        return null;
     }
 
     /**
