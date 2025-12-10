@@ -12,14 +12,14 @@ public class Ticket implements iTicket {
         this.usuario = usuario;
         this.dniAsistente = dniBeneficiario;
         this.pagoExtra = 0;
-        this.id = 0;
+        this.id = -1;
     }
 
     public Ticket (iUsuario usuario, String dniBeneficiario, float pagoExtra) {
         this.usuario = usuario;
         this.dniAsistente = dniBeneficiario;
         this.pagoExtra = pagoExtra;
-        this.id = 0;
+        this.id = -1;
     }
 
     public Ticket (iUsuario usuario, String dniBeneficiario, float pagoExtra,int id) {
