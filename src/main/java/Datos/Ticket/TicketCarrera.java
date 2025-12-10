@@ -15,6 +15,11 @@ public class TicketCarrera extends Ticket {
         this.dorsal = dorsal;
     }
 
+    public TicketCarrera(iUsuario usuario, String dniAsistente, float pagoExtra, int dorsal, int id) {
+        super(usuario, dniAsistente, pagoExtra, id);
+        this.dorsal = dorsal;
+    }
+
     public int getDorsal() {
         return dorsal;
     }
@@ -25,7 +30,7 @@ public class TicketCarrera extends Ticket {
 
     public String toString() {
         String dniUser = (getUsuario() != null) ? getUsuario().getDni() : "null";
-        return "TicketCarrera{" +
+        return "TicketCarrera{" + "id=" + getId() +
                 "comprador=" + dniUser +
                 ", asistente='" + getDniAsistente() + '\'' +
                 ", dorsal=" + dorsal +

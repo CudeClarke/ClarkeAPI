@@ -15,6 +15,11 @@ public class TicketConcierto extends Ticket{
         this.asiento = asiento;
     }
 
+    public TicketConcierto(iUsuario usuario, String dniAsistente, float pagoExtra, String asiento, int id) {
+        super(usuario, dniAsistente, pagoExtra, id);
+        this.asiento = asiento;
+    }
+
     public String getAsiento() {
         return asiento;
     }
@@ -25,7 +30,7 @@ public class TicketConcierto extends Ticket{
 
     public String toString() {
         String dniUser = (getUsuario() != null) ? getUsuario().getDni() : "null";
-        return "TicketConcierto{" +
+        return "TicketConcierto{" + "id" + getId() +
                 "comprador=" + dniUser +
                 ", asistente='" + getDniAsistente() + '\'' +
                 ", asiento='" + asiento + '\'' +
