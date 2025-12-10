@@ -30,7 +30,7 @@ public class TicketCarrera extends Ticket {
 
     public String toString() {
         String dniUser = (getUsuario() != null) ? getUsuario().getDni() : "null";
-        return "TicketCarrera{" +
+        return "TicketCarrera{" + "id=" + getId() +
                 "comprador=" + dniUser +
                 ", asistente='" + getDniAsistente() + '\'' +
                 ", dorsal=" + dorsal +

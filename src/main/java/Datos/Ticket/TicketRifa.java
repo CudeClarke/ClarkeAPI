@@ -30,7 +30,7 @@ public class TicketRifa extends Ticket {
 
     public String toString() {
         String dniUser = (getUsuario() != null) ? getUsuario().getDni() : "null";
-        return "TicketRifa{" +
+        return "TicketRifa{" + "id" + getId()  +
                 "comprador=" + dniUser +
                 ", asistente='" + getDniAsistente() + '\'' +
                 ", idBoleto=" + idBoleto +
