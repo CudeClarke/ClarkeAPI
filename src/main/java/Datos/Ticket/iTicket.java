@@ -11,4 +11,5 @@ public interface iTicket {
     public void setPagoExtra(float pagoExtra);
     public int getId();
     public void setId(int id);
+    public String getInformacion();
 }

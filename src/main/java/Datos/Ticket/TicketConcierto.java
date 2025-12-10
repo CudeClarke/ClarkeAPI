@@ -33,6 +33,11 @@ public class TicketConcierto extends Ticket{
         this.asiento = asiento;
     }
 
+    @Override
+    public String getInformacion() {
+        return asiento;
+    }
+
     public String toString() {
         String dniUser = (getUsuario() != null) ? getUsuario().getDni() : "null";
         return "TicketConcierto{" + "id" + getId() +

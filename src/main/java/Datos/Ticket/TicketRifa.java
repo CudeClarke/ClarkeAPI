@@ -33,6 +33,11 @@ public class TicketRifa extends Ticket {
         this.idBoleto = idBoleto;
     }
 
+    @Override
+    public String getInformacion() {
+        return Integer.toString(idBoleto);
+    }
+
     public String toString() {
         String dniUser = (getUsuario() != null) ? getUsuario().getDni() : "null";
         return "TicketRifa{" + "id" + getId()  +
