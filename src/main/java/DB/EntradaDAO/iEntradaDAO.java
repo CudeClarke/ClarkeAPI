@@ -13,6 +13,13 @@ public interface iEntradaDAO {
     List<iEntrada> searchByEvento(int idEvento);
 
     /**
+     * Metodo para buscar una entrada a partir de su id.
+     * @param idEntrada Id de la entrada que se desea buscar.
+     * @return Objeto iEntrada si existe, o null en caso contrario.
+     */
+    iEntrada searchById(int idEntrada);
+
+    /**
      * Metodo para registrar un nuevo tipo de entrada en la base de datos.
      * @param entrada Objeto con los datos de la entrada.
      * @param idEvento ID del evento al que pertenece.
