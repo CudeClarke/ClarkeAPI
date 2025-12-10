@@ -247,6 +247,10 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
         return user;
     }
 
+    /**
+     * Metodo para recuperar todos los usuarios registrados en la base de datos.
+     * @return Lista que contiene todos los objetos iUsuarios almacenados.
+     */
     public List<iUsuario> getAllUsuarios() {
         List<iUsuario> list = new ArrayList<>();
         String sql = "SELECT u.*, r.Telefono, r.Direccion_postal " +
