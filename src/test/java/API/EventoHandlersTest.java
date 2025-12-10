@@ -59,7 +59,9 @@ class EventoHandlersTest {
     void testGetEvents_Success() throws Exception {
         List<iEvento> listEventos = new ArrayList<>();
         // Creates dummy event
-        EventoConcierto eventoDummy = new EventoConcierto("MadCool", "Madrid", 0, 0, "Desc", Date.valueOf("2025-07-01"), "url", "Artista");
+        EventoConcierto eventoDummy = new EventoConcierto(
+                "MadCool", "Madrid", 0, 0, "Desc", "2025-07-01", "url", "Artista"
+        );
         listEventos.add(eventoDummy);
 
         when(eventoManagerMock.getAllEventos()).thenReturn(listEventos);
@@ -137,7 +139,7 @@ class EventoHandlersTest {
 
         // Simulates proper validation
         when(nuevoEvento.getNombre()).thenReturn("Nuevo Concierto");
-        when(nuevoEvento.getDate()).thenReturn(Date.valueOf("2025-01-01"));
+        when(nuevoEvento.getDate()).thenReturn("2025-01-01");
 
         when(ctxMock.bodyAsClass(any())).thenAnswer(invocation -> {
             Class<?> clazz = invocation.getArgument(0);
@@ -183,7 +185,7 @@ class EventoHandlersTest {
     void testAddEvent_FailBD() throws Exception {
         EventoConcierto evento = mock(EventoConcierto.class);
         when(evento.getNombre()).thenReturn("Test");
-        when(evento.getDate()).thenReturn(Date.valueOf("2025-01-01"));
+        when(evento.getDate()).thenReturn("2025-01-01");
 
         when(ctxMock.bodyAsClass(any())).thenAnswer(invocation -> {
             if (invocation.getArgument(0).equals(EventoConcierto.class)) return evento;
