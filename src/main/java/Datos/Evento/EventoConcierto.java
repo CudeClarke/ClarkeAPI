@@ -5,8 +5,18 @@ import java.sql.Date;
 public class EventoConcierto extends Evento {
     private String artista;
 
+    public EventoConcierto(String nombre, String ubicacion, int objetivoRecaudacion, String descripcion, Date date, String url, String artista) {
+        super(nombre, ubicacion, objetivoRecaudacion, descripcion, date, url);
+        this.artista = artista;
+    }
+
     public EventoConcierto(String nombre, String ubicacion, int recaudacion, int objetivoRecaudacion, String descripcion, Date date, String url, String artista) {
         super(nombre, ubicacion, recaudacion, objetivoRecaudacion, descripcion, date, url);
+        this.artista = artista;
+    }
+
+    public EventoConcierto(String nombre, String ubicacion, int recaudacion, int objetivoRecaudacion, String descripcion, Date date, String url, int ID, String artista) {
+        super(nombre, ubicacion, recaudacion, objetivoRecaudacion, descripcion, date, url, ID);
         this.artista = artista;
     }
 
@@ -23,7 +33,8 @@ public class EventoConcierto extends Evento {
 
     public String toString() {
         return "EventoConcierto{" +
-                "nombre='" + getNombre() + '\'' +
+                "ID=" + getID() +
+                ", nombre='" + getNombre() + '\'' +
                 ", fecha=" + getDate() +
                 ", ubicacion='" + getUbicacion() + '\'' +
                 ", recaudado=" + getRecaudacion() +
