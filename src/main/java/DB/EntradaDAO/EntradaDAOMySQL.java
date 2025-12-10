@@ -58,9 +58,25 @@ public class EntradaDAOMySQL implements iEntradaDAO {
         return lista;
     }
 
+    /**
+     * Metodo para buscar una entrada a partir de su id.
+     * @param idEntrada Id de la entrada que se desea buscar.
+     * @return Objeto iEntrada si existe, o null en caso contrario.
+     */
     @Override
     public iEntrada searchById(int idEntrada) {
+        String sql = "SELECT * FROM entrada WHERE ID_ENTRADA = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, idEntrada);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return buildEntrada(rs);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error searching entries by id: " + e.getMessage());
+        }
         return null;
+
     }
 
     /**

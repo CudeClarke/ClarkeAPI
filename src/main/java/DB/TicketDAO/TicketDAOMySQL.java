@@ -123,8 +123,8 @@ public class TicketDAOMySQL implements iTicketDAO {
                 while(rs.next()){
                     int id = rs.getInt("ID_TICKET");
                     int type = ticketType(id);
-                    iUsuario user = new UsuarioBase("a", "b", "c",dni); //SHOULD BE IMPLEMENTED CORRECTLY
-                    String Dni_asistente = rs.getString("Dni_Asistente");
+                    iUsuario user = new UsuarioBase("a", "b", "c",dni);
+                    String Dni_asistente = rs.getString("Dni_asistente");
                     String info = rs.getString("Informacion");
                     TicketFactory factory = getFactoryByType(type);
                     float pago_extra = rs.getFloat("Pago_extra");
@@ -182,10 +182,42 @@ public class TicketDAOMySQL implements iTicketDAO {
         return ticketList;
     }
 
+    /**
+     * Metodo para buscar un ticket a partir de su id.
+     * @param idTicket Id del ticket que se desea buscar.
+     * @return Objeto iTicket si existe, o null en caso contrario.
+     */
     @Override
     public iTicket searchById(int idTicket) {
+        String sql = "SELECT * FROM ticket WHERE ID_TICKET = ?";
+        try(PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, idTicket);
+            try(ResultSet rs = st.executeQuery()){
+                if(rs.next()){
+                    int type = ticketType(idTicket);
+                    iUsuario user = new UsuarioBase("a", "b", "c",rs.getString("DNI_USUARIO")); //SHOULD BE IMPLEMENTED CORRECTLY
+                    String Dni_asistente = rs.getString("Dni_asistente");
+                    String info = rs.getString("Informacion");
+                    TicketFactory factory = getFactoryByType(type);
+                    float pago_extra = rs.getFloat("Pago_extra");
+                    iTicket ticket;
+                    if(pago_extra == 0) {
+                        ticket = factory.createTicket(user, Dni_asistente, info, idTicket);
+                    }else{
+                        ticket = factory.createTicket(user, Dni_asistente, pago_extra, info, idTicket);
+                    }
+                    return ticket;
+                }
+            }catch(SQLException e){
+                System.err.println("Error searching ticket/s for user: " + e.getMessage());
+            }
+        }catch (SQLException e){
+            System.err.println("Error searching ticket/s for user:" + e.getMessage());
+        }
         return null;
     }
+
+
 
     /**
      * Method for registering certain ticket in the database
