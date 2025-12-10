@@ -16,6 +16,13 @@ public interface iTicketDAO {
      * @param idEntrada The id of the entry whose tickets we want to list
      */
     List<iTicket> searchByEntrada(int idEntrada);
+
+    /**
+     * Metodo para buscar un ticket a partir de su id.
+     * @param idTicket Id del ticket que se desea buscar.
+     * @return Objeto iTicket si existe, o null en caso contrario.
+     */
+    iTicket searchById(int idTicket);
     
     /**
      * Method for registering certain ticket in the database

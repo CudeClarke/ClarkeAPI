@@ -58,6 +58,11 @@ public class EntradaDAOMySQL implements iEntradaDAO {
         return lista;
     }
 
+    @Override
+    public iEntrada searchById(int idEntrada) {
+        return null;
+    }
+
     /**
      * Metodo para registrar un nuevo tipo de entrada en la base de datos.
      * @param entrada Objeto con los datos de la entrada.
