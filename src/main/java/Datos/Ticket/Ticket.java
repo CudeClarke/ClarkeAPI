@@ -64,6 +64,10 @@ public class Ticket implements iTicket {
 
     public void setId(int id) { this.id = id;}
 
+    public String getInformacion(){
+        return "";
+    }
+
 
     public String toString() {
         String dniUser = (usuario != null) ? usuario.getDni() : "null";

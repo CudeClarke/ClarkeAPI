@@ -33,6 +33,11 @@ public class TicketCarrera extends Ticket {
         this.dorsal = dorsal;
     }
 
+    @Override
+    public String getInformacion() {
+        return Integer.toString(dorsal);
+    }
+
     public String toString() {
         String dniUser = (getUsuario() != null) ? getUsuario().getDni() : "null";
         return "TicketCarrera{" + "id=" + getId() +
