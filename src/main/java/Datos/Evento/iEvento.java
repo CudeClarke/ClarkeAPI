@@ -1,6 +1,6 @@
 package Datos.Evento;
 
-import Datos.Entrada.Entrada;
+import Datos.Entrada.iEntrada;
 
 import java.util.List;
 import java.util.Set;
@@ -25,7 +25,7 @@ public interface iEvento {
     public void setTags(Set<String> tags);
     public Set<Patrocinador> getPatrocinadores();
     public void setPatrocinadores(Set<Patrocinador> patrocinadores);
-    public List<Entrada> getEntradas();
+    public List<iEntrada> getEntradas();
     public int getID();
     public void setID(int ID);
     
@@ -33,6 +33,6 @@ public interface iEvento {
     public void removeTag(String tag);
     public void addPatrocinador(Patrocinador p);
     public void removePatrocinador(Patrocinador p);
-    public void addEntrada(Entrada e);
-    public void deleteEntrada(Entrada e);
+    public void addEntrada(iEntrada e);
+    public void deleteEntrada(iEntrada e);
 }
