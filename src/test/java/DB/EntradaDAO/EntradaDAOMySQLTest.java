@@ -32,7 +32,7 @@ class EntradaDAOMySQLTest {
     }
 
     @Test
-    void testRegisterEntradaFine() throws SQLException {
+    void testRegisterEntrada_Success() throws SQLException {
         // Create one entrada for testing
         iEntrada entrada = new Entrada(50, 25.50f, "VIP", "Entrada zona VIP");
         int idEvento = 1;
@@ -44,7 +44,7 @@ class EntradaDAOMySQLTest {
 
         boolean resultado = entradaDAO.registerEntrada(entrada, idEvento);
 
-        assertTrue(resultado, "Register should be fine");
+        assertTrue(resultado, "Register should be true");
 
         // Verifies the parameters were in the same order as the SQL sentence
         verify(preparedStatementMock).setInt(1, idEvento);
@@ -67,7 +67,7 @@ class EntradaDAOMySQLTest {
     }
 
     @Test
-    void testSearchByEvento_EncuentraEntradas() throws SQLException {
+    void testSearchByEvento_EntradaFound() throws SQLException {
         int idEvento = 5;
 
         // Configure the sequence: connection -> statement -> resultSet
@@ -78,6 +78,7 @@ class EntradaDAOMySQLTest {
         when(resultSetMock.next()).thenReturn(true, false); // Primera vez true, segunda false (fin loop)
 
         // Simulates the exact data used in the columns used in buildEntrada(ResultSet rs)
+        when(resultSetMock.getInt("Id_entrada")).thenReturn(33);
         when(resultSetMock.getInt("Cantidad")).thenReturn(100);
         when(resultSetMock.getFloat("Precio")).thenReturn(15.0f);
         when(resultSetMock.getString("Nombre")).thenReturn("General");
