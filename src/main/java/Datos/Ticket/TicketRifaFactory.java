@@ -17,4 +17,8 @@ public class TicketRifaFactory extends TicketFactory{
     public iTicket createTicket(iUsuario usuario, String dniAsistente, float pagoExtra, String idBoleto, int id) {
         return new TicketRifa(usuario, dniAsistente, pagoExtra, Integer.parseInt(idBoleto), id);
     }
+
+    public iTicket createTicket(iUsuario usuario, String dniAsistente, String idBoleto, int id) {
+        return new TicketRifa(usuario, dniAsistente, Integer.parseInt(idBoleto), id);
+    }
 }

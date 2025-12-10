@@ -20,6 +20,11 @@ public class TicketRifa extends Ticket {
         this.idBoleto = idBoleto;
     }
 
+    public TicketRifa(iUsuario usuario, String dniBeneficiario, int idBoleto, int id) {
+        super(usuario, dniBeneficiario, id);
+        this.idBoleto = idBoleto;
+    }
+
     public int getIdBoleto() {
         return idBoleto;
     }
