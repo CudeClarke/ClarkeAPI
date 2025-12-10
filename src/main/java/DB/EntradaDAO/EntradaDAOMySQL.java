@@ -29,11 +29,12 @@ public class EntradaDAOMySQL implements iEntradaDAO {
     }
     
     private iEntrada buildEntrada(ResultSet rs) throws SQLException {
+        int id = rs.getInt("Id_entrada");
         int subAforo = rs.getInt("Cantidad");
         float precio = rs.getFloat("Precio");
         String nombre = rs.getString("Nombre");
         String descripcion = rs.getString("Descripcion");
-        return new Entrada(subAforo, precio, nombre, descripcion);
+        return new Entrada(id, subAforo, precio, nombre, descripcion);
     }
 
     /**
