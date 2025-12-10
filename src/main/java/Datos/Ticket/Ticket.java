@@ -29,6 +29,13 @@ public class Ticket implements iTicket {
         this.id = id;
     }
 
+    public Ticket (iUsuario usuario, String dniBeneficiario,int id) {
+        this.usuario = usuario;
+        this.dniAsistente = dniBeneficiario;
+        this.pagoExtra = 0;
+        this.id = id;
+    }
+
     public iUsuario getUsuario() {
         return usuario;
     }
