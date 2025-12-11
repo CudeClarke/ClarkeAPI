@@ -14,9 +14,9 @@ import Managers.CompraManager;
 import Managers.Transaction;
 
 public class CompraHandlers {
-    private static final CompraManager compraManager = new CompraManager(MySQLAccessFactory.getInstance());
-    private static final EventoManager eventoManager = new EventoManager(MySQLAccessFactory.getInstance());
-    private static final UserManager userManager = new UserManager(MySQLAccessFactory.getInstance());
+    private static CompraManager compraManager = new CompraManager(MySQLAccessFactory.getInstance());
+    private static EventoManager eventoManager = new EventoManager(MySQLAccessFactory.getInstance());
+    private static UserManager userManager = new UserManager(MySQLAccessFactory.getInstance());
     private static final String ID_EVENTO = "idEvento";
     private static final String ID_ENTRADA = "idEntrada";
     private static final String AMOUNT = "amount";
@@ -76,7 +76,7 @@ public class CompraHandlers {
           TicketFactory ticketFactory = null;
           int previousEvent = -1;
 
-          while (correct_format && exito && i< req.size()){
+          while (correct_format && exito && i< entradas.size()){
               JsonNode current_node = entradas.get(i);
               try {
                 int idEvento = current_node.get(ID_EVENTO).asInt();
