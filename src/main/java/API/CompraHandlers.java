@@ -17,6 +17,7 @@ public class CompraHandlers {
     private static CompraManager compraManager = new CompraManager(MySQLAccessFactory.getInstance());
     private static EventoManager eventoManager = new EventoManager(MySQLAccessFactory.getInstance());
     private static UserManager userManager = new UserManager(MySQLAccessFactory.getInstance());
+
     private static final String ID_EVENTO = "idEvento";
     private static final String ID_ENTRADA = "idEntrada";
     private static final String AMOUNT = "amount";
@@ -127,7 +128,7 @@ public class CompraHandlers {
         }
 
         Transaction transaction = compraManager.getTransaction(idTransaction);
-        if (transaction != null) {
+        if (transaction != null && compraManager.checkAvailabilityTransaction(idTransaction)) {
             boolean paymentSucces = true;
             ObjectMapper mapper = new ObjectMapper();
             JsonNode req = mapper.readTree(ctx.body());
@@ -136,9 +137,14 @@ public class CompraHandlers {
             //  paymentSuccess = PaymentService.processPayment(req)
 
             if (paymentSucces) {
-                userManager.registerUsuario(transaction.getComprador());
-                compraManager.confirmTransaction(idTransaction);
-                res = json_generator.status_response(0, "Transaction Confirmed");
+                boolean exito;
+                exito = userManager.registerUsuario(transaction.getComprador());
+                exito = exito && compraManager.confirmTransaction(idTransaction);
+                if (exito) {
+                    res = json_generator.status_response(0, "Transaction Confirmed");
+                }else{
+                    res =json_generator.status_response(1, "Error confirming transaction");
+                }
             } else {
                 res = json_generator.status_response(1, "Error processing payment");
             }
