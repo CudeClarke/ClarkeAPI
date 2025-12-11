@@ -76,7 +76,7 @@ public class CompraHandlers {
           TicketFactory ticketFactory = null;
           int previousEvent = -1;
 
-          while (correct_format && exito && i< req.size()){
+          while (correct_format && exito && i< entradas.size()){
               JsonNode current_node = entradas.get(i);
               try {
                 int idEvento = current_node.get(ID_EVENTO).asInt();
