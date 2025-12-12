@@ -257,10 +257,21 @@ public class TicketDAOMySQL implements iTicketDAO {
             return false;
         }
     }
-
+    /**
+     * Method to get the next id that will be assigned to a ticket. Return 1 if there is no ticket in the database
+     */
     @Override
     public int getNextTicketID() {
-        return 0;
+        String sql = "SELECT MAX(ID_TICKET) AS max_id FROM ticket";
+        try (PreparedStatement st = connection.prepareStatement(sql);
+             ResultSet rs = st.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt("max_id") + 1;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting next ticket ID: " + e.getMessage());
+        }
+        return 1;
     }
 }
 
