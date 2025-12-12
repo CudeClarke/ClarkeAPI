@@ -1,5 +1,7 @@
 package API;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.javalin.http.Handler;
 import Datos.Usuario.*;
 import DB.MySQLAccessFactory;
@@ -15,7 +17,13 @@ public class UserHandlers {
         if (dni.length() == 9 && Character.isLetter(dni.charAt(dni.length() - 1))) {
             iUsuario user = userManager.searchByDni(ctx.pathParam("dni"));
             if (user != null){
-                res = json_generator.Java_to_json(user);
+                ObjectNode jsonObject = (ObjectNode) json_generator.Java_to_json_node(user);
+                switch (user) {
+                    case UsuarioRegistrado _ : jsonObject.put("tipo", "REGISTRADO"); break;
+                    case UsuarioBase _ : jsonObject.put("tipo", "BASE"); break;
+                    default : jsonObject.put("tipo", "ERROR");
+                }
+                res = jsonObject.toString();
             }else{
                 res = json_generator.status_response(1, "Could not find user in database");
             }

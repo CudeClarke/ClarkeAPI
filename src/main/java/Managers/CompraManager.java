@@ -1,7 +1,6 @@
 package Managers;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import Datos.Ticket.*;
@@ -17,14 +16,13 @@ public class CompraManager {
     private static iTicketDAO ticketDAO;
     private static  iEntradaDAO entradaDAO;
     private static iEventoDAO eventoDAO;
-    List<iTicket> tickets;
     Map<Integer, Transaction> transacciones_pendientes;
 
     public CompraManager(iDatabaseAccessFactory factory){
         ticketDAO = factory.getTicketDAO();
         entradaDAO = factory.getEntradaDAO();
         eventoDAO = factory.getEventoDAO();
-        tickets = new ArrayList<>();
+        transacciones_pendientes = new HashMap<>();
     }
 
     /**
@@ -147,15 +145,15 @@ public class CompraManager {
             }
             if (evento != null){
                 iEntrada entrada = transaction.entradaIncluded(evento, idEntrada);
-                if (entrada == null){
+                if (entrada == null) {
                     entrada = entradaDAO.searchById(idEntrada);
-                    if (entrada != null){
+                    if (entrada != null) {
                         evento.addEntrada(entrada);
                     }
-                    if (entrada != null){
-                        entrada.addTicket(ticket);
-                        exito = true;
-                    }
+                }
+                if (entrada != null) {
+                    entrada.addTicket(ticket);
+                    exito = true;
                 }
             }
         }

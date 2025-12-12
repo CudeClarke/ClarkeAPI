@@ -1,15 +1,11 @@
 package API;
 
-import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.javalin.http.Handler;
 import io.javalin.http.Context;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import Managers.EventoManager;
 import DB.MySQLAccessFactory;
@@ -51,12 +47,10 @@ public class EventoHandlers {
         if (eventos != null && !eventos.isEmpty()) {
             ObjectMapper mapper = new ObjectMapper();
             ArrayNode jsonArray = mapper.createArrayNode();
-            for (int i = 0; i<eventos.size(); i++){
+            for (iEvento evento : eventos) {
                 ObjectNode current_node = mapper.createObjectNode();
-                iEvento current_evento = eventos.get(i);
-                current_node.put("idEvento", i+1);
-                current_node.put("tipo", eventoManager.getEventType(current_evento));
-                current_node.putPOJO("evento", current_evento);
+                current_node.put("tipo", eventoManager.getEventType(evento));
+                current_node.putPOJO("evento", evento);
                 jsonArray.add(current_node);
             }
 
@@ -75,7 +69,7 @@ public class EventoHandlers {
         if (nombre != null && !nombre.isBlank()) {
             iEvento evento = eventoManager.searchByName(nombre);
             if (evento != null) {
-                res = json_generator.Java_to_json(evento);
+                res = json_generator.Java_to_json_string(evento);
             } else {
                 res = json_generator.status_response(1, "Could not find event in database");
             }
