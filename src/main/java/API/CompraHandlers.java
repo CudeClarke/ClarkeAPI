@@ -1,5 +1,6 @@
 package API;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Handler;
@@ -22,7 +23,7 @@ public class CompraHandlers {
     private static final String ID_ENTRADA = "idEntrada";
     private static final String AMOUNT = "amount";
     private static final String COMPRADOR = "comprador";
-    private static final String LISTA_ENTRADAS = "lista_entrada";
+    private static final String LISTA_ENTRADAS = "lista_entradas";
     private static final String PAGO_EXTRA = "pago_extra";
     private static final String ASISTENTE = "asistente";
     private static final String DORSAL = "dorsal";
@@ -55,7 +56,7 @@ public class CompraHandlers {
             res = json_generator.status_response(1, "Tickets not available");
         }
         if (available && i<= req.size()){
-            res = json_generator.status_response(0, "");
+            res = json_generator.status_response(0, "Tickets are available");
         }
 
         ctx.json(res);
@@ -67,12 +68,25 @@ public class CompraHandlers {
       JsonNode req = mapper.readTree(ctx.body());
 
       if (req.has(COMPRADOR) && req.has(LISTA_ENTRADAS)){
-          iUsuario comprador = mapper.treeToValue(req.get(COMPRADOR), UsuarioBase.class);
+          iUsuario comprador;
+          try {
+              comprador = mapper.treeToValue(req.get(COMPRADOR), UsuarioRegistrado.class);
+          } catch (JsonProcessingException e) {
+              comprador = null;
+              System.out.println("Not Usuario Registrado");
+          }
+          if (comprador == null){
+              try {
+                  comprador = mapper.treeToValue(req.get(COMPRADOR), UsuarioBase.class);
+              } catch (JsonProcessingException e) {
+                  System.out.println("Not Usuario Base");
+              }
+          }
           JsonNode entradas = req.get(LISTA_ENTRADAS);
           int idTransaction = compraManager.startTransaction(comprador);
 
           int i = 0;
-          boolean correct_format = true;
+          boolean correct_format = (comprador != null);
           boolean exito = true;
           TicketFactory ticketFactory = null;
           int previousEvent = -1;
@@ -82,9 +96,10 @@ public class CompraHandlers {
               try {
                 int idEvento = current_node.get(ID_EVENTO).asInt();
                 int idEntrada = current_node.get(ID_ENTRADA).asInt();
-                float pagoExtra = current_node.get(PAGO_EXTRA).floatValue();
-                String dniAsistente = current_node.get(ASISTENTE).get("dni").asText();
+                String dniAsistente = current_node.get("dni").asText();
 
+                float pagoExtra = 0;
+                if (current_node.has(PAGO_EXTRA)) {pagoExtra = current_node.get(PAGO_EXTRA).floatValue();}
                 String information = "";
                 if (current_node.has(DORSAL)) {information = current_node.get(DORSAL).asText();}
                 if (current_node.has(ASIENTO)) {information = current_node.get(ASIENTO).asText();}
@@ -103,7 +118,7 @@ public class CompraHandlers {
           }
           if (!correct_format){
               compraManager.deleteTransaction(idTransaction);
-              res = json_generator.status_response(1, "Incorrect entrada format");
+              res = json_generator.status_response(1, "Incorrect comprador o entrada format");
           }
           if (!exito){
               compraManager.deleteTransaction(idTransaction);

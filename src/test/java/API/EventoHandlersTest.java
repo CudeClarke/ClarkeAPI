@@ -14,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import utils.json_generator;
 
 import java.lang.reflect.Field;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,7 +97,7 @@ class EventoHandlersTest {
         when(ctxMock.pathParam("nombre")).thenReturn(nombre);
         when(eventoManagerMock.searchByName(nombre)).thenReturn(eventoDummy);
 
-        jsonGeneratorStaticMock.when(() -> json_generator.Java_to_json(eventoDummy))
+        jsonGeneratorStaticMock.when(() -> json_generator.Java_to_json_string(eventoDummy))
                 .thenReturn("{ \"nombre\": \"MadCool\" }");
 
         EventoHandlers.getEventByName.handle(ctxMock);
