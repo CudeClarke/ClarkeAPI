@@ -62,6 +62,32 @@ public class EventoHandlers {
         ctx.json(res);
     };
 
+    public static Handler getEventByID = ctx -> {
+        String res = "";
+        int idEvento;
+        try {
+            idEvento = Integer.parseInt(ctx.pathParam("idEvento"));
+        } catch (NumberFormatException e){
+            idEvento = -1;
+        }
+        if (idEvento > 0){
+            iEvento evento = eventoManager.searchById(idEvento);
+            if (evento == null){
+                res = json_generator.status_response(1, "Could not find event");
+            }else{
+                ObjectMapper mapper = new ObjectMapper();
+                ObjectNode jsonObject = mapper.createObjectNode();
+                jsonObject.put("tipo", eventoManager.getEventType(evento));
+                jsonObject.putPOJO("evento", evento);
+                res = jsonObject.toString();
+            }
+        } else {
+            res = json_generator.status_response(1, "Invalid evento ID");
+        }
+
+        ctx.json(res);
+    };
+
     public static Handler getEventByName = ctx -> {
         String nombre = ctx.pathParam("nombre");
         String res = json_generator.status_response(1, "Invalid event name format");

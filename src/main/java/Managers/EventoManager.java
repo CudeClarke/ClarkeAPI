@@ -25,20 +25,25 @@ public class EventoManager {
 
     public List<iEvento> getAllEventos(){
         List<iEvento> eventos = eventoDAO.getAllEventos();
-        for (int i = 0; i<eventos.size(); i++){
-            iEvento current = eventos.get(i);
-            current.setTags(eventoDAO.getTags(i+1));
-            current.setPatrocinadores(eventoDAO.getPatrocinadores(i+1));
+        for (iEvento current : eventos) {
+            current.setTags(eventoDAO.getTags(current.getID()));
+            current.setPatrocinadores(eventoDAO.getPatrocinadores(current.getID()));
         }
         return eventos;
     }
 
     public iEvento searchByName(String name){
-        return eventoDAO.searchByName(name);
+        iEvento evento = eventoDAO.searchByName(name);
+        evento.setTags(eventoDAO.getTags(evento.getID()));
+        evento.setPatrocinadores(eventoDAO.getPatrocinadores(evento.getID()));
+        return evento;
     }
 
     public iEvento searchById(int idEvento){
-        return eventoDAO.searchById(idEvento);
+        iEvento evento = eventoDAO.searchById(idEvento);
+        evento.setTags(eventoDAO.getTags(evento.getID()));
+        evento.setPatrocinadores(eventoDAO.getPatrocinadores(evento.getID()));
+        return evento;
     }
 
     public List<iEvento> searchByTag(String tag){
