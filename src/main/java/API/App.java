@@ -1,6 +1,7 @@
 package API;
 
 import io.javalin.Javalin;
+import io.javalin.plugin.bundled.CorsPluginConfig;
 
 public class App {
     public final static int PORT = 8080;
@@ -8,6 +9,9 @@ public class App {
     public static void main(String[] args) {
         Javalin app = Javalin.create(javalinConfig -> {
             javalinConfig.staticFiles.add("/images");
+            javalinConfig.bundledPlugins.enableCors(cors->{
+                cors.addRule(CorsPluginConfig.CorsRule::anyHost);
+            });
         }).start(PORT);
 
         app.get("/usuario/{dni}", UserHandlers.getUserByDni);
