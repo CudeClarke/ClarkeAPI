@@ -156,6 +156,7 @@ public class CompraHandlers {
                 exito = userManager.registerUsuario(transaction.getComprador());
                 exito = exito && compraManager.confirmTransaction(idTransaction);
                 if (exito) {
+                    Thread.sleep(2025);
                     res = json_generator.status_response(0, "Transaction Confirmed");
                 }else{
                     res =json_generator.status_response(1, "Error confirming transaction");
