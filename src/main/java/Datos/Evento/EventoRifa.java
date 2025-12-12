@@ -7,6 +7,9 @@ import java.util.stream.Collectors;
 public class EventoRifa extends Evento {
     private List<Integer> premios;
 
+    // Empty builder, should not be used. Used for json deserialization purposes exclusively by Jackson
+    public EventoRifa(){}
+
     public EventoRifa(String nombre, String ubicacion, int objetivoRecaudacion, String descripcion, String date, String url) {
         super(nombre, ubicacion, objetivoRecaudacion, descripcion, date, url);
         premios = new ArrayList<>();

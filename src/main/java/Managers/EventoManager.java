@@ -1,16 +1,20 @@
 package Managers;
 
+import java.util.List;
+
+import DB.EntradaDAO.iEntradaDAO;
 import DB.iDatabaseAccessFactory;
 import DB.EventoDAO.iEventoDAO;
 import Datos.Evento.*;
-
-import java.util.List;
+import Datos.Entrada.iEntrada;
 
 public class EventoManager {
     private iEventoDAO eventoDAO;
+    private iEntradaDAO entradaDAO;
 
     public EventoManager(iDatabaseAccessFactory factory){
         eventoDAO = factory.getEventoDAO();
+        entradaDAO = factory.getEntradaDAO();
     }
 
     private boolean validEvent(iEvento evento){return (evento.getNombre() != null && !evento.getNombre().isBlank() && evento.getDate() != null);}
@@ -58,6 +62,12 @@ public class EventoManager {
         boolean res = false;
         if (validEvent(evento)){
             res = eventoDAO.registerEvento(evento, getEventType(evento));
+            /*List<iEntrada> entradas = evento.getEntradas();
+            if (res && entradas != null && !entradas.isEmpty()){
+                for (iEntrada entrada : entradas){
+                    res = res && entradaDAO.registerEntrada(entrada);
+                }
+            }*/
         }
         return res;
     }

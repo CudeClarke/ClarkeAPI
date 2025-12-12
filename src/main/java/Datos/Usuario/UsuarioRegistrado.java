@@ -4,6 +4,7 @@ public class UsuarioRegistrado extends UsuarioBase {
     private String direccion;
     private String tlf;
 
+    // Empty builder, should not be used. Used for json deserialization purposes exclusively by Jackson
     public UsuarioRegistrado(){}
 
     public UsuarioRegistrado(String nombre, String apellido, String email, String dni, boolean spam, String direccion, String tlf) {

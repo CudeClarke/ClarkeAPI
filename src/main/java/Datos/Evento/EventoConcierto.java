@@ -5,6 +5,9 @@ package Datos.Evento;
 public class EventoConcierto extends Evento {
     private String artista;
 
+    // Empty builder, should not be used. Used for json deserialization purposes exclusively by Jackson
+    public EventoConcierto(){}
+
     public EventoConcierto(String nombre, String ubicacion, int objetivoRecaudacion, String descripcion, String date, String url, String artista) {
         super(nombre, ubicacion, objetivoRecaudacion, descripcion, date, url);
         this.artista = artista;

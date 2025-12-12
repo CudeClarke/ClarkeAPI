@@ -40,6 +40,8 @@ public class UserHandlers {
             }else{
                 res = json_utils.status_response(1, "Could not add user to database");
             }
+        } else {
+            res = json_utils.status_response(1, "Request body does not hold user data");
         }
         ctx.json(res);
     };
