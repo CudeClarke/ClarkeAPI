@@ -32,7 +32,7 @@ public class TicketHandler {
                 List<iTicket> lista = ticketManager.searchByUser(dni);
 
                 if (lista != null && !lista.isEmpty()) {
-                    res = json_generator.Java_to_json(lista);
+                    res = json_generator.Java_to_json_string(lista);
                 } else {
                     res = json_generator.status_response(1, "No tickets found for user with DNI: " + dni);
                 }
@@ -80,7 +80,7 @@ public class TicketHandler {
 
                 if (exito) {
                     // Return the created ticket object instead of just status
-                    res = json_generator.Java_to_json(ticket);
+                    res = json_generator.Java_to_json_string(ticket);
                 } else {
                     res = json_generator.status_response(1, "Fallo al registrar ticket (DB Error/Duplicado).");
                 }

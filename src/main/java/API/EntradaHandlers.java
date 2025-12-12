@@ -62,11 +62,10 @@ public class EntradaHandlers {
                 if (entradas != null && !entradas.isEmpty()) {
                     ObjectMapper mapper = new ObjectMapper();
                     ArrayNode jsonArray = mapper.createArrayNode();
-                    for (int i = 0; i<entradas.size(); i++){
+                    for (iEntrada entrada : entradas) {
                         ObjectNode current_node = mapper.createObjectNode();
                         current_node.put("idEvento", idEvento);
-                        current_node.put("idEntrada", i+1);
-                        current_node.putPOJO("entrada", entradas.get(i));
+                        current_node.putPOJO("entrada", entrada);
                         jsonArray.add(current_node);
                     }
                     res = jsonArray.toString();

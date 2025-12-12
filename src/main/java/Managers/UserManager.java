@@ -33,7 +33,7 @@ public class UserManager {
             if (usuario_bd == null) {
                 res = userDAO.registerUsuario(user);
             } else {
-                if (usuario_bd instanceof UsuarioBase && user instanceof UsuarioRegistrado user_registrado) {
+                if (!(usuario_bd instanceof UsuarioRegistrado) && user instanceof UsuarioRegistrado user_registrado) {
                     res = userDAO.upgradUsuarioToRegistrado(user_registrado);
                 } else {
                     res = userDAO.updateUsuario(user);

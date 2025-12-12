@@ -77,4 +77,13 @@ public class Transaction {
         Transaction that = (Transaction) o;
         return Objects.equals(comprador, that.comprador) && Objects.equals(eventos, that.eventos);
     }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "ID=" + ID +
+                ", comprador=" + comprador +
+                ", eventos=" + eventos +
+                '}';
+    }
 }

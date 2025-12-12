@@ -2,7 +2,6 @@ package API;
 
 import Managers.UserManager;
 import Datos.Usuario.UsuarioBase;
-import Datos.Usuario.UsuarioRegistrado;
 import Datos.Usuario.iUsuario;
 import io.javalin.http.Context;
 import org.junit.jupiter.api.AfterEach;
@@ -66,7 +65,7 @@ class UserHandlersTest {
         // El mock devuelve un usuario
         when(userManagerMock.searchByDni(dni)).thenReturn(usuarioFalso);
 
-        jsonGeneratorStaticMock.when(() -> json_generator.Java_to_json(usuarioFalso))
+        jsonGeneratorStaticMock.when(() -> json_generator.Java_to_json_string(usuarioFalso))
                 .thenReturn("{ \"ok\": true }");
 
         // Exec handler
