@@ -395,31 +395,120 @@ public class EventoDAOMySQL implements iEventoDAO {
 
     @Override
     public boolean registerTag(String tag) {
-        return false;
+        String sql = "INSERT INTO etiquetas (Nombre) VALUES (?)";
+        try(PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, tag);
+            int rowsAffected = stmt.executeUpdate();
+            return (rowsAffected > 0);
+        } catch (SQLException e){
+            System.err.println("Error registering a tag: " + e.getMessage());
+            return false;
+        }
     }
 
     @Override
     public int getTagID(String tag) {
-        return 0;
+        String sql = "SELECT ID_ETIQUETA FROM etiquetas WHERE Nombre = ?";
+        try(PreparedStatement stmt = connection.prepareStatement(sql)){
+            stmt.setString(1, tag);
+            try(ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("ID_ETIQUETA");
+                } else {
+                    return -1;
+                }
+            }
+        }catch (SQLException e) {
+            System.err.println("Error getting tag ID: " + e.getMessage());
+            return -1;
+        }
     }
 
     @Override
     public int getNextTagID() {
-        return 0;
+        String sql = "SELECT MAX(ID_ETIQUETA) AS max_id FROM etiquetas";
+        try (PreparedStatement st = connection.prepareStatement(sql);
+             ResultSet rs = st.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt("max_id") + 1;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting next tag ID: " + e.getMessage());
+        }
+        return 1;
     }
 
     @Override
     public boolean registerPatrocinador(Patrocinador patrocinador) {
-        return false;
+        String sql = "INSERT INTO patrocinador (Nombre, Imagen) VALUES (?, ?)";
+        try(PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, patrocinador.getNombre());
+            stmt.setString(2, patrocinador.getLogo());
+            int rowsAffected = stmt.executeUpdate();
+            return (rowsAffected > 0);
+        } catch (SQLException e){
+            System.err.println("Error registering a patrocinador: " + e.getMessage());
+            return false;
+        }
     }
 
     @Override
     public int getPatrocinadorID(String nombre) {
-        return 0;
+        String sql = "SELECT ID_PATROCINADOR FROM patrocinador WHERE Nombre = ?";
+                try(PreparedStatement stmt = connection.prepareStatement(sql)){
+                    stmt.setString(1, nombre);
+                    try(ResultSet rs = stmt.executeQuery()) {
+                        if (rs.next()) {
+                            return rs.getInt("ID_PATROCINADOR");
+                        } else {
+                            return -1;
+                        }
+                    }
+                }catch (SQLException e) {
+                    System.err.println("Error getting patrocinador ID: " + e.getMessage());
+                    return -1;
+                }
     }
 
     @Override
     public int getNextPatrocinadorID() {
-        return 0;
+        String sql = "SELECT MAX(ID_PATROCINADOR) AS max_id FROM patrocinador";
+        try (PreparedStatement st = connection.prepareStatement(sql);
+             ResultSet rs = st.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt("max_id") + 1;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting next patrocinador ID: " + e.getMessage());
+        }
+        return 1;
+    }
+
+
+    @Override
+    public boolean setRelationEventoTag(int idEvento, int idTag){
+        String sql = "INSERT INTO clasifica (ID_ETIQUETA, ID_EVENTO) VALUES (?, ?)";
+        try(PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, idTag);
+            stmt.setInt(2, idEvento);
+            int rowsAffected = stmt.executeUpdate();
+            return (rowsAffected > 0);
+        } catch (SQLException e){
+            System.err.println("Error setting a relation between a evento and tag: " + e.getMessage());
+            return false;
+        }
+    }
+    @Override
+    public boolean setRelationEventoPatrocinador(int idEvento, int idPatrocinador){
+        String sql = "INSERT INTO patrocinio (ID_PATROCINADOR, ID_EVENTO) VALUES (?, ?)";
+        try(PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, idPatrocinador);
+            stmt.setInt(2, idEvento);
+            int rowsAffected = stmt.executeUpdate();
+            return (rowsAffected > 0);
+        } catch (SQLException e){
+            System.err.println("Error setting a relation between evento and patrocinador: " + e.getMessage());
+            return false;
+        }
     }
 }

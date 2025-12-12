@@ -133,4 +133,8 @@ public interface iEventoDAO {
      * @return Int proximo ID de patrocinador.
      */
     int getNextPatrocinadorID();
+
+    boolean setRelationEventoTag(int idEvento, int idTag);
+
+    boolean setRelationEventoPatrocinador(int idEvento, int idPatrocinador);
 }
