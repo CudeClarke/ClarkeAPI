@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-import utils.json_generator;
+import utils.json_utils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -30,12 +30,12 @@ class EventoHandlersTest {
     @Mock
     private EventoManager eventoManagerMock;
 
-    private MockedStatic<json_generator> jsonGeneratorStaticMock;
+    private MockedStatic<json_utils> jsonGeneratorStaticMock;
     private Object originalManager;
 
     @BeforeEach
     void setUp() throws Exception {
-        jsonGeneratorStaticMock = mockStatic(json_generator.class);
+        jsonGeneratorStaticMock = mockStatic(json_utils.class);
 
         Field field = EventoHandlers.class.getDeclaredField("eventoManager");
         field.setAccessible(true);
@@ -81,7 +81,7 @@ class EventoHandlersTest {
     void testGetEvents_Empty() throws Exception {
         when(eventoManagerMock.getAllEventos()).thenReturn(new ArrayList<>());
 
-        jsonGeneratorStaticMock.when(() -> json_generator.status_response(1, "No events found in database"))
+        jsonGeneratorStaticMock.when(() -> json_utils.status_response(1, "No events found in database"))
                 .thenReturn("ERROR_EMPTY");
 
         EventoHandlers.getEvents.handle(ctxMock);
@@ -97,7 +97,7 @@ class EventoHandlersTest {
         when(ctxMock.pathParam("nombre")).thenReturn(nombre);
         when(eventoManagerMock.searchByName(nombre)).thenReturn(eventoDummy);
 
-        jsonGeneratorStaticMock.when(() -> json_generator.Java_to_json_string(eventoDummy))
+        jsonGeneratorStaticMock.when(() -> json_utils.Java_to_json_string(eventoDummy))
                 .thenReturn("{ \"nombre\": \"MadCool\" }");
 
         EventoHandlers.getEventByName.handle(ctxMock);
@@ -111,7 +111,7 @@ class EventoHandlersTest {
         when(ctxMock.pathParam("nombre")).thenReturn(nombre);
         when(eventoManagerMock.searchByName(nombre)).thenReturn(null);
 
-        jsonGeneratorStaticMock.when(() -> json_generator.status_response(1, "Could not find event in database"))
+        jsonGeneratorStaticMock.when(() -> json_utils.status_response(1, "Could not find event in database"))
                 .thenReturn("ERROR_NOT_FOUND");
 
         EventoHandlers.getEventByName.handle(ctxMock);
@@ -123,7 +123,7 @@ class EventoHandlersTest {
     void testGetEventByName_InvalidName() throws Exception {
         when(ctxMock.pathParam("nombre")).thenReturn(""); // Nombre vacío
 
-        jsonGeneratorStaticMock.when(() -> json_generator.status_response(1, "Invalid event name format"))
+        jsonGeneratorStaticMock.when(() -> json_utils.status_response(1, "Invalid event name format"))
                 .thenReturn("ERROR_FORMAT");
 
         EventoHandlers.getEventByName.handle(ctxMock);
@@ -151,7 +151,7 @@ class EventoHandlersTest {
         // Simulates successful register
         when(eventoManagerMock.registerEvento(nuevoEvento)).thenReturn(true);
 
-        jsonGeneratorStaticMock.when(() -> json_generator.status_response(0, "Evento recibido correctamente."))
+        jsonGeneratorStaticMock.when(() -> json_utils.status_response(0, "Evento recibido correctamente."))
                 .thenReturn("SUCCESS");
 
         EventoHandlers.addEvent.handle(ctxMock);
@@ -171,7 +171,7 @@ class EventoHandlersTest {
             throw new Exception("Parsing error");
         });
 
-        jsonGeneratorStaticMock.when(() -> json_generator.status_response(1, "Nombre y Fecha son obligatorios."))
+        jsonGeneratorStaticMock.when(() -> json_utils.status_response(1, "Nombre y Fecha son obligatorios."))
                 .thenReturn("ERROR_VALIDATION");
 
         EventoHandlers.addEvent.handle(ctxMock);
@@ -194,7 +194,7 @@ class EventoHandlersTest {
         // Simulates a DB error
         when(eventoManagerMock.registerEvento(evento)).thenReturn(false);
 
-        jsonGeneratorStaticMock.when(() -> json_generator.status_response(1, "Fallo al añadir evento (DB Error/Duplicado)."))
+        jsonGeneratorStaticMock.when(() -> json_utils.status_response(1, "Fallo al añadir evento (DB Error/Duplicado)."))
                 .thenReturn("ERROR_DB");
 
         EventoHandlers.addEvent.handle(ctxMock);
@@ -207,7 +207,7 @@ class EventoHandlersTest {
         // Simulates that all attempts fail
         when(ctxMock.bodyAsClass(any())).thenThrow(new RuntimeException("Json invalido"));
 
-        jsonGeneratorStaticMock.when(() -> json_generator.status_response(1, "Request body does not hold Evento data"))
+        jsonGeneratorStaticMock.when(() -> json_utils.status_response(1, "Request body does not hold Evento data"))
                 .thenReturn("ERROR_BODY");
 
         EventoHandlers.addEvent.handle(ctxMock);

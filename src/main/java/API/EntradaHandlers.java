@@ -10,12 +10,11 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.javalin.http.Handler;
 import java.util.List;
-import java.util.Objects;
 
 import DB.MySQLAccessFactory;
 import Managers.EntradaManager;
 import Datos.Entrada.iEntrada;
-import utils.json_generator;
+import utils.json_utils;
 
 public class EntradaHandlers {
 
@@ -50,7 +49,7 @@ public class EntradaHandlers {
     }
 
     public static Handler getEntradasByEvento = ctx -> {
-        String res = json_generator.status_response(1, "Tipo de ID incorrecto");
+        String res = json_utils.status_response(1, "Tipo de ID incorrecto");
 
         try {
             String idParam = ctx.pathParam("id");
@@ -70,12 +69,12 @@ public class EntradaHandlers {
                     }
                     res = jsonArray.toString();
                 } else {
-                    res = json_generator.status_response(1, "No hay entradas");
+                    res = json_utils.status_response(1, "No hay entradas");
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
-            res = json_generator.status_response(1, "Server Error: " + e.getMessage());
+            res = json_utils.status_response(1, "Server Error: " + e.getMessage());
         }
 
         ctx.json(res);
@@ -83,7 +82,7 @@ public class EntradaHandlers {
 
 
     public static Handler addEntrada = ctx -> {
-        String res = json_generator.status_response(1, "Error");
+        String res = json_utils.status_response(1, "Error");
 
         ObjectMapper parser = new ObjectMapper();
         JsonNode req = parser.readTree(ctx.body());
@@ -95,24 +94,24 @@ public class EntradaHandlers {
 
         if (id_evento > 0 && entrada != null) {
             if (entrada.getNombre() == null || entrada.getNombre().isBlank()) {
-                res = json_generator.status_response(1, "Se necesita nombre");
+                res = json_utils.status_response(1, "Se necesita nombre");
             } else {
                 boolean exito = manager.addEntrada(entrada, id_evento);
                 if (exito) {
-                    res = json_generator.status_response(0, "Entrada creada correctamente");
+                    res = json_utils.status_response(0, "Entrada creada correctamente");
                 } else {
-                    res = json_generator.status_response(1, "Ha ocurrido un error");
+                    res = json_utils.status_response(1, "Ha ocurrido un error");
                 }
             }
         } else {
-            res = json_generator.status_response(1, "Cuerpo vacío");
+            res = json_utils.status_response(1, "Cuerpo vacío");
         }
         ctx.json(res);
     };
 
 
     public static Handler deleteEntrada = ctx -> {
-        String res = json_generator.status_response(1, "Formtao de ID incorrecto");
+        String res = json_utils.status_response(1, "Formtao de ID incorrecto");
 
         try {
             String idParam = ctx.pathParam("id");
@@ -121,14 +120,14 @@ public class EntradaHandlers {
                 int idEntrada = Integer.parseInt(idParam);
 
                 if (manager.deleteEntrada(idEntrada)) {
-                    res = json_generator.status_response(0, "Entrada eliminada");
+                    res = json_utils.status_response(0, "Entrada eliminada");
                 } else {
-                    res = json_generator.status_response(1, "No se pudo eliminar");
+                    res = json_utils.status_response(1, "No se pudo eliminar");
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
-            res = json_generator.status_response(1, "Server Error: " + e.getMessage());
+            res = json_utils.status_response(1, "Server Error: " + e.getMessage());
         }
 
         ctx.json(res);

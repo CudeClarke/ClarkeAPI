@@ -6,7 +6,7 @@ import java.util.List;
 import Datos.Ticket.*;
 import Datos.Usuario.*;
 import Managers.TicketManager;
-import utils.json_generator;
+import utils.json_utils;
 
 public class TicketHandler {
 
@@ -32,21 +32,21 @@ public class TicketHandler {
                 List<iTicket> lista = ticketManager.searchByUser(dni);
 
                 if (lista != null && !lista.isEmpty()) {
-                    res = json_generator.Java_to_json_string(lista);
+                    res = json_utils.Java_to_json_string(lista);
                 } else {
-                    res = json_generator.status_response(1, "No tickets found for user with DNI: " + dni);
+                    res = json_utils.status_response(1, "No tickets found for user with DNI: " + dni);
                 }
             } else if (typeParam != null && !typeParam.isBlank()) {
                 // Search by type not supported in TicketManager
-                res = json_generator.status_response(1, "Search by type not implemented yet");
+                res = json_utils.status_response(1, "Search by type not implemented yet");
             } else {
-                res = json_generator.status_response(1, "Please specify 'dni' or 'type' query parameter");
+                res = json_utils.status_response(1, "Please specify 'dni' or 'type' query parameter");
             }
         } catch (NumberFormatException e) {
-            res = json_generator.status_response(1, "Invalid type parameter format");
+            res = json_utils.status_response(1, "Invalid type parameter format");
         } catch (Exception e) {
             e.printStackTrace();
-            res = json_generator.status_response(1, "Internal Server Error: " + e.getMessage());
+            res = json_utils.status_response(1, "Internal Server Error: " + e.getMessage());
         }
 
         ctx.json(res);
@@ -54,19 +54,19 @@ public class TicketHandler {
 
     public static Handler getTicketById = ctx -> {
         // ticketType method not available in TicketManager
-        String res = json_generator.status_response(1, "Get Ticket By ID not supported in this version");
+        String res = json_utils.status_response(1, "Get Ticket By ID not supported in this version");
         ctx.json(res);
     };
 
     public static Handler addTicket = ctx -> {
-        String res = json_generator.status_response(1, "Unknown error");
+        String res = json_utils.status_response(1, "Unknown error");
 
         try {
             DatosTicket datos = ctx.bodyAsClass(DatosTicket.class);
 
             if (datos.nombre == null || datos.nombre.isBlank() ||
                     datos.dni == null || datos.dni.isBlank()) {
-                res = json_generator.status_response(1, "Nombre y DNI son obligatorios.");
+                res = json_utils.status_response(1, "Nombre y DNI son obligatorios.");
             } else {
                 // Create ticket object for registration
                 iUsuario user = new UsuarioBase(datos.nombre, "", "", datos.dni);
@@ -80,15 +80,15 @@ public class TicketHandler {
 
                 if (exito) {
                     // Return the created ticket object instead of just status
-                    res = json_generator.Java_to_json_string(ticket);
+                    res = json_utils.Java_to_json_string(ticket);
                 } else {
-                    res = json_generator.status_response(1, "Fallo al registrar ticket (DB Error/Duplicado).");
+                    res = json_utils.status_response(1, "Fallo al registrar ticket (DB Error/Duplicado).");
                 }
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            res = json_generator.status_response(1, "Error en los datos: " + e.getMessage());
+            res = json_utils.status_response(1, "Error en los datos: " + e.getMessage());
         }
 
         ctx.json(res);
@@ -96,20 +96,20 @@ public class TicketHandler {
 
     public static Handler deleteTicket = ctx -> {
         String idParam = ctx.pathParam("id");
-        String res = json_generator.status_response(1, "Invalid ticket ID format");
+        String res = json_utils.status_response(1, "Invalid ticket ID format");
 
         if (idParam != null && !idParam.isBlank()) {
             try {
                 boolean exito = ticketManager.deleteTicket(idParam);
 
                 if (exito) {
-                    res = json_generator.status_response(0, "Ticket eliminado correctamente.");
+                    res = json_utils.status_response(0, "Ticket eliminado correctamente.");
                 } else {
-                    res = json_generator.status_response(1, "No se pudo eliminar el ticket (no existe o DB error).");
+                    res = json_utils.status_response(1, "No se pudo eliminar el ticket (no existe o DB error).");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                res = json_generator.status_response(1, "Database Error: " + e.getMessage());
+                res = json_utils.status_response(1, "Database Error: " + e.getMessage());
             }
         }
 

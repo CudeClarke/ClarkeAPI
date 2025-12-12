@@ -4,41 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.javalin.http.Handler;
-import io.javalin.http.Context;
 import java.util.List;
 
 import Managers.EventoManager;
 import DB.MySQLAccessFactory;
 import Datos.Evento.*;
-import utils.json_generator; 
+import utils.json_utils;
 
 public class EventoHandlers {
     private static EventoManager eventoManager = new EventoManager(MySQLAccessFactory.getInstance());
-
-    private static iEvento eventoFromRequest(Context ctx){
-        iEvento evento = null;
-        try {
-            evento = ctx.bodyAsClass(EventoCarrera.class);
-        }catch (Exception e){
-            System.out.println("Not EventoCarrera");
-        }
-        if (evento == null){
-            try {
-                evento = ctx.bodyAsClass(EventoConcierto.class);
-            }catch (Exception e){
-                System.out.println("Not EventoConcierto");
-            }
-        }
-        if (evento == null){
-            try {
-                evento = ctx.bodyAsClass(EventoRifa.class);
-            }catch (Exception e){
-                System.out.println("Not EventoRifa");
-            }
-        }
-
-        return evento;
-    }
 
     public static Handler getEvents = ctx -> {
         String res = "";
@@ -56,7 +30,7 @@ public class EventoHandlers {
 
             res = jsonArray.toString();
         } else {
-            res = json_generator.status_response(1, "No events found in database");
+            res = json_utils.status_response(1, "No events found in database");
         }
 
         ctx.json(res);
@@ -73,7 +47,7 @@ public class EventoHandlers {
         if (idEvento > 0){
             iEvento evento = eventoManager.searchById(idEvento);
             if (evento == null){
-                res = json_generator.status_response(1, "Could not find event");
+                res = json_utils.status_response(1, "Could not find event");
             }else{
                 ObjectMapper mapper = new ObjectMapper();
                 ObjectNode jsonObject = mapper.createObjectNode();
@@ -82,7 +56,7 @@ public class EventoHandlers {
                 res = jsonObject.toString();
             }
         } else {
-            res = json_generator.status_response(1, "Invalid evento ID");
+            res = json_utils.status_response(1, "Invalid evento ID");
         }
 
         ctx.json(res);
@@ -90,14 +64,14 @@ public class EventoHandlers {
 
     public static Handler getEventByName = ctx -> {
         String nombre = ctx.pathParam("nombre");
-        String res = json_generator.status_response(1, "Invalid event name format");
+        String res = json_utils.status_response(1, "Invalid event name format");
 
         if (nombre != null && !nombre.isBlank()) {
             iEvento evento = eventoManager.searchByName(nombre);
             if (evento != null) {
-                res = json_generator.Java_to_json_string(evento);
+                res = json_utils.Java_to_json_string(evento);
             } else {
-                res = json_generator.status_response(1, "Could not find event in database");
+                res = json_utils.status_response(1, "Could not find event in database");
             }
         }
 
@@ -107,19 +81,19 @@ public class EventoHandlers {
 
     public static Handler addEvent = ctx -> {
         String res = "";
-        iEvento evento = eventoFromRequest(ctx);
+        iEvento evento = json_utils.json_string_to_iEvento(ctx.body());
         
         if (evento == null){
-            res = json_generator.status_response(1, "Request body does not hold Evento data");
+            res = json_utils.status_response(1, "Request body does not hold Evento data");
         }
         else {
             if (evento.getNombre() == null || evento.getNombre().isBlank() || evento.getDate() == null) {
-                res = json_generator.status_response(1, "Nombre y Fecha son obligatorios.");
+                res = json_utils.status_response(1, "Nombre y Fecha son obligatorios.");
             } else {
                 if (eventoManager.registerEvento(evento)) {
-                    res = json_generator.status_response(0, "Evento recibido correctamente.");
+                    res = json_utils.status_response(0, "Evento recibido correctamente.");
                 } else {
-                    res = json_generator.status_response(1, "Fallo al añadir evento (DB Error/Duplicado).");
+                    res = json_utils.status_response(1, "Fallo al añadir evento (DB Error/Duplicado).");
                 }
             }
         }
