@@ -20,7 +20,7 @@ public class App {
         app.get("/eventos", EventoHandlers.getEvents);
         app.get("/eventos/{idEvento}", EventoHandlers.getEventByID);
         app.get("/eventos/{nombre}", EventoHandlers.getEventByName);
-        app.post("/eventos", EventoHandlers.addEvent);
+        app.post("/nuevoEvento", EventoHandlers.addEvent);
 
 	    app.get("/eventos/{id}/entradas", EntradaHandlers.getEntradasByEvento);
         app.post("/api/entradas", EntradaHandlers.addEntrada);

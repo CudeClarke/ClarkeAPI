@@ -18,6 +18,7 @@ public class Evento implements iEvento {
     private Set<Patrocinador> patrocinadores;
     private List<iEntrada> entradas;
 
+    // Empty builder, should not be used. Used for json deserialization purposes exclusively by Jackson
     public Evento(){}
 
     public Evento(String nombre, String ubicacion, int objetivoRecaudacion, String descripcion, String date, String url) {

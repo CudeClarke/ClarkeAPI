@@ -34,4 +34,10 @@ public interface iTicketDAO {
      * @param id the id of the ticket that we want to delete from the database
      */
     boolean deleteTicket(String id);
+
+    /**
+     * Metodo para conseguir el proximo el ID de ticket que se asignará en la base de datos.
+     * @return Int proximo ID de ticket.
+     */
+    int getNextTicketID();
 }

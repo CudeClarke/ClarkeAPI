@@ -377,4 +377,49 @@ public class EventoDAOMySQL implements iEventoDAO {
         }
         return patrocinadores;
     }
+
+    @Override
+    public int getNextEventoID() {
+        int nextID = -1;
+        String sql = "SELECT COUNT(*) count FROM evento";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            try (ResultSet rs = stmt.executeQuery()){
+                nextID = rs.getInt("count") + 1;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting next event ID: " + e.getMessage());
+        }
+
+        return nextID;
+    }
+
+    @Override
+    public boolean registerTag(String tag) {
+        return false;
+    }
+
+    @Override
+    public int getTagID(String tag) {
+        return 0;
+    }
+
+    @Override
+    public int getNextTagID() {
+        return 0;
+    }
+
+    @Override
+    public boolean registerPatrocinador(Patrocinador patrocinador) {
+        return false;
+    }
+
+    @Override
+    public int getPatrocinadorID(String nombre) {
+        return 0;
+    }
+
+    @Override
+    public int getNextPatrocinadorID() {
+        return 0;
+    }
 }
