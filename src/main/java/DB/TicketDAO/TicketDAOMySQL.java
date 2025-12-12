@@ -69,7 +69,7 @@ public class TicketDAOMySQL implements iTicketDAO {
                 return new TicketConciertoFactory();
             }
             default -> {
-                throw new IllegalArgumentException("Unknown ticket type: " + type);
+                return new TicketDefaultFactory();
             }
         }
     }
