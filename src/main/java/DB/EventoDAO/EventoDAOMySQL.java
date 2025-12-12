@@ -367,6 +367,7 @@ public class EventoDAOMySQL implements iEventoDAO {
                     String nombre = rs.getString("Nombre");
                     String logo = rs.getString("Imagen");
 
+                    logo = (logo == null)? "default_logo.png" : logo;
                     Patrocinador patrocinador = new Patrocinador(nombre, logo);
                     patrocinadores.add(patrocinador);
                 }
