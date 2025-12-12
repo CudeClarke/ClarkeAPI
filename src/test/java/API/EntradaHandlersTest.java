@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-import utils.json_generator;
+import utils.json_utils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -30,12 +30,12 @@ class EntradaHandlersTest {
     @Mock
     private EntradaManager entradaManagerMock;
 
-    private MockedStatic<json_generator> jsonGeneratorStaticMock;
+    private MockedStatic<json_utils> jsonGeneratorStaticMock;
     private Object originalManager;
 
     @BeforeEach
     void setUp() throws Exception {
-        jsonGeneratorStaticMock = mockStatic(json_generator.class);
+        jsonGeneratorStaticMock = mockStatic(json_utils.class);
 
         Field field = EntradaHandlers.class.getDeclaredField("manager");
         field.setAccessible(true);
@@ -79,7 +79,7 @@ class EntradaHandlersTest {
     void testGetEntradasByEvento_IvalidID() throws Exception {
         when(ctxMock.pathParam("id")).thenReturn("abc");
 
-        jsonGeneratorStaticMock.when(() -> json_generator.status_response(1, "Tipo de ID incorrecto"))
+        jsonGeneratorStaticMock.when(() -> json_utils.status_response(1, "Tipo de ID incorrecto"))
                 .thenReturn("ERROR_ID");
 
         EntradaHandlers.getEntradasByEvento.handle(ctxMock);
@@ -94,7 +94,7 @@ class EntradaHandlersTest {
         // Returns null or empty list
         when(entradaManagerMock.getEntradasByEvento(1)).thenReturn(new ArrayList<>());
 
-        jsonGeneratorStaticMock.when(() -> json_generator.status_response(1, "No hay entradas"))
+        jsonGeneratorStaticMock.when(() -> json_utils.status_response(1, "No hay entradas"))
                 .thenReturn("EMPTY");
 
         EntradaHandlers.getEntradasByEvento.handle(ctxMock);
@@ -121,7 +121,7 @@ class EntradaHandlersTest {
         // Simulates the manager actually saves
         when(entradaManagerMock.addEntrada(any(iEntrada.class), eq(5))).thenReturn(true);
 
-        jsonGeneratorStaticMock.when(() -> json_generator.status_response(0, "Entrada creada correctamente"))
+        jsonGeneratorStaticMock.when(() -> json_utils.status_response(0, "Entrada creada correctamente"))
                 .thenReturn("SUCCESS");
 
         EntradaHandlers.addEntrada.handle(ctxMock);
@@ -142,7 +142,7 @@ class EntradaHandlersTest {
             """;
         when(ctxMock.body()).thenReturn(jsonBody);
 
-        jsonGeneratorStaticMock.when(() -> json_generator.status_response(1, "Se necesita nombre"))
+        jsonGeneratorStaticMock.when(() -> json_utils.status_response(1, "Se necesita nombre"))
                 .thenReturn("ERROR_NOMBRE");
 
         EntradaHandlers.addEntrada.handle(ctxMock);
@@ -155,7 +155,7 @@ class EntradaHandlersTest {
     void testAddEntrada_EmptyBody() throws Exception {
         when(ctxMock.body()).thenReturn("{}"); // JSON vacío sin idEvento ni entrada
 
-        jsonGeneratorStaticMock.when(() -> json_generator.status_response(1, "Cuerpo vacío"))
+        jsonGeneratorStaticMock.when(() -> json_utils.status_response(1, "Cuerpo vacío"))
                 .thenReturn("ERROR_EMPTY");
 
         EntradaHandlers.addEntrada.handle(ctxMock);
@@ -168,7 +168,7 @@ class EntradaHandlersTest {
         when(ctxMock.pathParam("id")).thenReturn("10");
         when(entradaManagerMock.deleteEntrada(10)).thenReturn(true);
 
-        jsonGeneratorStaticMock.when(() -> json_generator.status_response(0, "Entrada eliminada"))
+        jsonGeneratorStaticMock.when(() -> json_utils.status_response(0, "Entrada eliminada"))
                 .thenReturn("DELETED");
 
         EntradaHandlers.deleteEntrada.handle(ctxMock);
@@ -180,7 +180,7 @@ class EntradaHandlersTest {
     void testDeleteEntrada_IncorrectID() throws Exception {
         when(ctxMock.pathParam("id")).thenReturn("text");
 
-        jsonGeneratorStaticMock.when(() -> json_generator.status_response(1, "Formtao de ID incorrecto"))
+        jsonGeneratorStaticMock.when(() -> json_utils.status_response(1, "Formtao de ID incorrecto"))
                 .thenReturn("ERROR_ID_FORMAT");
 
         EntradaHandlers.deleteEntrada.handle(ctxMock);
