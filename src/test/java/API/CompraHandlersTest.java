@@ -17,7 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-import utils.json_generator;
+import utils.json_utils;
 
 import java.lang.reflect.Field;
 
@@ -39,7 +39,7 @@ class CompraHandlersTest {
     @Mock private Transaction transactionMock;
 
     // Static mocks
-    private MockedStatic<json_generator> jsonGeneratorStaticMock;
+    private MockedStatic<json_utils> jsonGeneratorStaticMock;
     private MockedStatic<MySQLAccessFactory> dbFactoryStaticMock;
 
     private Object originalCompraManager;
@@ -49,7 +49,7 @@ class CompraHandlersTest {
     @BeforeEach
     void setUp() throws Exception {
         // Control responses
-        jsonGeneratorStaticMock = mockStatic(json_generator.class);
+        jsonGeneratorStaticMock = mockStatic(json_utils.class);
 
         // DB mocking
         dbFactoryStaticMock = mockStatic(MySQLAccessFactory.class);
@@ -107,7 +107,7 @@ class CompraHandlersTest {
 
         when(compraManagerMock.checkAvailabity(1, 10, 2)).thenReturn(true);
 
-        jsonGeneratorStaticMock.when(() -> json_generator.status_response(0, ""))
+        jsonGeneratorStaticMock.when(() -> json_utils.status_response(0, ""))
                 .thenReturn("AVAILABLE");
 
         CompraHandlers.checkTicketsAvailability.handle(ctxMock);
@@ -122,7 +122,7 @@ class CompraHandlersTest {
 
         when(compraManagerMock.checkAvailabity(1, 10, 500)).thenReturn(false);
 
-        jsonGeneratorStaticMock.when(() -> json_generator.status_response(1, "Tickets not available"))
+        jsonGeneratorStaticMock.when(() -> json_utils.status_response(1, "Tickets not available"))
                 .thenReturn("NOT_AVAILABLE");
 
         CompraHandlers.checkTicketsAvailability.handle(ctxMock);
@@ -162,7 +162,7 @@ class CompraHandlersTest {
         // Simulates adding a ticket transaction (succesfully)
         when(compraManagerMock.addTicketToTransaction(999, 5, 10, ticketMock)).thenReturn(true);
 
-        jsonGeneratorStaticMock.when(() -> json_generator.status_response(0, "999"))
+        jsonGeneratorStaticMock.when(() -> json_utils.status_response(0, "999"))
                 .thenReturn("SUCCESS_ID_999");
 
         CompraHandlers.setTransaction.handle(ctxMock);
@@ -189,7 +189,7 @@ class CompraHandlersTest {
         // Simulates failure adding a ticket
         when(compraManagerMock.addTicketToTransaction(anyInt(), anyInt(), anyInt(), any())).thenReturn(false);
 
-        jsonGeneratorStaticMock.when(() -> json_generator.status_response(1, "Error while processing transaction"))
+        jsonGeneratorStaticMock.when(() -> json_utils.status_response(1, "Error while processing transaction"))
                 .thenReturn("ERROR_PROCESS");
 
         CompraHandlers.setTransaction.handle(ctxMock);
@@ -209,7 +209,7 @@ class CompraHandlersTest {
         UsuarioBase comprador = mock(UsuarioBase.class);
         when(transactionMock.getComprador()).thenReturn(comprador);
 
-        jsonGeneratorStaticMock.when(() -> json_generator.status_response(0, "Transaction Confirmed"))
+        jsonGeneratorStaticMock.when(() -> json_utils.status_response(0, "Transaction Confirmed"))
                 .thenReturn("CONFIRMED");
 
         CompraHandlers.processPayment.handle(ctxMock);
@@ -223,7 +223,7 @@ class CompraHandlersTest {
     void testProcessPayment_InvalidId() throws Exception {
         when(ctxMock.pathParam("idTransaction")).thenReturn("abc"); // ID no numérico
 
-        jsonGeneratorStaticMock.when(() -> json_generator.status_response(1, "Invalid Transaction ID"))
+        jsonGeneratorStaticMock.when(() -> json_utils.status_response(1, "Invalid Transaction ID"))
                 .thenReturn("INVALID_ID");
 
         CompraHandlers.processPayment.handle(ctxMock);
@@ -236,7 +236,7 @@ class CompraHandlersTest {
     void testCancelTransaction_Success() throws Exception {
         when(ctxMock.pathParam("idTransaction")).thenReturn("123");
 
-        jsonGeneratorStaticMock.when(() -> json_generator.status_response(0, "Transaction Cancelled"))
+        jsonGeneratorStaticMock.when(() -> json_utils.status_response(0, "Transaction Cancelled"))
                 .thenReturn("CANCELLED");
 
         CompraHandlers.cancelTransaction.handle(ctxMock);

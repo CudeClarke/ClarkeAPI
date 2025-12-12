@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-import utils.json_generator;
+import utils.json_utils;
 
 import java.lang.reflect.Field;
 
@@ -28,7 +28,7 @@ class UserHandlersTest {
     @Mock
     private UserManager userManagerMock;
 
-    private MockedStatic<json_generator> jsonGeneratorStaticMock;
+    private MockedStatic<json_utils> jsonGeneratorStaticMock;
 
     // Guardamos el manager original para restaurarlo después del test
     private Object originalUserManager;
@@ -36,7 +36,7 @@ class UserHandlersTest {
     @BeforeEach
     void setUp() throws Exception {
         // Mocking json_generator
-        jsonGeneratorStaticMock = mockStatic(json_generator.class);
+        jsonGeneratorStaticMock = mockStatic(json_utils.class);
 
         Field field = UserHandlers.class.getDeclaredField("userManager");
         field.setAccessible(true);
@@ -65,7 +65,7 @@ class UserHandlersTest {
         // El mock devuelve un usuario
         when(userManagerMock.searchByDni(dni)).thenReturn(usuarioFalso);
 
-        jsonGeneratorStaticMock.when(() -> json_generator.Java_to_json_string(usuarioFalso))
+        jsonGeneratorStaticMock.when(() -> json_utils.Java_to_json_string(usuarioFalso))
                 .thenReturn("{ \"ok\": true }");
 
         // Exec handler
@@ -79,7 +79,7 @@ class UserHandlersTest {
         // Invalid DNI
         when(ctxMock.pathParam("dni")).thenReturn("123");
 
-        jsonGeneratorStaticMock.when(() -> json_generator.status_response(1, "Incorrect DNI format"))
+        jsonGeneratorStaticMock.when(() -> json_utils.status_response(1, "Incorrect DNI format"))
                 .thenReturn("ERROR_FORMATO");
 
         UserHandlers.getUserByDni.handle(ctxMock);
@@ -99,7 +99,7 @@ class UserHandlersTest {
         // Simulates that the register is actually working
         when(userManagerMock.registerUsuario(usuarioInput)).thenReturn(true);
 
-        jsonGeneratorStaticMock.when(() -> json_generator.status_response(0, "User added to database"))
+        jsonGeneratorStaticMock.when(() -> json_utils.status_response(0, "User added to database"))
                 .thenReturn("SUCCESS");
 
         UserHandlers.registerUser.handle(ctxMock);
@@ -115,7 +115,7 @@ class UserHandlersTest {
         // Simulates that the register fail
         when(userManagerMock.registerUsuario(usuarioInput)).thenReturn(false);
 
-        jsonGeneratorStaticMock.when(() -> json_generator.status_response(1, "Could not add user to database"))
+        jsonGeneratorStaticMock.when(() -> json_utils.status_response(1, "Could not add user to database"))
                 .thenReturn("ERROR_BD");
 
         UserHandlers.registerUser.handle(ctxMock);
