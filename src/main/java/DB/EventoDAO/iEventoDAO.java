@@ -87,4 +87,50 @@ public interface iEventoDAO {
      * @return Lista de patrocinadores del evento.
      */
     Set<Patrocinador> getPatrocinadores(int idEvento);
+
+    /**
+     * Metodo para conseguir el proximo el ID de evento que se asignará en la base de datos.
+     * @return Int proximo ID de evento.
+     */
+    int getNextEventoID();
+
+    /**
+     * Metodo para añadir un nuevo tag a la base de datos.
+     * @param tag String del tag.
+     * @return True si el tag se insertó correctamente, false en caso contrario.
+     */
+    boolean registerTag(String tag);
+
+    /**
+     * Metodo para conseguir el ID de un tag dado su String.
+     * @param tag String del tag.
+     * @return ID del tag.
+     */
+    int getTagID(String tag);
+
+    /**
+     * Metodo para conseguir el proximo el ID de tag que se asignará en la base de datos.
+     * @return Int proximo ID de tag.
+     */
+    int getNextTagID();
+
+    /**
+     * Metodo para añadir un nuevo patrocinador a la base de datos.
+     * @param patrocinador String del tag.
+     * @return True si el patrocinador se insertó correctamente, false en caso contrario.
+     */
+    boolean registerPatrocinador(Patrocinador patrocinador);
+
+    /**
+     * Metodo para conseguir el ID de un patrocinador dado su nombre.
+     * @param nombre Nombre del patrocinador
+     * @return ID del patrocinador.
+     */
+    int getPatrocinadorID(String nombre);
+
+    /**
+     * Metodo para conseguir el proximo el ID de patrocinador que se asignará en la base de datos.
+     * @return Int proximo ID de patrocinador.
+     */
+    int getNextPatrocinadorID();
 }

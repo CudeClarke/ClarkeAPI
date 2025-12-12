@@ -7,6 +7,7 @@ public class UsuarioBase implements iUsuario {
     private String dni;
     private boolean spam;
 
+    // Empty builder, should not be used. Used for json deserialization purposes exclusively by Jackson
     public UsuarioBase(){}
 
     public UsuarioBase(String nombre, String apellidos, String email, String dni) {

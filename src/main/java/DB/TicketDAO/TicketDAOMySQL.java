@@ -257,5 +257,10 @@ public class TicketDAOMySQL implements iTicketDAO {
             return false;
         }
     }
+
+    @Override
+    public int getNextTicketID() {
+        return 0;
+    }
 }
 

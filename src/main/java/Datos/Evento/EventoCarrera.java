@@ -4,6 +4,9 @@ package Datos.Evento;
 public class EventoCarrera extends Evento {
     private int recorrido;
 
+    // Empty builder, should not be used. Used for json deserialization purposes exclusively by Jackson
+    public EventoCarrera(){}
+
     public EventoCarrera(String nombre, String ubicacion, int objetivoRecaudacion, String descripcion, String date, String url, int recorrido) {
         super(nombre, ubicacion, objetivoRecaudacion, descripcion, date, url);
         this.recorrido = recorrido;
