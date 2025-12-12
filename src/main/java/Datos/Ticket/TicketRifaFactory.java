@@ -5,20 +5,44 @@ import Datos.Usuario.iUsuario;
 public class TicketRifaFactory extends TicketFactory{
     @Override
     public iTicket createTicket(iUsuario usuario, String dniAsistente, String idBoleto) {
-        return new TicketRifa(usuario, dniAsistente, Integer.parseInt(idBoleto));
+        int idBoleto_int;
+        try {
+            idBoleto_int = Integer.parseInt(idBoleto);
+        }catch (NumberFormatException e){
+            idBoleto_int = -1;
+        }
+        return new TicketRifa(usuario, dniAsistente, idBoleto_int);
     }
 
     @Override
     public iTicket createTicket(iUsuario usuario, String dniAsistente, float pagoExtra, String idBoleto) {
-        return new TicketRifa(usuario, dniAsistente, pagoExtra, Integer.parseInt(idBoleto));
+        int idBoleto_int;
+        try {
+            idBoleto_int = Integer.parseInt(idBoleto);
+        }catch (NumberFormatException e){
+            idBoleto_int = -1;
+        }
+        return new TicketRifa(usuario, dniAsistente, pagoExtra, idBoleto_int);
     }
 
     @Override
     public iTicket createTicket(iUsuario usuario, String dniAsistente, float pagoExtra, String idBoleto, int id) {
-        return new TicketRifa(usuario, dniAsistente, pagoExtra, Integer.parseInt(idBoleto), id);
+        int idBoleto_int;
+        try {
+            idBoleto_int = Integer.parseInt(idBoleto);
+        }catch (NumberFormatException e){
+            idBoleto_int = -1;
+        }
+        return new TicketRifa(usuario, dniAsistente, pagoExtra, idBoleto_int, id);
     }
 
     public iTicket createTicket(iUsuario usuario, String dniAsistente, String idBoleto, int id) {
-        return new TicketRifa(usuario, dniAsistente, Integer.parseInt(idBoleto), id);
+        int idBoleto_int;
+        try {
+            idBoleto_int = Integer.parseInt(idBoleto);
+        }catch (NumberFormatException e){
+            idBoleto_int = -1;
+        }
+        return new TicketRifa(usuario, dniAsistente, idBoleto_int, id);
     }
 }
