@@ -34,22 +34,22 @@ class EventoHandlersTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        // 1. Mock de json_utils
+        // Mock de json_utils
         jsonGeneratorStaticMock = mockStatic(json_utils.class);
 
-        // 2. Mock de MySQLAccessFactory para evitar conexión real
+        // Mock de MySQLAccessFactory para evitar conexión real
         dbFactoryStaticMock = mockStatic(MySQLAccessFactory.class);
         MySQLAccessFactory dummyFactory = mock(MySQLAccessFactory.class);
         dbFactoryStaticMock.when(MySQLAccessFactory::getInstance).thenReturn(dummyFactory);
 
-        // 3. Forzar carga de clase
+        // Fuerza carga de clase
         try {
             Class.forName("API.EventoHandlers");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
 
-        // 4. Inyección del Mock
+        // Inyección del Mock
         Field field = EventoHandlers.class.getDeclaredField("eventoManager");
         field.setAccessible(true);
         originalManager = field.get(null);
@@ -61,7 +61,7 @@ class EventoHandlersTest {
         jsonGeneratorStaticMock.close();
         dbFactoryStaticMock.close();
 
-        // Restaurar original
+        // Restaura original
         Field field = EventoHandlers.class.getDeclaredField("eventoManager");
         field.setAccessible(true);
         field.set(null, originalManager);
@@ -141,8 +141,6 @@ class EventoHandlersTest {
         verify(eventoManagerMock, never()).searchByName(anyString());
     }
 
-    // --- TEST ADD EVENT (CORREGIDO) ---
-
     @Test
     void testAddEvent_Success() throws Exception {
         // GIVEN
@@ -150,7 +148,6 @@ class EventoHandlersTest {
         when(nuevoEvento.getNombre()).thenReturn("Nuevo Concierto");
         when(nuevoEvento.getDate()).thenReturn("2025-01-01");
 
-        // CORRECCIÓN: Tu código usa ctx.body() y json_utils, NO bodyAsClass
         when(ctxMock.body()).thenReturn("{JSON}");
 
         // Simulamos que el util convierte el string a nuestro objeto mockeado
@@ -162,16 +159,13 @@ class EventoHandlersTest {
         jsonGeneratorStaticMock.when(() -> json_utils.status_response(0, "Evento recibido correctamente."))
                 .thenReturn("SUCCESS");
 
-        // WHEN
         EventoHandlers.addEvent.handle(ctxMock);
 
-        // THEN
         verify(ctxMock).json("SUCCESS");
     }
 
     @Test
     void testAddEvent_MissingData() throws Exception {
-        // GIVEN
         EventoConcierto eventoIncompleto = mock(EventoConcierto.class);
         when(eventoIncompleto.getNombre()).thenReturn(null); // Falta nombre
 
@@ -182,17 +176,14 @@ class EventoHandlersTest {
         jsonGeneratorStaticMock.when(() -> json_utils.status_response(1, "Nombre y Fecha son obligatorios."))
                 .thenReturn("ERROR_VALIDATION");
 
-        // WHEN
         EventoHandlers.addEvent.handle(ctxMock);
 
-        // THEN
         verify(ctxMock).json("ERROR_VALIDATION");
         verify(eventoManagerMock, never()).registerEvento(any());
     }
 
     @Test
     void testAddEvent_FailBD() throws Exception {
-        // GIVEN
         EventoConcierto evento = mock(EventoConcierto.class);
         when(evento.getNombre()).thenReturn("Test");
         when(evento.getDate()).thenReturn("2025-01-01");
@@ -201,35 +192,30 @@ class EventoHandlersTest {
         jsonGeneratorStaticMock.when(() -> json_utils.json_string_to_iEvento(anyString()))
                 .thenReturn(evento);
 
-        // Simulamos fallo en BD
+        // Simula fallo en BD
         when(eventoManagerMock.registerEvento(evento)).thenReturn(false);
 
         jsonGeneratorStaticMock.when(() -> json_utils.status_response(1, "Fallo al añadir evento (DB Error/Duplicado)."))
                 .thenReturn("ERROR_DB");
 
-        // WHEN
         EventoHandlers.addEvent.handle(ctxMock);
 
-        // THEN
         verify(ctxMock).json("ERROR_DB");
     }
 
     @Test
     void testAddEvent_InvalidBody() throws Exception {
-        // GIVEN
         when(ctxMock.body()).thenReturn("{BASURA}");
 
-        // Simulamos que el conversor devuelve null (fallo al parsear)
+        // Simula que el conversor devuelve null (fallo al parsear)
         jsonGeneratorStaticMock.when(() -> json_utils.json_string_to_iEvento(anyString()))
                 .thenReturn(null);
 
         jsonGeneratorStaticMock.when(() -> json_utils.status_response(1, "Request body does not hold Evento data"))
                 .thenReturn("ERROR_BODY");
 
-        // WHEN
         EventoHandlers.addEvent.handle(ctxMock);
 
-        // THEN
         verify(ctxMock).json("ERROR_BODY");
     }
 }

@@ -74,7 +74,7 @@ class UserHandlersTest {
     @Test
     void testGetUserByDni_Encontrado() throws Exception {
         String dni = "12345678Z";
-        // Usam UsuarioBase para que el switch del handler entre en el caso correcto
+        // Usa UsuarioBase para que el switch del handler entre en el caso correcto
         UsuarioBase usuarioFalso = mock(UsuarioBase.class);
 
         when(ctxMock.pathParam("dni")).thenReturn(dni);

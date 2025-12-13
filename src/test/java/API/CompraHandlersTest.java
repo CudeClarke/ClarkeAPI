@@ -32,13 +32,13 @@ class CompraHandlersTest {
     @Mock private EventoManager eventoManagerMock;
     @Mock private UserManager userManagerMock;
 
-    // Auxiliary mocks
+    // Mocks auxiliares
     @Mock private TicketFactory ticketFactoryMock;
     @Mock private iTicket ticketMock;
     @Mock private iEvento eventoMock;
     @Mock private Transaction transactionMock;
 
-    // Static mocks
+    // Mocks estaticos
     private MockedStatic<json_utils> jsonGeneratorStaticMock;
     private MockedStatic<MySQLAccessFactory> dbFactoryStaticMock;
 

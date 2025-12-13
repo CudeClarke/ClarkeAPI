@@ -53,7 +53,7 @@ class TicketHandlerTest {
             throw new RuntimeException("No se encontró la clase API.TicketHandler", e);
         }
 
-        // Inyectamos el Mock del Manager por Reflexión
+        // Inyecta el Mock del Manager por Reflexión
         Field field = TicketHandler.class.getDeclaredField("ticketManager");
         field.setAccessible(true);
         originalManager = field.get(null);

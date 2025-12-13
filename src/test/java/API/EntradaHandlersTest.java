@@ -39,22 +39,22 @@ class EntradaHandlersTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        // 1. Mock de json_utils
+        // Mock de json_utils
         jsonGeneratorStaticMock = mockStatic(json_utils.class);
 
-        // 2. BLINDAJE: Mock de MySQLAccessFactory para evitar conexión real
+        // BLINDAJE: Mock de MySQLAccessFactory para evitar conexión real
         dbFactoryStaticMock = mockStatic(MySQLAccessFactory.class);
         MySQLAccessFactory dummyFactory = mock(MySQLAccessFactory.class);
         dbFactoryStaticMock.when(MySQLAccessFactory::getInstance).thenReturn(dummyFactory);
 
-        // 3. Forzar la carga de la clase con el mock de BD activo
+        // Fuerza la carga de la clase con el mock de BD activo
         try {
             Class.forName("API.EntradaHandlers");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Error cargando API.EntradaHandlers", e);
         }
 
-        // 4. Inyección del Mock del Manager por Reflexión
+        // Inyección del Mock del Manager por Reflexión
         Field field = EntradaHandlers.class.getDeclaredField("manager");
         field.setAccessible(true);
 
@@ -75,7 +75,6 @@ class EntradaHandlersTest {
 
     @Test
     void testGetEntradasByEvento_Success() throws Exception {
-        // GIVEN
         String idParam = "1";
         List<iEntrada> lista = new ArrayList<>();
         // ID=100, Precio=50.0, Nombre="General"
@@ -85,10 +84,8 @@ class EntradaHandlersTest {
         when(ctxMock.pathParam("id")).thenReturn(idParam);
         when(entradaManagerMock.getEntradasByEvento(1)).thenReturn(lista);
 
-        // WHEN
         EntradaHandlers.getEntradasByEvento.handle(ctxMock);
 
-        // THEN
         // Verificamos que el JSON contiene los datos que Jackson serializaría
         verify(ctxMock).json(argThat(jsonStr ->
                 jsonStr.toString().contains("\"idEvento\":1") &&
