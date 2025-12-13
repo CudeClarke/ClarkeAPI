@@ -10,7 +10,7 @@ import utils.json_utils;
 
 public class TicketHandler {
 
-    private final static TicketManager ticketManager = new TicketManager(DB.MySQLAccessFactory.getInstance());
+    private static TicketManager ticketManager = new TicketManager(DB.MySQLAccessFactory.getInstance());
 
     public static class DatosTicket {
         public String nombre;
