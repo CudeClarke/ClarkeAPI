@@ -19,12 +19,8 @@ public class App {
 
         app.get("/eventos", EventoHandlers.getEvents);
         app.get("/eventos/{idEvento}", EventoHandlers.getEventByID);
-        app.get("/eventos/{nombre}", EventoHandlers.getEventByName);
+        app.get("/eventos/{id}/entradas", EntradaHandlers.getEntradasByEvento);
         app.post("/nuevoEvento", EventoHandlers.addEvent);
-
-	    app.get("/eventos/{id}/entradas", EntradaHandlers.getEntradasByEvento);
-        app.post("/api/entradas", EntradaHandlers.addEntrada);
-        app.delete("/entradas/{id}", EntradaHandlers.deleteEntrada);
 
         app.post("/comprar/check", CompraHandlers.checkTicketsAvailability);
         app.post("/comprar/start", CompraHandlers.setTransaction);
