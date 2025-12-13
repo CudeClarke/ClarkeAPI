@@ -134,7 +134,19 @@ public interface iEventoDAO {
      */
     int getNextPatrocinadorID();
 
+    /**
+     * Metodo para establecer una conexión entre un evento y su tag en la base de datos
+     * @param idEvento id del evento
+     * @param idTag id de la etiqueta de ese evento
+     * @return True o False dependiendo de si se ha ejecutado correctamente la consulta SQL
+     */
     boolean setRelationEventoTag(int idEvento, int idTag);
 
+    /**
+     * Metodo para establecer una conexión entre un evento y su patrocinador en la base de datos
+     * @param idEvento id del evento
+     * @param idPatrocinador id del patrocinador de ese evento
+     * @return True o False dependiendo de si se ha ejecutado correctamente la consulta SQL
+     */
     boolean setRelationEventoPatrocinador(int idEvento, int idPatrocinador);
 }

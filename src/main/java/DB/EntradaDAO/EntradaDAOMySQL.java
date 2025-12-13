@@ -37,11 +37,6 @@ public class EntradaDAOMySQL implements iEntradaDAO {
         return new Entrada(id, subAforo, precio, nombre, descripcion);
     }
 
-    /**
-     * Metodo para buscar todas las entradas asociadas a un evento concreto.
-     * @param idEvento Identificador del evento.
-     * @return Lista de entradas disponibles para ese evento.
-     */
     @Override
     public List<iEntrada> searchByEvento(int idEvento) {
         List<iEntrada> lista = new ArrayList<>();
@@ -58,11 +53,6 @@ public class EntradaDAOMySQL implements iEntradaDAO {
         return lista;
     }
 
-    /**
-     * Metodo para buscar una entrada a partir de su id.
-     * @param idEntrada Id de la entrada que se desea buscar.
-     * @return Objeto iEntrada si existe, o null en caso contrario.
-     */
     @Override
     public iEntrada searchById(int idEntrada) {
         String sql = "SELECT * FROM entrada WHERE ID_ENTRADA = ?";
@@ -79,12 +69,6 @@ public class EntradaDAOMySQL implements iEntradaDAO {
 
     }
 
-    /**
-     * Metodo para registrar un nuevo tipo de entrada en la base de datos.
-     * @param entrada Objeto con los datos de la entrada.
-     * @param idEvento ID del evento al que pertenece.
-     * @return True si se inserta correctamente o False si ocurre un error.
-     */
     @Override
     public boolean registerEntrada(iEntrada entrada, int idEvento) {
         String sql = "INSERT INTO entrada (ID_EVENTO, Precio, Cantidad, Nombre, Descripcion) VALUES (?, ?, ?, ?, ?)";
@@ -104,12 +88,6 @@ public class EntradaDAOMySQL implements iEntradaDAO {
         }
     }
 
-    /**
-     * Metodo para actualizar una entrada existente dado su ID.
-     * @param id Identificador unico de la entrada.
-     * @param entrada Objeto con los nuevos datos.
-     * @return True si se actualiza correctamente.
-     */
     @Override
     public boolean updateEntrada(int id, iEntrada entrada) {
         String sql = "UPDATE entrada SET Precio = ?, Cantidad = ?, Nombre = ?, Descripcion = ? WHERE ID_ENTRADA = ?";
@@ -129,11 +107,6 @@ public class EntradaDAOMySQL implements iEntradaDAO {
         }
     }
 
-    /**
-     * Metodo para eliminar una entrada de la base de datos por su ID.
-     * @param id Identificador unico de la entrada.
-     * @return True si se elimina correctamente.
-     */
     @Override
     public boolean deleteEntrada(int id) {
         String sql = "DELETE FROM entrada WHERE ID_ENTRADA = ?";
@@ -148,12 +121,6 @@ public class EntradaDAOMySQL implements iEntradaDAO {
         }
     }
 
-    /**
-     * Metodo auxiliar para recuperar el ID de una entrada.
-     * @param entrada Objeto entrada.
-     * @param idEvento ID del evento asociado.
-     * @return ID de la entrada o -1 si no existe.
-     */
     @Override
     public int getID(iEntrada entrada, int idEvento) {
         String sql = "SELECT ID_ENTRADA FROM entrada WHERE ID_EVENTO = ? AND Precio = ? AND Nombre = ? AND Descripcion = ?";
