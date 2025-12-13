@@ -6,14 +6,16 @@ import java.util.List;
 public interface iTicketDAO {
 
     /**
-     * Method to retrieve all tickets purchased by a user with a given DNI
-     * @param dni the dni of the user whose tickets are to be retrieved
+     * Metodo para obtener todos los tickets pertenecientes a una persona
+     * @param dni dni de la persona cuyos tickets queremos sacar
+     * @return Lista de tickets de ese usuario
      */
     List<iTicket> searchByUser(String dni);
 
     /**
-     * Method to retrieve all tickets linked to the given entry
-     * @param idEntrada The id of the entry whose tickets we want to list
+     * Metodo para obtener todos los tickets asociados a una entrada
+     * @param idEntrada id de la entrada asociada a esos tickets
+     * @return Lista de tickets asociados a esa entrada
      */
     List<iTicket> searchByEntrada(int idEntrada);
 
@@ -25,13 +27,19 @@ public interface iTicketDAO {
     iTicket searchById(int idTicket);
     
     /**
-     * Method for registering certain ticket in the database
+     * Metodo para registrar un ticket en la base de datos
+     * @param ticket ticket que se quiere registrar en la base de datos
+     * @param dniComprador dni del comprador del ticket
+     * @param idEntrada id de la entrada asociada al ticket
+     * @param informacion informacion especial del ticket
+     * @return True o False dependiendo de si la consulta SQL se ejecuta correctamente
      */
     boolean registerTicket(iTicket ticket, String dniComprador, int idEntrada, String informacion);
 
     /**
-     * Method to delete a ticket from de database
-     * @param id the id of the ticket that we want to delete from the database
+     * Metodo para eliminar un ticket de la base de datos
+     * @param id el id del ticket a eliminar
+     * @return True o False dependiendo de si la consulta SQL se ejecuta correctamente
      */
     boolean deleteTicket(String id);
 
