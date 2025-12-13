@@ -2,16 +2,18 @@ package API;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.javalin.http.Handler;
 import utils.json_utils;
 
+import Managers.*;
 import DB.MySQLAccessFactory;
 import Datos.Ticket.TicketFactory;
 import Datos.Usuario.*;
-import Managers.EventoManager;
-import Managers.UserManager;
-import Managers.CompraManager;
-import Managers.Transaction;
+import Datos.Ticket.iTicket;
+import Datos.Entrada.iEntrada;
+import Datos.Evento.iEvento;
 
 public class CompraHandlers {
     private static CompraManager compraManager = new CompraManager(MySQLAccessFactory.getInstance());
@@ -144,7 +146,24 @@ public class CompraHandlers {
                 exito = exito && compraManager.confirmTransaction(idTransaction);
                 if (exito) {
                     Thread.sleep(2025);
-                    res = json_utils.status_response(0, "Transaction Confirmed");
+                    ArrayNode jsonArray = mapper.createArrayNode();
+                    for (iEvento evento : transaction.getEventos()){
+                        for (iEntrada entrada : evento.getEntradas()){
+                            for (iTicket ticket : entrada.getTickets()){
+                                ObjectNode current_node = mapper.createObjectNode();
+                                current_node.put(ID_EVENTO, evento.getID());
+                                current_node.put("nombreEvento", evento.getNombre());
+                                current_node.put(ID_ENTRADA, entrada.getId());
+                                current_node.put("nombreEntrada", entrada.getNombre());
+                                current_node.put("idTicket", ticket.getId());
+                                current_node.put("dniAsistente", ticket.getDniAsistente());
+                                current_node.put("dniComprador", ticket.getUsuario().getDni());
+                                jsonArray.add(current_node);
+                            }
+                        }
+                    }
+                    res = jsonArray.toString();
+                    compraManager.deleteTransaction(idTransaction);
                 }else{
                     res = json_utils.status_response(1, "Error confirming transaction");
                 }
