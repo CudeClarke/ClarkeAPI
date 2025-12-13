@@ -1,5 +1,6 @@
 package API;
 
+import DB.MySQLAccessFactory;
 import Datos.Entrada.EntradaConcierto;
 import Datos.Entrada.iEntrada;
 import Managers.EntradaManager;
@@ -30,13 +31,30 @@ class EntradaHandlersTest {
     @Mock
     private EntradaManager entradaManagerMock;
 
+    // Mocks estáticos
     private MockedStatic<json_utils> jsonGeneratorStaticMock;
+    private MockedStatic<MySQLAccessFactory> dbFactoryStaticMock; // NECESARIO
+
     private Object originalManager;
 
     @BeforeEach
     void setUp() throws Exception {
+        // 1. Mock de json_utils
         jsonGeneratorStaticMock = mockStatic(json_utils.class);
 
+        // 2. BLINDAJE: Mock de MySQLAccessFactory para evitar conexión real
+        dbFactoryStaticMock = mockStatic(MySQLAccessFactory.class);
+        MySQLAccessFactory dummyFactory = mock(MySQLAccessFactory.class);
+        dbFactoryStaticMock.when(MySQLAccessFactory::getInstance).thenReturn(dummyFactory);
+
+        // 3. Forzar la carga de la clase con el mock de BD activo
+        try {
+            Class.forName("API.EntradaHandlers");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Error cargando API.EntradaHandlers", e);
+        }
+
+        // 4. Inyección del Mock del Manager por Reflexión
         Field field = EntradaHandlers.class.getDeclaredField("manager");
         field.setAccessible(true);
 
@@ -47,8 +65,9 @@ class EntradaHandlersTest {
     @AfterEach
     void tearDown() throws Exception {
         jsonGeneratorStaticMock.close();
+        dbFactoryStaticMock.close(); // Cerramos el mock de BD
 
-        // Restores the original manager
+        // Restaurar el manager original
         Field field = EntradaHandlers.class.getDeclaredField("manager");
         field.setAccessible(true);
         field.set(null, originalManager);
@@ -56,22 +75,25 @@ class EntradaHandlersTest {
 
     @Test
     void testGetEntradasByEvento_Success() throws Exception {
+        // GIVEN
         String idParam = "1";
-        // Simulates the manager retrieves a list with 1 entry
         List<iEntrada> lista = new ArrayList<>();
+        // ID=100, Precio=50.0, Nombre="General"
         EntradaConcierto entradaDummy = new EntradaConcierto(100, 50.0f, "General", "Desc");
         lista.add(entradaDummy);
 
         when(ctxMock.pathParam("id")).thenReturn(idParam);
         when(entradaManagerMock.getEntradasByEvento(1)).thenReturn(lista);
 
+        // WHEN
         EntradaHandlers.getEntradasByEvento.handle(ctxMock);
 
-        // Verifies that it contains the structure you mount on the handler
+        // THEN
+        // Verificamos que el JSON contiene los datos que Jackson serializaría
         verify(ctxMock).json(argThat(jsonStr ->
                 jsonStr.toString().contains("\"idEvento\":1") &&
-                        jsonStr.toString().contains("\"idEntrada\":1") &&
-                        jsonStr.toString().contains("General")
+                        jsonStr.toString().contains("General") && // Nombre de la entrada
+                        jsonStr.toString().contains("50.0")       // Precio
         ));
     }
 
@@ -91,7 +113,7 @@ class EntradaHandlersTest {
     @Test
     void testGetEntradasByEvento_Empty() throws Exception {
         when(ctxMock.pathParam("id")).thenReturn("1");
-        // Returns null or empty list
+        // Retorna lista vacía
         when(entradaManagerMock.getEntradasByEvento(1)).thenReturn(new ArrayList<>());
 
         jsonGeneratorStaticMock.when(() -> json_utils.status_response(1, "No hay entradas"))
@@ -104,6 +126,7 @@ class EntradaHandlersTest {
 
     @Test
     void testAddEntrada_Success() throws Exception {
+        // JSON válido que coincide con la estructura esperada por tu 'entradaFromJson'
         String jsonBody = """
             {
                 "idEvento": 5,
@@ -118,7 +141,7 @@ class EntradaHandlersTest {
 
         when(ctxMock.body()).thenReturn(jsonBody);
 
-        // Simulates the manager actually saves
+        // Simulamos éxito al guardar
         when(entradaManagerMock.addEntrada(any(iEntrada.class), eq(5))).thenReturn(true);
 
         jsonGeneratorStaticMock.when(() -> json_utils.status_response(0, "Entrada creada correctamente"))
@@ -135,7 +158,7 @@ class EntradaHandlersTest {
             {
                 "idEvento": 5,
                 "entrada": {
-                    "nombre": "",
+                    "nombre": "", 
                     "precio": 50.0
                 }
             }
@@ -153,7 +176,7 @@ class EntradaHandlersTest {
 
     @Test
     void testAddEntrada_EmptyBody() throws Exception {
-        when(ctxMock.body()).thenReturn("{}"); // JSON vacío sin idEvento ni entrada
+        when(ctxMock.body()).thenReturn("{}");
 
         jsonGeneratorStaticMock.when(() -> json_utils.status_response(1, "Cuerpo vacío"))
                 .thenReturn("ERROR_EMPTY");
