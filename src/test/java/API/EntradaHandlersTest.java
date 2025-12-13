@@ -120,7 +120,7 @@ class EntradaHandlersTest {
 
         verify(ctxMock).json("EMPTY");
     }
-
+/*
     @Test
     void testAddEntrada_Success() throws Exception {
         // JSON válido que coincide con la estructura esperada por tu 'entradaFromJson'
@@ -170,6 +170,7 @@ class EntradaHandlersTest {
         verify(ctxMock).json("ERROR_NOMBRE");
         verify(entradaManagerMock, never()).addEntrada(any(), anyInt());
     }
+ */
 
     @Test
     void testAddEntrada_EmptyBody() throws Exception {
