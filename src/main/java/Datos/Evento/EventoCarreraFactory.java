@@ -3,7 +3,7 @@ package Datos.Evento;
 
 public class EventoCarreraFactory extends EventoFactory{
     @Override
-    public iEvento createEvento(String nombre, String ubicacion, int objetivoRecaudacion, String descripcion, String date, String url, String informacion) {
+    public iEvento createEvento(String nombre, String ubicacion, float objetivoRecaudacion, String descripcion, String date, String url, String informacion) {
         int recorrido;
         try {
             recorrido = Integer.parseInt(informacion);
@@ -14,7 +14,7 @@ public class EventoCarreraFactory extends EventoFactory{
     }
 
     @Override
-    public iEvento createEvento(String nombre, String ubicacion, int recaudacion, int objetivoRecaudacion, String descripcion, String date, String url, String informacion) {
+    public iEvento createEvento(String nombre, String ubicacion, float recaudacion, float objetivoRecaudacion, String descripcion, String date, String url, String informacion) {
         int recorrido;
         try {
             recorrido = Integer.parseInt(informacion);
@@ -25,7 +25,7 @@ public class EventoCarreraFactory extends EventoFactory{
     }
 
     @Override
-    public iEvento createEvento(String nombre, String ubicacion, int recaudacion, int objetivoRecaudacion, String descripcion, String date, String url, int ID, String informacion) {
+    public iEvento createEvento(String nombre, String ubicacion, float recaudacion, float objetivoRecaudacion, String descripcion, String date, String url, int ID, String informacion) {
         int recorrido;
         try {
             recorrido = Integer.parseInt(informacion);

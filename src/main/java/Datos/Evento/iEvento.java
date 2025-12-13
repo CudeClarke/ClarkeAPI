@@ -8,10 +8,10 @@ import java.util.Set;
 public interface iEvento {
     public String getNombre();
     public void setNombre(String nombre);
-    public int getRecaudacion();
-    public void setRecaudacion(int recaudacion);
-    public int getObjetivoRecaudacion();
-    public void setObjetivoRecaudacion(int objetivoRecaudacion);
+    public float getRecaudacion();
+    public void setRecaudacion(float recaudacion);
+    public float getObjetivoRecaudacion();
+    public void setObjetivoRecaudacion(float objetivoRecaudacion);
     public String getUbicacion();
     public void setUbicacion(String ubicacion);
     public String getDescripcion();

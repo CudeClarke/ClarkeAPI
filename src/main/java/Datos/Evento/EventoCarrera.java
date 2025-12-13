@@ -7,17 +7,17 @@ public class EventoCarrera extends Evento {
     // Empty builder, should not be used. Used for json deserialization purposes exclusively by Jackson
     public EventoCarrera(){}
 
-    public EventoCarrera(String nombre, String ubicacion, int objetivoRecaudacion, String descripcion, String date, String url, int recorrido) {
+    public EventoCarrera(String nombre, String ubicacion, float objetivoRecaudacion, String descripcion, String date, String url, int recorrido) {
         super(nombre, ubicacion, objetivoRecaudacion, descripcion, date, url);
         this.recorrido = recorrido;
     }
 
-    public EventoCarrera(String nombre, String ubicacion, int recaudacion, int objetivoRecaudacion, String descripcion, String date, String url, int recorrido) {
+    public EventoCarrera(String nombre, String ubicacion, float recaudacion, float objetivoRecaudacion, String descripcion, String date, String url, int recorrido) {
         super(nombre, ubicacion, recaudacion, objetivoRecaudacion, descripcion, date, url);
         this.recorrido = recorrido;
     }
 
-    public EventoCarrera(String nombre, String ubicacion, int recaudacion, int objetivoRecaudacion, String descripcion, String date, String url, int ID, int recorrido) {
+    public EventoCarrera(String nombre, String ubicacion, float recaudacion, float objetivoRecaudacion, String descripcion, String date, String url, int ID, int recorrido) {
         super(nombre, ubicacion, recaudacion, objetivoRecaudacion, descripcion, date, url, ID);
         this.recorrido = recorrido;
     }
