@@ -48,21 +48,27 @@ class CompraHandlersTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        // Control responses
+        // Control de respuestas y utilidades
         jsonGeneratorStaticMock = mockStatic(json_utils.class);
 
-        // DB mocking
+        // Mockeamos la conversión de JSON a Usuario
+        // Si no hacemos esto, 'comprador' será null en setTransaction y fallará.
+        jsonGeneratorStaticMock.when(() -> json_utils.json_string_to_iUsuario(anyString()))
+                .thenReturn(mock(UsuarioBase.class));
+
+        // DB mocking (Evita conexión real al cargar la clase)
         dbFactoryStaticMock = mockStatic(MySQLAccessFactory.class);
         MySQLAccessFactory dummyFactory = mock(MySQLAccessFactory.class);
         dbFactoryStaticMock.when(MySQLAccessFactory::getInstance).thenReturn(dummyFactory);
 
+        // Fuerza que las clases se carguen
         try {
             Class.forName("API.CompraHandlers");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("No se encontró la clase API.CompraHandlers", e);
         }
 
-        // 4. Inyectamos nuestros Mocks específicos en los campos estáticos
+        // Inyeccion de mocks
         injectMock("compraManager", compraManagerMock);
         injectMock("eventoManager", eventoManagerMock);
         injectMock("userManager", userManagerMock);
@@ -70,22 +76,22 @@ class CompraHandlersTest {
 
     @AfterEach
     void tearDown() throws Exception {
-        // Close all static mocks
+        // Cierra los mocks static
         jsonGeneratorStaticMock.close();
         dbFactoryStaticMock.close();
 
-        // Restores the managers
+        // Restaura los managers
         if (originalCompraManager != null) restoreMock("compraManager", originalCompraManager);
         if (originalEventoManager != null) restoreMock("eventoManager", originalEventoManager);
         if (originalUserManager != null) restoreMock("userManager", originalUserManager);
     }
 
-    // Some auxiliary methods
+    // Metodos auxiliares
 
     private void injectMock(String fieldName, Object mock) throws Exception {
         Field field = CompraHandlers.class.getDeclaredField(fieldName);
         field.setAccessible(true);
-        // Saves the original just the 1st time
+        // Guarda el original para la primera vez
         if (fieldName.equals("compraManager")) originalCompraManager = field.get(null);
         if (fieldName.equals("eventoManager")) originalEventoManager = field.get(null);
         if (fieldName.equals("userManager")) originalUserManager = field.get(null);
@@ -101,13 +107,12 @@ class CompraHandlersTest {
 
     @Test
     void testCheckTicketsAvailability_Available() throws Exception {
-        // GIVEN
         String jsonBody = "[ { \"idEvento\": 1, \"idEntrada\": 10, \"amount\": 2 } ]";
         when(ctxMock.body()).thenReturn(jsonBody);
 
         when(compraManagerMock.checkAvailabity(1, 10, 2)).thenReturn(true);
 
-        jsonGeneratorStaticMock.when(() -> json_utils.status_response(0, ""))
+        jsonGeneratorStaticMock.when(() -> json_utils.status_response(0, "Tickets are available"))
                 .thenReturn("AVAILABLE");
 
         CompraHandlers.checkTicketsAvailability.handle(ctxMock);
@@ -135,12 +140,12 @@ class CompraHandlersTest {
         String jsonBody = """
             {
                 "comprador": { "nombre": "Juan", "dni": "12345678A" },
-                "lista_entrada": [
+                "lista_entradas": [
                     {
                         "idEvento": 5,
                         "idEntrada": 10,
                         "pago_extra": 0.0,
-                        "asistente": { "dni": "87654321B" },
+                        "dni": "87654321B",
                         "boleto": "InfoExtra"
                     }
                 ]
@@ -148,18 +153,18 @@ class CompraHandlersTest {
             """;
         when(ctxMock.body()).thenReturn(jsonBody);
 
-        // Simulates the transaction start
+        // Simula el inicio de la transaccion
         when(compraManagerMock.startTransaction(any(UsuarioBase.class))).thenReturn(999);
 
-        // Simulates event and factory recovery
+        // Simula la recuperacion de eventos y la factoria
         when(eventoManagerMock.searchById(5)).thenReturn(eventoMock);
         when(compraManagerMock.getTicketFactoryByEventType(eventoMock)).thenReturn(ticketFactoryMock);
 
-        // Simulates ticket creation
+        // Simula la creacion de ticket
         when(ticketFactoryMock.createTicket(any(), eq("87654321B"), eq(0.0f), eq("InfoExtra")))
                 .thenReturn(ticketMock);
 
-        // Simulates adding a ticket transaction (succesfully)
+        // Simula el agregado de ticket a la transaccion (correctamente)
         when(compraManagerMock.addTicketToTransaction(999, 5, 10, ticketMock)).thenReturn(true);
 
         jsonGeneratorStaticMock.when(() -> json_utils.status_response(0, "999"))
@@ -176,17 +181,17 @@ class CompraHandlersTest {
         String jsonBody = """
             {
                 "comprador": { "nombre": "Juan" },
-                "lista_entrada": [ { "idEvento": 1, "idEntrada": 1, "pago_extra": 0, "asistente": {"dni":"X"} } ]
+                "lista_entradas": [ { "idEvento": 1, "idEntrada": 1, "pago_extra": 0, "dni":"X"} ]
             }
             """;
         when(ctxMock.body()).thenReturn(jsonBody);
         when(compraManagerMock.startTransaction(any())).thenReturn(100);
 
-        // Simulates a specific configuration to achieve a failure
+        // Simula una configuración especifica para el fallo
         when(eventoManagerMock.searchById(1)).thenReturn(eventoMock);
         when(compraManagerMock.getTicketFactoryByEventType(eventoMock)).thenReturn(ticketFactoryMock);
 
-        // Simulates failure adding a ticket
+        // Simula el fallo al agregar el ticket
         when(compraManagerMock.addTicketToTransaction(anyInt(), anyInt(), anyInt(), any())).thenReturn(false);
 
         jsonGeneratorStaticMock.when(() -> json_utils.status_response(1, "Error while processing transaction"))
@@ -195,7 +200,7 @@ class CompraHandlersTest {
         CompraHandlers.setTransaction.handle(ctxMock);
 
         verify(ctxMock).json("ERROR_PROCESS");
-        // Verifies that deleteTransaction was made
+        // Verifica que se ha hecho deleteTransaction
         verify(compraManagerMock).deleteTransaction(100);
     }
 
@@ -204,19 +209,31 @@ class CompraHandlersTest {
         when(ctxMock.pathParam("idTransaction")).thenReturn("50");
         when(ctxMock.body()).thenReturn("{}");
 
-        // Simulates a valid transaction
+        // Simula una transaccion valida
         when(compraManagerMock.getTransaction(50)).thenReturn(transactionMock);
         UsuarioBase comprador = mock(UsuarioBase.class);
         when(transactionMock.getComprador()).thenReturn(comprador);
 
-        jsonGeneratorStaticMock.when(() -> json_utils.status_response(0, "Transaction Confirmed"))
-                .thenReturn("CONFIRMED");
+        // Simula que la disponibilidad es correcta
+        when(compraManagerMock.checkAvailabilityTransaction(50)).thenReturn(true);
+
+        // Simula un registro correcto
+        when(userManagerMock.registerUsuario(comprador)).thenReturn(true);
+        // Simula la confirmacion de exito
+        when(compraManagerMock.confirmTransaction(50)).thenReturn(true);
+
+        java.util.Collections.emptyList();
+        when(transactionMock.getEventos()).thenReturn(java.util.Collections.emptyList());
 
         CompraHandlers.processPayment.handle(ctxMock);
 
         verify(userManagerMock).registerUsuario(comprador);
         verify(compraManagerMock).confirmTransaction(50);
-        verify(ctxMock).json("CONFIRMED");
+        // Borra la transaccion
+        verify(compraManagerMock).deleteTransaction(50);
+
+        // Comprueba si el JSON devuelto esta vacio
+        verify(ctxMock).json("[]");
     }
 
     @Test
