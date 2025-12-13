@@ -34,8 +34,8 @@ public class TicketDAOMySQL implements iTicketDAO {
     }
 
     /**
-     * Method to the retrieve the type of a specific ticket, based on the event type
-     * @param id the id of the ticket whose type you want to confirm
+     * Metodo para obtener el tipo de ticket de un ticket dado
+     * @param id id del ticket cuyo tipo queremos conseguir
      */
     public int ticketType(int id) {
         String sql = "SELECT e.ID_TIPO_EVENTO as tipo FROM ticket t JOIN entrada en ON en.ID_ENTRADA = t.ID_ENTRADA JOIN evento e ON e.ID_EVENTO = en.ID_EVENTO where t.ID_TICKET = ?";
@@ -54,8 +54,8 @@ public class TicketDAOMySQL implements iTicketDAO {
         return 0;
     }
     /**
-     * Method to the create a ticket of a certain type
-     * @param type the type of the ticket that we are trying to create
+     * Metodo para crear un ticket de un tipo determinado
+     * @param type El tipo del ticket que queremos crear
      */
     public TicketFactory getFactoryByType(int type){
         switch(type){
@@ -74,14 +74,11 @@ public class TicketDAOMySQL implements iTicketDAO {
         }
     }
 
-
-
-
-    /**
+    /*
      * Method to retrieve all tickets that are from the same type
      * @param type the type of the tickets we are retrieving
-     */
-    /*public List<iTicket>  searchByType(int type) {
+
+    public List<iTicket>  searchByType(int type) {
         List<iTicket> ticketList = new ArrayList<>();
         String sql = "SELECT * FROM ticket t JOIN entrada en ON en.ID_ENTRADA = t.ID_ENTRADA JOIN evento e ON e.ID_EVENTO = en.ID_EVENTO where e.ID_TIPO_EVENTO = ?";
         try(PreparedStatement st = connection.prepareStatement(sql)) {
@@ -104,15 +101,8 @@ public class TicketDAOMySQL implements iTicketDAO {
         }
         return ticketList;
     }
+    */
 
-*/
-
-
-
-    /**
-     * Method to retrieve all tickets purchased by a user with a given DNI
-     * @param dni the dni of the user whose tickets are to be retrieved
-     */
     @Override
     public List<iTicket> searchByUser(String dni) {
         List<iTicket> ticketList = new ArrayList<>();
@@ -146,10 +136,6 @@ public class TicketDAOMySQL implements iTicketDAO {
         return ticketList;
     }
 
-    /**
-     * Method to retrieve all tickets linked to the given entry
-     * @param idEntrada The id of the entry whose tickets we want to list
-     */
     @Override
     public List<iTicket> searchByEntrada(int idEntrada) {
         List<iTicket> ticketList = new ArrayList<>();
@@ -182,11 +168,6 @@ public class TicketDAOMySQL implements iTicketDAO {
         return ticketList;
     }
 
-    /**
-     * Metodo para buscar un ticket a partir de su id.
-     * @param idTicket Id del ticket que se desea buscar.
-     * @return Objeto iTicket si existe, o null en caso contrario.
-     */
     @Override
     public iTicket searchById(int idTicket) {
         String sql = "SELECT * FROM ticket WHERE ID_TICKET = ?";
@@ -217,11 +198,6 @@ public class TicketDAOMySQL implements iTicketDAO {
         return null;
     }
 
-
-
-    /**
-     * Method for registering certain ticket in the database
-     */
     @Override
     public boolean registerTicket(iTicket ticket, String dniComprador, int idEntrada, String informacion) {
         String sql = "INSERT INTO ticket (DNI_USUARIO, ID_ENTRADA, Dni_asistente, Pago_extra, Informacion) VALUES (?, ?, ?, ?, ?)";
@@ -239,10 +215,6 @@ public class TicketDAOMySQL implements iTicketDAO {
         }
     }
 
-    /**
-     * Method to delete a ticket from de database
-     * @param id the id of the ticket that we want to delete from the database
-     */
     @Override
     public boolean deleteTicket(String id) {
         String sql = "DELETE FROM ticket WHERE ID_TICKET = ?";
@@ -257,9 +229,7 @@ public class TicketDAOMySQL implements iTicketDAO {
             return false;
         }
     }
-    /**
-     * Method to get the next id that will be assigned to a ticket. Return 1 if there is no ticket in the database
-     */
+
     @Override
     public int getNextTicketID() {
         String sql = "SELECT MAX(ID_TICKET) AS max_id FROM ticket";

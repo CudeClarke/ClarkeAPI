@@ -27,11 +27,6 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
         this.connection = connection;
     }
 
-    /**
-     * Metodo para registrar un usuario en la base de datos, aprovechando la herencia.
-     * @param usuario Objeto con los datos a introducir en la bd, puede ser base o registrado.
-     * @return True si se inserto correctamente o false si, o ya estaba en la bd u ocurrio un error.
-     */
     public boolean registerUsuario(iUsuario usuario) {
         String sqlUsuario = "INSERT INTO usuario (DNI, Nombre, Apellidos, Email, SPAM) VALUES (?, ?, ?, ?, ?)";
         String sqlRegistrado = "INSERT INTO registrado (DNI_USUARIO, Telefono, Direccion_postal) VALUES (?, ?, ?)";
@@ -88,11 +83,6 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
         }
     }
 
-    /**
-     * Metodo para convertir a un usuario ya existente en la base de datos en un usario registrado
-     * @param usuario UsuarioRegistrado a introducir en la base de datos
-     * @return True si se inserto correctamente o false si, o ya estaba en la bd u ocurrio un error.
-     */
     @Override
     public boolean upgradUsuarioToRegistrado(UsuarioRegistrado usuario) {
         // Actualizamos los datos base por si han cambiado
@@ -151,11 +141,6 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
         }
     }
 
-    /**
-     * Metodo para actualizar un usuario partiendo del dni
-     * @param usuario Objeto con la informacion del usuario
-     * @return True si se actualiza o false en otro caso
-     */
     public boolean updateUsuario(iUsuario usuario) {
         // SQL para datos comunes
         String sqlUpdateUsuario = "UPDATE usuario SET Nombre=?, Apellidos=?, Email=?, SPAM=? WHERE DNI=?";
@@ -221,11 +206,6 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
         }
     }
 
-    /**
-     * Metodo para buscar por el dni de un usuario.
-     * @param dni String que buscamos.
-     * @return El usuario (base/registrado) si existe o null en otro caso.
-     */
     public iUsuario searchByDni(String dni) {
         String sql = "SELECT u.*, r.Telefono, r.Direccion_postal " +
                 "FROM usuario u " +
@@ -247,10 +227,6 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
         return user;
     }
 
-    /**
-     * Metodo para recuperar todos los usuarios registrados en la base de datos.
-     * @return Lista que contiene todos los objetos iUsuarios almacenados.
-     */
     public List<iUsuario> getAllUsuarios() {
         List<iUsuario> list = new ArrayList<>();
         String sql = "SELECT u.*, r.Telefono, r.Direccion_postal " +
@@ -267,11 +243,6 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
         return list;
     }
 
-    /**
-     * Metodo para borrar un usuario (base/registrado) de la base de datos.
-     * @param dni String del usuario a borrar.
-     * @return True si se borro correctamente o False en otro caso.
-     */
     public boolean deleteUsuario(String dni) {
         String sqlDeleteRegistrado = "DELETE FROM registrado WHERE DNI_USUARIO = ?";
         String sqlDeleteUsuario = "DELETE FROM usuario WHERE DNI = ?";
