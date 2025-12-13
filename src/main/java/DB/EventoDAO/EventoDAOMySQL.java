@@ -261,7 +261,7 @@ public class EventoDAOMySQL implements iEventoDAO {
         } catch (SQLException e) {
             System.err.println("Error getting event ID: " + e.getMessage());
         }
-        return 0;
+        return -1;
     }
 
     @Override

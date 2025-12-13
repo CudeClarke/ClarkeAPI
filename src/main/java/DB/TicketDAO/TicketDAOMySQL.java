@@ -51,7 +51,7 @@ public class TicketDAOMySQL implements iTicketDAO {
         } catch (SQLException e) {
             System.err.println("ERROR: " + e.getMessage());
         }
-        return 0;
+        return -1;
     }
     /**
      * Metodo para crear un ticket de un tipo determinado
