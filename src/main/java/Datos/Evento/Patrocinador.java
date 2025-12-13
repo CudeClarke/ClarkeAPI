@@ -6,9 +6,16 @@ public class Patrocinador {
     private String nombre;
     private String logo;
 
+    // Empty builder, should not be used. Used for json deserialization purposes exclusively by Jackson
+    public Patrocinador(){}
+
     public Patrocinador(String nombre, String logo) {
         this.nombre = nombre;
         this.logo = logo;
+    }
+
+    public Patrocinador(String nombre){
+        this.nombre = nombre;
     }
 
     public String getNombre() {

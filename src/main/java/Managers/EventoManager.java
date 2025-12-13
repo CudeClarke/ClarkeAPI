@@ -1,6 +1,7 @@
 package Managers;
 
 import java.util.List;
+import java.util.Set;
 
 import DB.EntradaDAO.iEntradaDAO;
 import DB.iDatabaseAccessFactory;
@@ -61,13 +62,34 @@ public class EventoManager {
     public boolean registerEvento(iEvento evento){
         boolean res = false;
         if (validEvent(evento)){
+            int idEvento = eventoDAO.getNextEventoID();
             res = eventoDAO.registerEvento(evento, getEventType(evento));
-            /*List<iEntrada> entradas = evento.getEntradas();
+            Set<String> tags = evento.getTags();
+            if (res && tags != null && !tags.isEmpty()){
+               for (String tag : tags){
+                    int idTag = registerTag(tag);
+                    if (idTag > 0){
+                        res = res && eventoDAO.setRelationEventoTag(idEvento, idTag);
+                    }
+               }
+            }
+
+            Set<Patrocinador> patrocinadores = evento.getPatrocinadores();
+            if (res && patrocinadores != null && !patrocinadores.isEmpty()){
+                for (Patrocinador patrocinador : patrocinadores){
+                    int idPatrocinador = registerPatrocinador(patrocinador);
+                    if (idPatrocinador > 0){
+                        res = res && eventoDAO.setRelationEventoPatrocinador(idEvento, idPatrocinador);
+                    }
+                }
+            }
+
+            List<iEntrada> entradas = evento.getEntradas();
             if (res && entradas != null && !entradas.isEmpty()){
                 for (iEntrada entrada : entradas){
-                    res = res && entradaDAO.registerEntrada(entrada);
+                    res = res && entradaDAO.registerEntrada(entrada, idEvento);
                 }
-            }*/
+            }
         }
         return res;
     }
@@ -92,5 +114,27 @@ public class EventoManager {
             }
         }
         return res;
+    }
+
+    public int registerTag(String tag){
+        int idTag;
+        idTag = eventoDAO.getTagID(tag);
+        if (idTag < 0){
+            if (eventoDAO.registerTag(tag)){
+                idTag = eventoDAO.getNextTagID()-1;
+            }
+        }
+        return idTag;
+    }
+
+    public int registerPatrocinador(Patrocinador patrocinador){
+        int idPatrocinador;
+        idPatrocinador = eventoDAO.getPatrocinadorID(patrocinador.getNombre());
+        if (idPatrocinador < 0){
+            if (eventoDAO.registerPatrocinador(patrocinador)){
+                idPatrocinador = eventoDAO.getNextPatrocinadorID()-1;
+            }
+        }
+        return idPatrocinador;
     }
 }
