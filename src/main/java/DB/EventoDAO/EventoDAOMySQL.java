@@ -384,7 +384,9 @@ public class EventoDAOMySQL implements iEventoDAO {
         String sql = "SELECT COUNT(*) count FROM evento";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             try (ResultSet rs = stmt.executeQuery()){
-                nextID = rs.getInt("count") + 1;
+                if (rs.next()) {
+                    nextID = rs.getInt("count") + 1;
+                }
             }
         } catch (SQLException e) {
             System.err.println("Error getting next event ID: " + e.getMessage());
