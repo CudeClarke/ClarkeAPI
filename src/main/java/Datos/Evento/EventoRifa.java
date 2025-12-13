@@ -10,17 +10,17 @@ public class EventoRifa extends Evento {
     // Empty builder, should not be used. Used for json deserialization purposes exclusively by Jackson
     public EventoRifa(){}
 
-    public EventoRifa(String nombre, String ubicacion, int objetivoRecaudacion, String descripcion, String date, String url) {
+    public EventoRifa(String nombre, String ubicacion, float objetivoRecaudacion, String descripcion, String date, String url) {
         super(nombre, ubicacion, objetivoRecaudacion, descripcion, date, url);
         premios = new ArrayList<>();
     }
 
-    public EventoRifa(String nombre, String ubicacion, int recaudacion, int objetivoRecaudacion, String descripcion, String date, String url) {
+    public EventoRifa(String nombre, String ubicacion, float recaudacion, float objetivoRecaudacion, String descripcion, String date, String url) {
         super(nombre, ubicacion, recaudacion, objetivoRecaudacion, descripcion, date, url);
         premios = new ArrayList<>();
     }
 
-    public EventoRifa(String nombre, String ubicacion, int recaudacion, int objetivoRecaudacion, String descripcion, String date, String url,  int ID) {
+    public EventoRifa(String nombre, String ubicacion, float recaudacion, float objetivoRecaudacion, String descripcion, String date, String url,  int ID) {
         super(nombre, ubicacion, recaudacion, objetivoRecaudacion, descripcion, date, url, ID);
         premios = new ArrayList<>();
     }

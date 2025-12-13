@@ -54,12 +54,12 @@ public class EventoDAOMySQL implements iEventoDAO {
         int idEvento = rs.getInt("ID_EVENTO");
         int tipoID = rs.getInt("ID_TIPO_EVENTO");
         String nombre = rs.getString("Nombre");
-        int objetivo = rs.getInt("Objetivo");
+        float objetivo = rs.getFloat("Objetivo");
         String ubicacion = rs.getString("Lugar");
         String descripcion = rs.getString("Descripcion");
         String fecha = rs.getString("Fecha");
         String url = rs.getString("Imagen");
-        int recaudacion = rs.getInt("Recaudacion");
+        float recaudacion = rs.getFloat("Recaudacion");
         String informacionExtra = rs.getString("Informacion");
 
         ubicacion = (ubicacion == null)? "" : ubicacion;
@@ -215,8 +215,8 @@ public class EventoDAOMySQL implements iEventoDAO {
             stmt.setString(3, evento.getDate());
             setOptionalString(stmt, 4, evento.getUbicacion());
             setOptionalString(stmt, 5, evento.getDescripcion());
-            stmt.setDouble(6, evento.getRecaudacion());
-            stmt.setDouble(7, evento.getObjetivoRecaudacion());
+            stmt.setFloat(6, evento.getRecaudacion());
+            stmt.setFloat(7, evento.getObjetivoRecaudacion());
             setOptionalString(stmt, 8, evento.getInformacion());
             setOptionalString(stmt, 9, evento.getUrl());
 
@@ -254,8 +254,8 @@ public class EventoDAOMySQL implements iEventoDAO {
             stmt.setString(2, evento.getDate());
             setOptionalString(stmt, 3, evento.getUbicacion());
             setOptionalString(stmt, 4, evento.getDescripcion());
-            stmt.setDouble(5, evento.getRecaudacion());
-            stmt.setDouble(6, evento.getObjetivoRecaudacion());
+            stmt.setFloat(5, evento.getRecaudacion());
+            stmt.setFloat(6, evento.getObjetivoRecaudacion());
             setOptionalString(stmt, 7, evento.getInformacion());
             setOptionalString(stmt, 8, evento.getUrl());
             stmt.setInt(9, id);

@@ -7,8 +7,8 @@ import java.util.*;
 public class Evento implements iEvento {
     private String nombre;
     private String ubicacion;
-    private int recaudacion;
-    private int objetivoRecaudacion;
+    private float recaudacion;
+    private float objetivoRecaudacion;
     private String descripcion;
     private String date;
     private String url;
@@ -21,7 +21,7 @@ public class Evento implements iEvento {
     // Empty builder, should not be used. Used for json deserialization purposes exclusively by Jackson
     public Evento(){}
 
-    public Evento(String nombre, String ubicacion, int objetivoRecaudacion, String descripcion, String date, String url) {
+    public Evento(String nombre, String ubicacion, float objetivoRecaudacion, String descripcion, String date, String url) {
         this.nombre = nombre;
         this.ubicacion = ubicacion;
         this.objetivoRecaudacion = objetivoRecaudacion;
@@ -36,7 +36,7 @@ public class Evento implements iEvento {
         entradas = new ArrayList<>();
     }
 
-    public Evento(String nombre, String ubicacion, int recaudacion, int objetivoRecaudacion, String descripcion, String date, String url) {
+    public Evento(String nombre, String ubicacion, float recaudacion, float objetivoRecaudacion, String descripcion, String date, String url) {
         this.nombre = nombre;
         this.ubicacion = ubicacion;
         this.objetivoRecaudacion = objetivoRecaudacion;
@@ -51,7 +51,7 @@ public class Evento implements iEvento {
         entradas = new ArrayList<>();
     }
 
-    public Evento(String nombre, String ubicacion, int recaudacion, int objetivoRecaudacion, String descripcion, String date, String url, int ID) {
+    public Evento(String nombre, String ubicacion, float recaudacion, float objetivoRecaudacion, String descripcion, String date, String url, int ID) {
         this.nombre = nombre;
         this.ubicacion = ubicacion;
         this.objetivoRecaudacion = objetivoRecaudacion;
@@ -148,19 +148,19 @@ public class Evento implements iEvento {
         this.nombre = nombre;
     }
 
-    public int getRecaudacion() {
+    public float getRecaudacion() {
         return recaudacion;
     }
 
-    public void setRecaudacion(int recaudacion) {
+    public void setRecaudacion(float recaudacion) {
         this.recaudacion = recaudacion;
     }
 
-    public int getObjetivoRecaudacion() {
+    public float getObjetivoRecaudacion() {
         return objetivoRecaudacion;
     }
 
-    public void setObjetivoRecaudacion(int objetivoRecaudacion) {
+    public void setObjetivoRecaudacion(float objetivoRecaudacion) {
         this.objetivoRecaudacion = objetivoRecaudacion;
     }
 
