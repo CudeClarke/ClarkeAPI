@@ -8,133 +8,141 @@ import java.util.Set;
 public interface iEventoDAO {
 
     /**
-     * Metodo para recuperar todos los eventos registrados en la base de datos.
-     * @return Lista que contiene todos los objetos iEvento almacenados ordenados por ID.
+     * Method to retrieve all "eventos" from the database
+     * @return a list of type "iEvento" ordered by ID
      */
     List<iEvento> getAllEventos();
 
     /**
-     * Metodo para buscar eventos que contengan una etiqueta concreta.
-     * @param tag Nombre de la etiqueta asociada a los eventos.
-     * @return Lista de eventos que tienen dicha etiqueta ordenados por ID.
+     * Method for searching all "eventos" which have a certain "tag"
+     * @param tag Name of the tag associated to the "eventos"
+     * @return List of type "iEvento" with that certain "tag" ordered by id
      */
     List<iEvento> searchByTag(String tag);
 
     /**
-     * Metodo para buscar eventos patrocinados por un patrocinador concreto.
-     * @param patrocinador Nombre del patrocinador.
-     * @return Lista de eventos asociados al patrocinador indicado ordenados por ID.
+     * Method for searching "eventos" sponsored by a certain "patrocinador"
+     * @param patrocinador Name of the "patrocinador"
+     * @return List of type iEvento with "eventos" associated to a certain "patrocinador" ordered by id
      */
     List<iEvento> searchByPatrocinador(String patrocinador);
 
     /**
-     * Metodo para buscar un evento a partir de su nombre.
-     * @param nombre Nombre del evento que se desea buscar.
-     * @return Objeto iEvento si existe, o null en caso contrario.
+     * Method for searching all "eventos" based on its name
+     * @param nombre Name of the "evento" we want to search
+     * @return Object of type "iEvento" with that certain "name"
      */
     iEvento searchByName(String nombre);
 
     /**
-     * Metodo para buscar un evento a partir de su id.
-     * @param idEvento Id del evento que se desea buscar.
-     * @return Objeto iEvento si existe, o null en caso contrario.
+     * Method for searching all "eventos" based on its id
+     * @param idEvento Identificator of the "evento" we want to search
+     * @return Object of type "iEvento" with that certain id if it exists, NULL otherwise
      */
     iEvento searchById(int idEvento);
 
     /**
-     * Metodo para añadir un nuevo evento a la base de datos.
-     * Los campos LUGAR y DESCRIPCION son opcionales, por lo que
-     * pueden recibirse como null y se insertarán como NULL.
-     * @param evento Evento a añdir a la base de datos.
-     * @param tipo Tipo del evento.
-     * @return True si el evento se insertó correctamente, false en caso contrario.
+     * Method for registering a new "evento" on the database
+     * The fields "LUGAR" and "DESCRIPCION" are optional
+     * so they might be received and set as NULL
+     * @param evento "Evento" to be added to the database
+     * @param tipo Type of "evento"
+     * @return True or false based on the correct execution of the sql query.
      */
     boolean registerEvento(iEvento evento, int tipo);
 
     /**
-     * Metodo para actualizar la información de un evento existente.
-     * @param id Identificador del evento a actualizar.
-     * @param evento Evento a actualizar.
-     * NOTA: Se entiende que el tipo de evento no es algo que se deba de cambiar.
-     * @return True si el evento se actualizo correctamente, false en caso contrario.
+     * Method for updating the information of an existent "evento"
+     * @param id Identifier of the "evento" to be updated
+     * @param evento "Evento" to be updated
+     * NOTA: it is taken for granted that the "evento" type is something not to be changed
+     * @return True or false based on the correct execution of the sql query.
      */
     boolean updateEvento(int id, iEvento evento);
 
     /**
-     * Metodo para eliminar la información de un evento existente.
-     * @param idEvento Identificador del evento a eliminar.
-     * @return True si el evento se actualizo correctamente, false en caso contrario.
+     * Method for deleting the information of an existent "evento"
+     * @param idEvento identifier of the "evento" to be eliminated
+     * @return True or false based on the correct execution of the sql query.
      */
     boolean deleteEvento(int idEvento);
 
     /**
-     * Metodo para conseguir el identificador de un evento existente.
-     * @param evento Evento al que queremos obtener el identifador.
-     * @return El identificador del evento. En caso de error devuelve 0.
+     * Method for getting the identifier of a certain existent event
+     * @param evento Object of type iEvento whose id we are going to get
+     * @return The identifier of the "evento". In case of an error, it returns 0
      */
     int getID(iEvento evento);
 
     /**
-     * Metodo para conseguir las etiquetas de un evento existente.
-     * @param idEvento Identificador del evento al que vamos a obtener las etiquetas.
-     * @return Lista de etiquetas del evento.
+     * Method for getting all the "tags" from a certain existent event
+     * @param idEvento identificator of the specified event
+     * @return Set of the "tags"
      */
     Set<String> getTags(int idEvento);
 
     /**
-     * Metodo para conseguir los patrocinadores de un evento existente.
-     * @param idEvento Identificador del evento al que vamos a obtener los patrocinadores.
-     * @return Lista de patrocinadores del evento.
+     * Method for getting all the "patrocinadores" from a certain existent event
+     * @param idEvento identificator of the specified event
+     * @return Set of the "patrocinadores"
      */
     Set<Patrocinador> getPatrocinadores(int idEvento);
 
     /**
-     * Metodo para conseguir el proximo el ID de evento que se asignará en la base de datos.
-     * @return Int proximo ID de evento.
+     * Method for searching the next id that will be assigned to a "evento" in the database
+     * @return Int of the next "evento" id
      */
     int getNextEventoID();
 
     /**
-     * Metodo para añadir un nuevo tag a la base de datos.
-     * @param tag String del tag.
-     * @return True si el tag se insertó correctamente, false en caso contrario.
+     * Method for registering a "tag" on the database
+     * @param tag Object "tag" that will be added
+     * @return true or false based on the correct execution of the sql query.
      */
     boolean registerTag(String tag);
 
     /**
-     * Metodo para conseguir el ID de un tag dado su String.
-     * @param tag String del tag.
-     * @return ID del tag.
+     * Method for getting the "tag" id based on its name
+     * @param tag Name of the "tag"
+     * @return ID of the "tag"
      */
     int getTagID(String tag);
 
     /**
-     * Metodo para conseguir el proximo el ID de tag que se asignará en la base de datos.
-     * @return Int proximo ID de tag.
+     * Method for searching the next id that will be assigned to a "tag" in the database
+     * @return Int of the next "tag" id
      */
     int getNextTagID();
 
     /**
-     * Metodo para añadir un nuevo patrocinador a la base de datos.
-     * @param patrocinador String del tag.
-     * @return True si el patrocinador se insertó correctamente, false en caso contrario.
+     * Method for registering a "patrocinador" on the database
+     * @param patrocinador Object "patrocinador" that will be added
+     * @return True or false based on the correct execution of the sql query.
      */
     boolean registerPatrocinador(Patrocinador patrocinador);
 
     /**
-     * Metodo para conseguir el ID de un patrocinador dado su nombre.
-     * @param nombre Nombre del patrocinador
-     * @return ID del patrocinador.
+     * Method for getting the "patrocinador" id based on its name
+     * @param nombre Name of the "patrocinador"
+     * @return ID of the "patrocinador"
      */
     int getPatrocinadorID(String nombre);
 
     /**
-     * Metodo para conseguir el proximo el ID de patrocinador que se asignará en la base de datos.
-     * @return Int proximo ID de patrocinador.
+     * Method for searching the next id that will be assigned to a "patrocinador" in the database
+     * @return Int of the next "patrocinador" id
      */
     int getNextPatrocinadorID();
 
+    /**
+     * Method for setting the relation between "evento" and "tag" based on their ids
+     * @return True or false based on the correct execution of the sql query.
+     */
     boolean setRelationEventoTag(int idEvento, int idTag);
 
+    /**
+     * Method for setting the relation between "evento" and "patrocinador" based on their ids
+     * @return True or false based on the correct execution of the sql query.
+     */
     boolean setRelationEventoPatrocinador(int idEvento, int idPatrocinador);
 }
