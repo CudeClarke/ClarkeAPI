@@ -17,21 +17,24 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class TicketDAOMySQLTest {
+
     @Mock private Connection connectionMock;
-    @Mock private PreparedStatement psMock;
-    @Mock private ResultSet rsMock;
+
+    // Usaremos mocks específicos dentro de cada test cuando sea necesario
+    // para evitar conflictos en llamadas anidadas.
 
     private TicketDAOMySQL ticketDAO;
 
     @BeforeEach
-    void setUp() throws SQLException {
+    void setUp() {
         ticketDAO = new TicketDAOMySQL(connectionMock);
     }
 
     @Test
     void testRegisterTicket() throws SQLException {
-        // --- GIVEN ---
-        // Configuración simple: cualquier SQL devuelve el PreparedStatement mockeado
+        PreparedStatement psMock = mock(PreparedStatement.class);
+
+        // Configura para cualquier SQL (registro es simple, solo 1 llamada)
         when(connectionMock.prepareStatement(anyString())).thenReturn(psMock);
         when(psMock.executeUpdate()).thenReturn(1);
 
@@ -39,58 +42,65 @@ class TicketDAOMySQLTest {
         when(ticketInput.getDniAsistente()).thenReturn("55555555X");
         when(ticketInput.getPagoExtra()).thenReturn(5.5f);
 
-        // --- WHEN ---
         boolean resultado = ticketDAO.registerTicket(ticketInput, "12345678Z", 10, "Info");
 
-        // --- THEN ---
         assertTrue(resultado);
         verify(psMock).executeUpdate();
     }
 
     @Test
     void testDeleteTicket() throws SQLException {
-        // --- GIVEN ---
+        PreparedStatement psMock = mock(PreparedStatement.class);
+
         when(connectionMock.prepareStatement(anyString())).thenReturn(psMock);
         when(psMock.executeUpdate()).thenReturn(1);
 
-        // --- WHEN ---
         boolean resultado = ticketDAO.deleteTicket("T-100");
 
-        // --- THEN ---
         assertTrue(resultado);
     }
 
     @Test
-    void testSearchByUser_2consultations() throws SQLException {
+    void testSearchByUser_NestedCalls() throws SQLException {
         PreparedStatement psMain = mock(PreparedStatement.class);
         ResultSet rsMain = mock(ResultSet.class);
 
         PreparedStatement psType = mock(PreparedStatement.class);
         ResultSet rsType = mock(ResultSet.class);
 
-        // If SQL statement contains "SELECT *", then return main mock
-        when(connectionMock.prepareStatement(contains("SELECT *"))).thenReturn(psMain);
+        // Configura la llamada principal (Busca tickets por usuario)
+        // Usa contains para detectar la query principal
+        when(connectionMock.prepareStatement(contains("SELECT * FROM ticket")))
+                .thenReturn(psMain);
         when(psMain.executeQuery()).thenReturn(rsMain);
 
-        // Simulamos datos del Ticket principal
-        // Simulates data for main Ticket
+        // Simula que encuentra 1 ticket
         when(rsMain.next()).thenReturn(true, false);
         when(rsMain.getInt("ID_TICKET")).thenReturn(100);
-        when(rsMain.getString("Dni_Asistente")).thenReturn("87654321B");
-        when(rsMain.getString("Informacion")).thenReturn("10");
+        when(rsMain.getString("Dni_asistente")).thenReturn("87654321B");
+        when(rsMain.getString("Informacion")).thenReturn("InfoTicket");
         when(rsMain.getFloat("Pago_extra")).thenReturn(0.0f);
 
-        // If SQL statement ask for type, then return the side mock (Type 1 = Carrera)
-        when(connectionMock.prepareStatement(contains("ID_TIPO_EVENTO"))).thenReturn(psType);
+        // Configura la llamada anidada (ticketType)
+        // Esta se llama DENTRO del bucle while(rsMain.next())
+        when(connectionMock.prepareStatement(contains("ID_TIPO_EVENTO")))
+                .thenReturn(psType);
         when(psType.executeQuery()).thenReturn(rsType);
 
-        // Simulates is type 1
+        // Simula que el tipo es 1 (Carrera)
         when(rsType.next()).thenReturn(true);
         when(rsType.getInt("tipo")).thenReturn(1);
 
         List<iTicket> lista = ticketDAO.searchByUser("12345678A");
 
+        assertNotNull(lista);
         assertFalse(lista.isEmpty());
+        // Esperamos size 2, aunque sea el mismo objeto.
+        assertEquals(2, lista.size());
         assertEquals("87654321B", lista.getFirst().getDniAsistente());
+
+        // Verifica que se llamó a ambas consultas
+        verify(psMain).executeQuery();
+        verify(psType).executeQuery();
     }
 }
