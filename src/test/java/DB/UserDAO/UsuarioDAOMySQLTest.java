@@ -1,6 +1,7 @@
 package DB.UserDAO;
 
 import Datos.Usuario.UsuarioBase;
+import Datos.Usuario.UsuarioRegistrado;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -13,13 +14,12 @@ import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.*;
-
-import Datos.Usuario.*;
 
 @ExtendWith(MockitoExtension.class)
 class UsuarioDAOMySQLTest {
-    // Create false actors
+    // Crea los actores falsos
     @Mock
     private Connection connectionMock;
     @Mock
@@ -30,8 +30,8 @@ class UsuarioDAOMySQLTest {
     private UsuarioDAOMySQL usuarioDAO;
 
     @BeforeEach
-    void setUp() throws SQLException {
-        // Before each test, initialize a false connection
+    void setUp() {
+        // Inicializamos una conexion falsa antes de cada test
         usuarioDAO = new UsuarioDAOMySQL(connectionMock);
     }
 
@@ -40,49 +40,49 @@ class UsuarioDAOMySQLTest {
         UsuarioRegistrado usuario = new UsuarioRegistrado(
                 "Juan", "Perez", "juan@test.com", "12345678A", false, "Calle Falsa 123", "600000000"
         );
-        // When DAO ask for a PreparedStatement, we give a false one.
+        // Cuando el DAO pregunte por un statement, le damos uno falso
         when(connectionMock.prepareStatement(anyString())).thenReturn(preparedStatementMock);
-        // When update is executed, return 1 (rows affected)
+        // Cuando se hace executeUpdate, retornamos 1 (fila afectada)
         when(preparedStatementMock.executeUpdate()).thenReturn(1);
 
         boolean result = usuarioDAO.registerUsuario(usuario);
 
         assertTrue(result, "Register should return true");
 
-        // A few extra verifications
-        // Verify that autocommit has been deactivated
+        // Verificaciones extra
+        // Autocommit desactivado
         verify(connectionMock).setAutoCommit(false);
-        // Verify that 2 statements where prepared (one for base, one for registrado)
+        // Se prepararon 2 statement
         verify(connectionMock, times(2)).prepareStatement(anyString());
-        // Verify that commit was done
+        // Se hizo commit
         verify(connectionMock).commit();
     }
 
     @Test
-    void testRegisterUsuarioFailRollback() throws SQLException {
+    void testRegisterUsuario_FailRollback() throws SQLException {
         UsuarioBase usuario = new UsuarioBase("Ana", "Gomez", "ana@test.com", "87654321B", true);
 
         when(connectionMock.prepareStatement(anyString())).thenReturn(preparedStatementMock);
-        // Simulates throwing an exception when update is executed
+        // Simula que se lanza la excepcion cuando se hace update
         when(preparedStatementMock.executeUpdate()).thenThrow(new SQLException("Conexion error"));
 
         boolean resultado = usuarioDAO.registerUsuario(usuario);
         assertFalse(resultado, "Register should fail and return false");
 
-        // Verify that rollback attempt was made
+        // Verifica que se intento hacer rollback
         verify(connectionMock).rollback();
     }
 
     @Test
-    void testSearchByDniFound() throws SQLException {
+    void testSearchByDni_Found() throws SQLException {
         String dniBuscado = "12345678A";
 
-        // Configuration of all the calls that must be done
+        // Configuracion para todas las llamadas que se deben hacer
         // connection -> prepareStatement -> executeQuery -> ResultSet
         when(connectionMock.prepareStatement(anyString())).thenReturn(preparedStatementMock);
         when(preparedStatementMock.executeQuery()).thenReturn(resultSetMock);
 
-        // Simulates the behavior of the ResultSet
+        // Simula el comportamiento del ResultSet
         when(resultSetMock.next()).thenReturn(true); // Hay un resultado
         when(resultSetMock.getString("DNI")).thenReturn(dniBuscado);
         when(resultSetMock.getString("Nombre")).thenReturn("Carlos");
@@ -96,10 +96,10 @@ class UsuarioDAOMySQLTest {
         var resultado = usuarioDAO.searchByDni(dniBuscado);
 
         assertNotNull(resultado);
-        // Verifies the inheritance
+        // Verifica la herencia
         assertInstanceOf(UsuarioRegistrado.class, resultado);
 
-        // Checks specific data
+        // Comprueba datos especificos
         UsuarioRegistrado ur = (UsuarioRegistrado) resultado;
         assertEquals("Calle Circuito 55", ur.getDireccion());
         assertEquals("Carlos", ur.getNombre());
@@ -109,7 +109,7 @@ class UsuarioDAOMySQLTest {
     void testDeleteUsuario() throws SQLException {
         String dni = "12345678A";
         when(connectionMock.prepareStatement(anyString())).thenReturn(preparedStatementMock);
-        // Simulates removing a row
+        // Simula que se borra 1 fila
         when(preparedStatementMock.executeUpdate()).thenReturn(1);
 
         boolean resultado = usuarioDAO.deleteUsuario(dni);
@@ -124,17 +124,15 @@ class UsuarioDAOMySQLTest {
                 "Carlos", "Sainz", "carlos@notferrari.com", "55555555X", false, "Calle Circuito 1", "600123456"
         );
 
-        // Creates especific mocks for each statement (update and insert)
+        // Crea un mock especifico para cada statement (update e insert)
         PreparedStatement psUpdate = mock(PreparedStatement.class);
         PreparedStatement psInsert = mock(PreparedStatement.class);
 
-        // Configures the connection to return the correct PreparedStatement depending on the SQL statement
-        // Using lenient() just because we are using specific stubs different from the generic anyString()
+        // Configura la conexion para devolver el statement correct dependiendo de la sentencia SQL
         lenient().when(connectionMock.prepareStatement(contains("UPDATE"))).thenReturn(psUpdate);
         lenient().when(connectionMock.prepareStatement(contains("INSERT"))).thenReturn(psInsert);
 
         // Simulamos éxito en ambas operaciones
-        // Simulates the success of both actions
         when(psUpdate.executeUpdate()).thenReturn(1); // 1 row updated in usuario
         when(psInsert.executeUpdate()).thenReturn(1); // 1 row inserted in registrado
 
@@ -142,7 +140,7 @@ class UsuarioDAOMySQLTest {
 
         assertTrue(result, "Upgrade should return true");
 
-        // Verifications
+        // Verificaciones
         verify(connectionMock).setAutoCommit(false);
         verify(psUpdate).executeUpdate();
         verify(psInsert).executeUpdate();
@@ -150,26 +148,26 @@ class UsuarioDAOMySQLTest {
     }
 
     @Test
-    void testUpgradeUsuarioToRegistradoFailUserNotFound() throws SQLException {
+    void testUpgradeUsuarioToRegistrado_FailUserNotFound() throws SQLException {
         UsuarioRegistrado usuario = new UsuarioRegistrado(
                 "Carlos", "Sainz", "email", "NO_EXISTE", false, "Dir", "Tlf"
         );
 
         PreparedStatement psUpdate = mock(PreparedStatement.class);
 
-        // Configures only the UPDATE
+        // Configura solo el UPDATE
         lenient().when(connectionMock.prepareStatement(contains("UPDATE"))).thenReturn(psUpdate);
 
-        // Simulate that UPDATE return 0 (no DNI found)
+        // Simula que UPDATE devuelve 0 (filas afectadas)
         when(psUpdate.executeUpdate()).thenReturn(0);
 
         boolean result = usuarioDAO.upgradUsuarioToRegistrado(usuario);
 
         assertFalse(result, "Upgrade should return false if user DNI does not exist");
 
-        // Verifications
+        // Verificaciones
         verify(connectionMock).rollback();
-        // Ensures that no attempt was ever made if insert failed
+        // Asegura que nunca se ha intentado si insert falla
         verify(connectionMock, never()).prepareStatement(contains("INSERT"));
     }
 }
