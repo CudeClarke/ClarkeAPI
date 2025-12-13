@@ -181,7 +181,7 @@ class TicketHandlerTest {
         when(ctxMock.bodyAsClass(TicketHandler.DatosTicket.class)).thenReturn(datos);
 
         // Simula fallo en BD
-        when(ticketManagerMock.registerTicket(any(), anyString(), anyInt(), anyString()))
+        when(ticketManagerMock.registerTicket(any(), any(), anyInt(), any()))
                 .thenReturn(false);
 
         jsonUtilsStaticMock.when(() -> json_utils.status_response(1, "Fallo al registrar ticket (DB Error/Duplicado)."))
