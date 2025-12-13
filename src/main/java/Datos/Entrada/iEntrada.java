@@ -1,9 +1,11 @@
 package Datos.Entrada;
 
 import Datos.Ticket.iTicket;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.util.List;
 
+@JsonDeserialize(as = Entrada.class)
 public interface iEntrada {
     public int getSubAforo();
     public void setSubAforo(int subAforo);

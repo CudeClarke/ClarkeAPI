@@ -36,12 +36,14 @@ public class json_utils {
         try {
             evento = mapper.readValue(json, EventoCarrera.class);
         }catch (Exception e){
+            System.out.println(e.getMessage());
             System.out.println("Not EventoCarrera");
         }
         if (evento == null){
             try {
                 evento = mapper.readValue(json, EventoConcierto.class);
             }catch (Exception e){
+                System.out.println(e.getMessage());
                 System.out.println("Not EventoConcierto");
             }
         }
@@ -49,6 +51,7 @@ public class json_utils {
             try {
                 evento = mapper.readValue(json, EventoRifa.class);
             }catch (Exception e){
+                System.out.println(e.getMessage());
                 System.out.println("Not EventoRifa");
             }
         }
