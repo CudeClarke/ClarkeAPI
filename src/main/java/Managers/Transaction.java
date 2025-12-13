@@ -1,14 +1,13 @@
 package Managers;
 
-import Datos.Usuario.iUsuario;
-import Datos.Evento.iEvento;
-import Datos.Entrada.iEntrada;
-import Datos.Ticket.iTicket;
-import utils.IDGenerator;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import Datos.Usuario.iUsuario;
+import Datos.Evento.iEvento;
+import Datos.Entrada.iEntrada;
+import utils.IDGenerator;
 
 public class Transaction {
     int ID;
