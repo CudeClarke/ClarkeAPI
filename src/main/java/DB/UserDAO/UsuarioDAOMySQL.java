@@ -27,6 +27,43 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
         this.connection = connection;
     }
 
+    public List<iUsuario> getAllUsuarios() {
+        List<iUsuario> list = new ArrayList<>();
+        String sql = "SELECT u.*, r.Telefono, r.Direccion_postal " +
+                "FROM usuario u " +
+                "LEFT JOIN registrado r ON u.DNI = r.DNI_USUARIO";
+
+        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                list.add(mapUsuario(rs));
+            }
+        } catch (SQLException e){
+            System.err.println("Error listing users: " + e.getMessage());
+        }
+        return list;
+    }
+
+    public iUsuario searchByDni(String dni) {
+        String sql = "SELECT u.*, r.Telefono, r.Direccion_postal " +
+                "FROM usuario u " +
+                "LEFT JOIN registrado r ON u.DNI = r.DNI_USUARIO " +
+                "WHERE u.DNI = ?";
+
+        UsuarioBase user = null;
+
+        try(PreparedStatement stmt = connection.prepareStatement(sql)){
+            stmt.setString(1, dni);
+            try (ResultSet rs = stmt.executeQuery()){
+                if (rs.next()) {
+                    user = mapUsuario(rs);
+                }
+            }
+        } catch (SQLException e){
+            System.err.println("Error searching for user: " + e.getMessage());
+        }
+        return user;
+    }
+
     public boolean registerUsuario(iUsuario usuario) {
         String sqlUsuario = "INSERT INTO usuario (DNI, Nombre, Apellidos, Email, SPAM) VALUES (?, ?, ?, ?, ?)";
         String sqlRegistrado = "INSERT INTO registrado (DNI_USUARIO, Telefono, Direccion_postal) VALUES (?, ?, ?)";
@@ -204,43 +241,6 @@ public class UsuarioDAOMySQL implements iUsuarioDAO{
                 e.printStackTrace();
             }
         }
-    }
-
-    public iUsuario searchByDni(String dni) {
-        String sql = "SELECT u.*, r.Telefono, r.Direccion_postal " +
-                "FROM usuario u " +
-                "LEFT JOIN registrado r ON u.DNI = r.DNI_USUARIO " +
-                "WHERE u.DNI = ?";
-
-        UsuarioBase user = null;
-
-        try(PreparedStatement stmt = connection.prepareStatement(sql)){
-            stmt.setString(1, dni);
-            try (ResultSet rs = stmt.executeQuery()){
-                if (rs.next()) {
-                    user = mapUsuario(rs);
-                }
-            }
-        } catch (SQLException e){
-            System.err.println("Error searching for user: " + e.getMessage());
-        }
-        return user;
-    }
-
-    public List<iUsuario> getAllUsuarios() {
-        List<iUsuario> list = new ArrayList<>();
-        String sql = "SELECT u.*, r.Telefono, r.Direccion_postal " +
-                "FROM usuario u " +
-                "LEFT JOIN registrado r ON u.DNI = r.DNI_USUARIO";
-
-        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                list.add(mapUsuario(rs));
-            }
-        } catch (SQLException e){
-            System.err.println("Error listing users: " + e.getMessage());
-        }
-        return list;
     }
 
     public boolean deleteUsuario(String dni) {

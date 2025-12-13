@@ -76,30 +76,21 @@ public class EventoDAOMySQL implements iEventoDAO {
         return evento;
     }
 
-    /**
-     * Metodo para buscar un evento a partir de su nombre.
-     * @param nombreBuscado Nombre del evento que se desea buscar.
-     * @return Objeto iEvento si existe, o null en caso contrario.
-     */
-    public iEvento searchByName(String nombreBuscado) {
-        String sql = "SELECT e.* FROM evento e WHERE e.Nombre = ?";
+    @Override
+    public List<iEvento> getAllEventos() {
+        List<iEvento> lista = new ArrayList<>();
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, nombreBuscado);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) return buildEvento(rs);
-            }
+        String sql = "SELECT * FROM evento ORDER BY ID_EVENTO ASC";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) lista.add(buildEvento(rs));
         } catch (SQLException e) {
-            System.err.println("Error searching event by name: " + e.getMessage());
+            System.err.println("Error getting all events: " + e.getMessage());
         }
-        return null;
+        return lista;
     }
 
-    /**
-     * Metodo para buscar eventos que contengan una etiqueta concreta.
-     * @param tag Nombre de la etiqueta asociada a los eventos.
-     * @return Lista de eventos que tienen dicha etiqueta ordenados por ID.
-     */
     @Override
     public List<iEvento> searchByTag(String tag) {
         List<iEvento> lista = new ArrayList<>();
@@ -124,11 +115,6 @@ public class EventoDAOMySQL implements iEventoDAO {
         return lista;
     }
 
-    /**
-     * Metodo para buscar eventos patrocinados por un patrocinador concreto.
-     * @param patrocinador Nombre del patrocinador.
-     * @return Lista de eventos asociados al patrocinador indicado ordenados por ID.
-     */
     @Override
     public List<iEvento> searchByPatrocinador(String patrocinador) {
         List<iEvento> lista = new ArrayList<>();
@@ -153,11 +139,21 @@ public class EventoDAOMySQL implements iEventoDAO {
         return lista;
     }
 
-    /**
-     * Metodo para buscar un evento a partir de su id.
-     * @param idEvento Id del evento que se desea buscar.
-     * @return Objeto iEvento si existe, o null en caso contrario.
-     */
+    @Override
+    public iEvento searchByName(String nombreBuscado) {
+        String sql = "SELECT e.* FROM evento e WHERE e.Nombre = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, nombreBuscado);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return buildEvento(rs);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error searching event by name: " + e.getMessage());
+        }
+        return null;
+    }
+
     @Override
     public iEvento searchById(int idEvento) {
         String sql = "SELECT e.* FROM evento e WHERE e.ID_EVENTO = ?";
@@ -172,34 +168,6 @@ public class EventoDAOMySQL implements iEventoDAO {
         }
         return null;
     }
-
-    /**
-     * Metodo para recuperar todos los eventos registrados en la base de datos.
-     * @return Lista que contiene todos los objetos iEvento almacenados ordenados por ID.
-     */
-    @Override
-    public List<iEvento> getAllEventos() {
-        List<iEvento> lista = new ArrayList<>();
-
-        String sql = "SELECT * FROM evento ORDER BY ID_EVENTO ASC";
-
-        try (PreparedStatement stmt = connection.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-             while (rs.next()) lista.add(buildEvento(rs));
-        } catch (SQLException e) {
-            System.err.println("Error getting all events: " + e.getMessage());
-        }
-        return lista;
-    }
-
-    /**
-     * Metodo para añadir un nuevo evento a la base de datos.
-     * Los campos LUGAR y DESCRIPCION son opcionales, por lo que
-     * pueden recibirse como null y se insertarán como NULL.
-     * @param evento Evento a añdir a la base de datos.
-     * @param tipo Tipo del evento.
-     * @return True si el evento se insertó correctamente, false en caso contrario.
-     */
 
     @Override
     public boolean registerEvento(iEvento evento, int tipo) {
@@ -228,14 +196,6 @@ public class EventoDAOMySQL implements iEventoDAO {
             return false;
         }
     }
-
-    /**
-     * Metodo para actualizar la información de un evento existente.
-     * @param id Identificador del evento a actualizar.
-     * @param evento Evento a actualizar.
-     * NOTA: Se entiende que el tipo de evento no es algo que se deba de cambiar.
-     * @return True si el evento se actualizo correctamente, false en caso contrario.
-     */
 
     @Override
     public boolean updateEvento(int id, iEvento evento) {
@@ -268,12 +228,6 @@ public class EventoDAOMySQL implements iEventoDAO {
         }
     }
 
-    /**
-     * Metodo para eliminar la información de un evento existente.
-     * @param idEvento Identificador del evento a eliminar.
-     * @return True si el evento se actualizo correctamente, false en caso contrario.
-     */
-
     @Override
     public boolean deleteEvento(int idEvento) {
         if (idEvento <= 0) return false;
@@ -292,12 +246,6 @@ public class EventoDAOMySQL implements iEventoDAO {
         }
     }
 
-    /**
-     * Metodo para conseguir el identificador de un evento existente.
-     * @param evento Evento al que queremos obtener el identifador.
-     * @return El identificador del evento. En caso de error devuelve 0.
-     */
-
     @Override
     public int getID(iEvento evento) {
         String nombre = evento.getNombre();
@@ -315,12 +263,6 @@ public class EventoDAOMySQL implements iEventoDAO {
         }
         return 0;
     }
-
-    /**
-     * Metodo para conseguir las etiquetas de un evento existente.
-     * @param idEvento Identificador del evento al que vamos a obtener las etiquetas.
-     * @return Lista de etiquetas del evento.
-     */
 
     @Override
     public Set<String> getTags(int idEvento) {
@@ -343,12 +285,6 @@ public class EventoDAOMySQL implements iEventoDAO {
         }
         return tags;
     }
-
-    /**
-     * Metodo para conseguir los patrocinadores de un evento existente.
-     * @param idEvento Identificador del evento al que vamos a obtener los patrocinadores.
-     * @return Lista de patrocinadores del evento.
-     */
 
     @Override
     public Set<Patrocinador> getPatrocinadores(int idEvento) {
