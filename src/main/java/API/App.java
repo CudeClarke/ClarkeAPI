@@ -26,5 +26,6 @@ public class App {
         app.post("/comprar/start", CompraHandlers.setTransaction);
         app.post("/comprar/confirmar/{idTransaction}", CompraHandlers.processPayment);
         app.get("/comprar/cancelar/{idTransaction}", CompraHandlers.cancelTransaction);
+        app.post("/getTicketsInfo", CompraHandlers.getTicketsInfo);
     }
 }

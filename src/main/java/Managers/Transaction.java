@@ -1,8 +1,6 @@
 package Managers;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import Datos.Usuario.iUsuario;
 import Datos.Evento.iEvento;
@@ -13,11 +11,13 @@ public class Transaction {
     int ID;
     iUsuario comprador;
     List<iEvento> eventos;
+    Set<Integer> ticket_ids;
 
     public Transaction(iUsuario comprador){
         ID = IDGenerator.getCounter();
         this.comprador = comprador;
         eventos = new ArrayList<>();
+        ticket_ids = new HashSet<>();
     }
 
     public void addEvento(iEvento evento){
@@ -51,6 +51,14 @@ public class Transaction {
             i++;
         }
         return  res;
+    }
+
+    public Set<Integer> getTicket_ids(){
+        return ticket_ids;
+    }
+
+    public void addTicketIDs(int id){
+        ticket_ids.add(id);
     }
 
     public int getID() {

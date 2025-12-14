@@ -1,5 +1,6 @@
 package API;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -15,9 +16,13 @@ import Datos.Ticket.iTicket;
 import Datos.Entrada.iEntrada;
 import Datos.Evento.iEvento;
 
+import java.util.List;
+
 public class CompraHandlers {
     private static CompraManager compraManager = new CompraManager(MySQLAccessFactory.getInstance());
     private static EventoManager eventoManager = new EventoManager(MySQLAccessFactory.getInstance());
+    private static EntradaManager entradaManager = new EntradaManager(MySQLAccessFactory.getInstance());
+    private static TicketManager ticketManager = new TicketManager(MySQLAccessFactory.getInstance());
     private static UserManager userManager = new UserManager(MySQLAccessFactory.getInstance());
 
     private static final String ID_EVENTO = "idEvento";
@@ -146,24 +151,7 @@ public class CompraHandlers {
                 exito = exito && compraManager.confirmTransaction(idTransaction);
                 if (exito) {
                     Thread.sleep(2025);
-                    ArrayNode jsonArray = mapper.createArrayNode();
-                    for (iEvento evento : transaction.getEventos()){
-                        for (iEntrada entrada : evento.getEntradas()){
-                            for (iTicket ticket : entrada.getTickets()){
-                                ObjectNode current_node = mapper.createObjectNode();
-                                current_node.put(ID_EVENTO, evento.getID());
-                                current_node.put("nombreEvento", evento.getNombre());
-                                current_node.put(ID_ENTRADA, entrada.getId());
-                                current_node.put("nombreEntrada", entrada.getNombre());
-                                current_node.put("idTicket", ticket.getId());
-                                current_node.put("dniAsistente", ticket.getDniAsistente());
-                                current_node.put("dniComprador", ticket.getUsuario().getDni());
-                                jsonArray.add(current_node);
-                            }
-                        }
-                    }
-                    res = jsonArray.toString();
-                    compraManager.deleteTransaction(idTransaction);
+                    res = transaction.getTicket_ids().toString();
                 }else{
                     res = json_utils.status_response(1, "Error confirming transaction");
                 }
@@ -194,5 +182,36 @@ public class CompraHandlers {
         }
 
         ctx.json(res);
+    };
+
+    public static Handler getTicketsInfo = ctx -> {
+      String res = "";
+      ObjectMapper mapper = new ObjectMapper();
+      List<Integer> ticketIDs = mapper.readValue(ctx.body(), new TypeReference<List<Integer>>(){});
+      ArrayNode jsonArray = mapper.createArrayNode();
+      for (Integer idTicket : ticketIDs){
+          iTicket ticket = ticketManager.searchByID(idTicket);
+          int idEntrada = ticketManager.searchEntradaID(idTicket);
+          iEntrada entrada = entradaManager.searchByID(idEntrada);
+          int idEvento = entradaManager.searchEventoID(idEntrada);
+          iEvento evento = eventoManager.searchById(idEvento);
+          if (evento != null && entrada != null && ticket != null) {
+              ObjectNode current_node = mapper.createObjectNode();
+              current_node.put("idEvento", idEvento);
+              current_node.put("nombreEvento", evento.getNombre());
+              current_node.put("url", evento.getUrl());
+              current_node.putPOJO("patrocinadores", evento.getPatrocinadores());
+              current_node.put("idEntrada", idEntrada);
+              current_node.put("nombreEntrada", entrada.getNombre());
+              current_node.put("idTicket", idTicket);
+              current_node.put("dniAsistente", ticket.getDniAsistente());
+              current_node.put("dniComprador", ticket.getUsuario().getDni());
+              jsonArray.add(current_node);
+          }
+      }
+
+      res = jsonArray.toString();
+
+      ctx.json(res);
     };
 }

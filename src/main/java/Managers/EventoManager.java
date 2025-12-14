@@ -46,8 +46,10 @@ public class EventoManager {
 
     public iEvento searchById(int idEvento){
         iEvento evento = eventoDAO.searchById(idEvento);
-        evento.setTags(eventoDAO.getTags(evento.getID()));
-        evento.setPatrocinadores(eventoDAO.getPatrocinadores(evento.getID()));
+        if (evento != null) {
+            evento.setTags(eventoDAO.getTags(evento.getID()));
+            evento.setPatrocinadores(eventoDAO.getPatrocinadores(evento.getID()));
+        }
         return evento;
     }
 

@@ -55,6 +55,8 @@ public class TicketManager {
 
     public iTicket searchByID(int idTicket) {return ticketDAO.searchById(idTicket);}
 
+    public int searchEntradaID(int idTicket) {return  ticketDAO.getEntradaID(idTicket);}
+
     /**
      * Registra un nuevo ticket en el sistema.
      * 
