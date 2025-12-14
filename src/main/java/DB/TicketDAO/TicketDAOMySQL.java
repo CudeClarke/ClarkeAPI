@@ -199,7 +199,19 @@ public class TicketDAOMySQL implements iTicketDAO {
 
     @Override
     public int getEntradaID(int idTicket) {
-        return 0;
+        int entrada = -1;
+        String sql = "SELECT ID_ENTRADA FROM ticket WHERE ID_TICKET = ?";
+        try(PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, idTicket);
+            try(ResultSet rs = stmt.executeQuery()){
+                while(rs.next()){
+                    entrada = rs.getInt("ID_ENTRADA");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error registering an ticket: " + e.getMessage());
+        }
+        return entrada;
     }
 
     @Override
