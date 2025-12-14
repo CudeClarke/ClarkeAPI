@@ -55,6 +55,14 @@ public class json_utils {
                 System.out.println("Not EventoRifa");
             }
         }
+        if (evento == null){
+            try {
+                evento = mapper.readValue(json, Evento.class);
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+                System.out.println("Not Evento");
+            }
+        }
         return evento;
     }
 
