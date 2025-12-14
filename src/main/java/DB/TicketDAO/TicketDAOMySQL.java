@@ -209,7 +209,7 @@ public class TicketDAOMySQL implements iTicketDAO {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error registering an ticket: " + e.getMessage());
+            System.err.println("Error obtaining the entrada id: " + e.getMessage());
         }
         return entrada;
     }

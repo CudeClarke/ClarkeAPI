@@ -81,7 +81,7 @@ public class EntradaDAOMySQL implements iEntradaDAO {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error registering an ticket: " + e.getMessage());
+            System.err.println("Error obtaining the evento id: " + e.getMessage());
         }
         return evento;
     }
