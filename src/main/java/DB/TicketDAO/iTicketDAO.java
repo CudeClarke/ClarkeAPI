@@ -25,6 +25,13 @@ public interface iTicketDAO {
      * @return Objeto iTicket si existe, o null en caso contrario.
      */
     iTicket searchById(int idTicket);
+
+    /**
+     * Metodo para buscar el ID de la entrada a la que pertenece el Ticket.
+     * @param idTicket Id del ticket.
+     * @return ID de la entrada a la que pertenece el Ticket, -1 en caso de fallo.
+     */
+    int getEntradaID(int idTicket);
     
     /**
      * Metodo para registrar un ticket en la base de datos

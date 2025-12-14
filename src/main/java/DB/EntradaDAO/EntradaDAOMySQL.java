@@ -70,6 +70,11 @@ public class EntradaDAOMySQL implements iEntradaDAO {
     }
 
     @Override
+    public int getEventoID(int idEntrada) {
+        return 0;
+    }
+
+    @Override
     public boolean registerEntrada(iEntrada entrada, int idEvento) {
         String sql = "INSERT INTO entrada (ID_EVENTO, Precio, Cantidad, Nombre, Descripcion) VALUES (?, ?, ?, ?, ?)";
 
