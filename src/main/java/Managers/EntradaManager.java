@@ -22,6 +22,10 @@ public class EntradaManager {
         return entradaDAO.searchByEvento(idEvento);
     }
 
+    public iEntrada searchByID(int idEntrada){return entradaDAO.searchById(idEntrada);}
+
+    public int searchEventoID(int idEntrada){return entradaDAO.getEventoID(idEntrada);}
+
     public boolean addEntrada(iEntrada entrada, int idEvento) {
         if (!validEntrada(entrada)) {
             return false;

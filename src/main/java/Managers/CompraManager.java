@@ -173,11 +173,14 @@ public class CompraManager {
                 for (iEntrada entrada : evento.getEntradas()){
                     for (iTicket ticket : entrada.getTickets()){
                         int nextID = ticketDAO.getNextTicketID();
+                        transaction.addTicketIDs(nextID);
                         exito = exito && ticketDAO.registerTicket(ticket, ticket.getUsuario().getDni(), entrada.getId(), ticket.getInformacion());
-                        if (exito) {ticket.setId(nextID);}
                     }
                 }
             }
+        }
+        if (exito){
+            deleteTransaction(idTransaction);
         }
         return exito;
     }
