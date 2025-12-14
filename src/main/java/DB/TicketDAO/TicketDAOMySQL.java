@@ -11,7 +11,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-//MUST DELETE NOMBRE ONCE TICKET CLASS IS CHANGED
 public class TicketDAOMySQL implements iTicketDAO {
     private static TicketDAOMySQL instance;
     private final Connection connection;
@@ -196,6 +195,11 @@ public class TicketDAOMySQL implements iTicketDAO {
             System.err.println("Error searching ticket/s for user:" + e.getMessage());
         }
         return null;
+    }
+
+    @Override
+    public int getEntradaID(int idTicket) {
+        return 0;
     }
 
     @Override
