@@ -71,7 +71,19 @@ public class EntradaDAOMySQL implements iEntradaDAO {
 
     @Override
     public int getEventoID(int idEntrada) {
-        return 0;
+        int evento = -1;
+        String sql = "SELECT ID_EVENTO FROM entrada WHERE ID_ENTRADA = ?";
+        try(PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, idEntrada);
+            try(ResultSet rs = stmt.executeQuery()){
+                while(rs.next()){
+                    evento = rs.getInt("ID_EVENTO");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error obtaining the evento id: " + e.getMessage());
+        }
+        return evento;
     }
 
     @Override
