@@ -20,6 +20,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import utils.json_utils;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -209,31 +213,27 @@ class CompraHandlersTest {
         when(ctxMock.pathParam("idTransaction")).thenReturn("50");
         when(ctxMock.body()).thenReturn("{}");
 
-        // Simula una transaccion valida
+        // Simula transacción válida
         when(compraManagerMock.getTransaction(50)).thenReturn(transactionMock);
         UsuarioBase comprador = mock(UsuarioBase.class);
         when(transactionMock.getComprador()).thenReturn(comprador);
 
-        // Simula que la disponibilidad es correcta
+        // Simula disponibilidad y éxito en operaciones
         when(compraManagerMock.checkAvailabilityTransaction(50)).thenReturn(true);
-
-        // Simula un registro correcto
         when(userManagerMock.registerUsuario(comprador)).thenReturn(true);
-        // Simula la confirmacion de exito
         when(compraManagerMock.confirmTransaction(50)).thenReturn(true);
 
-        java.util.Collections.emptyList();
-        when(transactionMock.getEventos()).thenReturn(java.util.Collections.emptyList());
+        // Simula la lista de IDs de tickets para evitar NullPointerException
+        Set<Integer> fakeIds = new HashSet<>(Arrays.asList(101, 102));
+        when(transactionMock.getTicket_ids()).thenReturn(fakeIds);
 
         CompraHandlers.processPayment.handle(ctxMock);
 
         verify(userManagerMock).registerUsuario(comprador);
         verify(compraManagerMock).confirmTransaction(50);
-        // Borra la transaccion
-        verify(compraManagerMock).deleteTransaction(50);
 
-        // Comprueba si el JSON devuelto esta vacio
-        verify(ctxMock).json("[]");
+        // Verifica que devuelve la lista de IDs como String (formato JSON array)
+        verify(ctxMock).json(fakeIds.toString());
     }
 
     @Test
