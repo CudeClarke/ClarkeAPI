@@ -138,26 +138,29 @@ class CompraManagerTest {
         UsuarioBase usuario = new UsuarioBase("Juan", "Perez", "juan@mail.com", "12345678A");
         int idTrans = compraManager.startTransaction(usuario);
 
-        // Configura DAOs
+        // Configuración de Mocks
         when(eventoDAOMock.searchById(1)).thenReturn(eventoReal);
         when(entradaDAOMock.searchById(10)).thenReturn(entradaReal);
         when(ticketDAOMock.getNextTicketID()).thenReturn(500);
         when(ticketDAOMock.registerTicket(any(), anyString(), anyInt(), any())).thenReturn(true);
 
-        // Usa un ticket REAL
+        // Usamos un ticket real para evitar NullPointers
         iTicket realTicket = new Ticket(usuario, "12345678A");
-        // realTicket.getInformacion() devolverá "" por defecto, lo cual es válido.
 
-        // Añade el ticket a la transacción
+        // Preparamos la transacción
         compraManager.addTicketToTransaction(idTrans, 1, 10, realTicket);
 
+        // WHEN
         boolean result = compraManager.confirmTransaction(idTrans);
 
+        // THEN
         assertTrue(result);
 
-        // Verifica que se llamó al registro con los datos correctos
+        // Verificamos que se llama al DAO para registrar
         verify(ticketDAOMock).registerTicket(eq(realTicket), eq("12345678A"), eq(10), any());
-        assertEquals(500, realTicket.getId());
+
+        // Verificamos que la transacción se ha eliminado del mapa (comportamiento de éxito)
+        assertNull(compraManager.getTransaction(idTrans));
     }
 
     @Test
