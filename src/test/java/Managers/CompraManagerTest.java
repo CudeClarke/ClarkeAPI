@@ -144,22 +144,20 @@ class CompraManagerTest {
         when(ticketDAOMock.getNextTicketID()).thenReturn(500);
         when(ticketDAOMock.registerTicket(any(), anyString(), anyInt(), any())).thenReturn(true);
 
-        // Usamos un ticket real para evitar NullPointers
+        // Usa un ticket real para evitar NullPointers
         iTicket realTicket = new Ticket(usuario, "12345678A");
 
-        // Preparamos la transacción
+        // Prepara la transacción
         compraManager.addTicketToTransaction(idTrans, 1, 10, realTicket);
 
-        // WHEN
         boolean result = compraManager.confirmTransaction(idTrans);
 
-        // THEN
         assertTrue(result);
 
-        // Verificamos que se llama al DAO para registrar
+        // Verifica que se llama al DAO para registrar
         verify(ticketDAOMock).registerTicket(eq(realTicket), eq("12345678A"), eq(10), any());
 
-        // Verificamos que la transacción se ha eliminado del mapa (comportamiento de éxito)
+        // Verifica que la transacción se ha eliminado del mapa (comportamiento de éxito)
         assertNull(compraManager.getTransaction(idTrans));
     }
 
